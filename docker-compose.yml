@@ -1,0 +1,11 @@
+version: '3'
+services:
+  bookmarker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    working_dir: /app
+    volumes:
+      - .:/app
+      - /app/node_modules
+    entrypoint: npm run build
