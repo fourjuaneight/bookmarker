@@ -4,12 +4,13 @@
   "description": "Serverless functions to bookmark media to Airtable.",
   "main": "dist/worker.js",
   "scripts": {
-    "build": "tsup src/index.ts --env.NODE_ENV production --minify && npm run environment",
+    "build": "tsup src/index.ts --env.NODE_ENV production --minify && npm run environment && npm run move",
     "clean": "rm -rf dist",
     "clean:node": "rm -rf node_modules",
-    "environment": "node setEnv.js && mv dist/index.js index.js",
+    "environment": "node setEnv.js",
     "format": "prettier --write \"src/**/*.ts\"",
-    "lint": "eslint --fix \"src/**/*.ts\""
+    "lint": "eslint --fix \"src/**/*.ts\"",
+    "move": "mv dist/index.js index.js"
   },
   "repository": {
     "type": "git",

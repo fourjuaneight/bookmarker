@@ -9,7 +9,7 @@ const cwd = resolve(__dirname);
 
 (async () => {
   const replaceOptions = {
-    files: resolve(cwd, 'sw.js'),
+    files: resolve(cwd, 'wrangler.toml'),
     from: [
       /account_id\s=\s""/g,
       /AUTH_KEY\s=\s""/g,
