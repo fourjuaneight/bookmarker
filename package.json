@@ -10,7 +10,8 @@
     "environment": "node setEnv.js",
     "format": "prettier --write \"src/**/*.ts\"",
     "lint": "eslint --fix \"src/**/*.ts\"",
-    "move": "mv dist/index.js dist/worker.js"
+    "move": "mv dist/index.js dist/worker.js",
+    "publish": "wrangler publish"
   },
   "repository": {
     "type": "git",
@@ -54,6 +55,7 @@
     "typescript": "^4.4.4"
   },
   "dependencies": {
+    "@cloudflare/wrangler": "^1.19.4",
     "dotenv": "^10.0.0",
     "replace-in-file": "^6.3.2"
   }
