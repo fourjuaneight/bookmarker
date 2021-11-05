@@ -143,7 +143,7 @@ const getPodcastDetails = async (
  *
  * @param {string} url podcast url
  * @param {string[]} tags record tags
- * @returns {Promise<BookmarkPodcasts>} result of podcast record upload
+ * @returns {Promise<BookmarkingResponse>} result of record upload
  */
 export const bookmarkPodcasts = async (
   url: string,

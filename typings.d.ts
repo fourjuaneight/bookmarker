@@ -4,6 +4,13 @@ export interface PodcastData {
   url: string;
 }
 
+export interface RedditData {
+  title: string;
+  content: string;
+  subreddit: string;
+  url: string;
+  category: string;
+}
 export interface ParsingService {
   title: RegExp;
   creator: RegExp;
@@ -18,16 +25,18 @@ export interface ParsingPatterns {
   [key: string]: ParsingService | RegExp[];
 }
 
-export interface BookmarkPodcasts {
+export interface RecordData {
   title: string;
-  creator: string;
+  content?: string;
+  creator?: string;
+  subreddit?: string;
   url: string;
   tags: string[];
 }
 
 export interface Records {
   id: string;
-  fields: BookmarkPodcasts;
+  fields: RecordData;
   createdTime: string;
 }
 

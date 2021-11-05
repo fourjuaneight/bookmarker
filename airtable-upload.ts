@@ -1,6 +1,6 @@
 import "https://deno.land/x/dotenv@v3.1.0/load.ts";
 
-import { AirtableError, AirtableResp, BookmarkPodcasts } from "./typings.d.ts";
+import { AirtableError, AirtableResp, RecordData } from "./typings.d.ts";
 
 /**
  * Upload podcast record object to Airtable
@@ -8,12 +8,12 @@ import { AirtableError, AirtableResp, BookmarkPodcasts } from "./typings.d.ts";
  * @async
  *
  * @param {string} table Airtable table name
- * @param {BookmarkPodcasts} record formatted podcast record to upload
+ * @param {RecordData} record formatted podcast record to upload
  * @return {void}
  */
 export const airtableUpload = async (
   table: string,
-  record: BookmarkPodcasts
+  record: RecordData
 ): Promise<string> => {
   const options: RequestInit = {
     method: "POST",
