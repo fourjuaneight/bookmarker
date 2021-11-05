@@ -1,0 +1,18 @@
+name = "bookmarker"
+type = "javascript"
+account_id = ""
+workers_dev = true
+
+[vars]
+AUTH_KEY = ""
+AIRTABLE_API = ""
+AIRTABLE_BOOKMARKS_ENDPOINT = ""
+TWITTER_KEY = ""
+VIMEO_KEY = ""
+YOUTUBE_KEY = ""
+
+[build]
+command = "npm install && npm run build"
+
+[build.upload]
+format = "service-worker"
