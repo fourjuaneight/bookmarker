@@ -152,9 +152,7 @@ export const bookmarkPodcasts = async (
   try {
     const podcastData = await getPodcastDetails(url, "castro");
     const airtableResp = await airtableUpload("Podcasts", {
-      title: podcastData.title,
-      creator: podcastData.creator,
-      url: podcastData.url,
+      ...podcastData,
       tags,
     });
 
