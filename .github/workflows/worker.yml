@@ -1,0 +1,33 @@
+name: Build and Deploy Worker
+
+on: push
+
+jobs:
+  worker:
+    runs-on: ubuntu-18.04
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Use Node 16.12.0
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16.12.0
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build and Deploy
+        run: wrangler publish
+        env:
+          CI: true
+          CF_ACCOUNT_ID: ${{secrets.CF_ACCOUNT_ID}}
+          AUTH_KEY: ${{secrets.AUTH_KEY}}
+          AIRTABLE_API: ${{secrets.AIRTABLE_API}}
+          AIRTABLE_BOOKMARKS_ENDPOINT: ${{secrets.AIRTABLE_BOOKMARKS_ENDPOINT}}
+          TWITTER_KEY: ${{secrets.TWITTER_KEY}}
+          VIMEO_KEY: ${{secrets.VIMEO_KEY}}
+          YOUTUBE_KEY: ${{secrets.YOUTUBE_KEY}}

@@ -10,7 +10,7 @@
     "environment": "node setEnv.js",
     "format": "prettier --write \"src/**/*.ts\"",
     "lint": "eslint --fix \"src/**/*.ts\"",
-    "move": "mv dist/index.js index.js"
+    "move": "mv dist/index.js dist/worker.js"
   },
   "repository": {
     "type": "git",
