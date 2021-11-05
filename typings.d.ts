@@ -1,3 +1,4 @@
+// deno-lint-ignore-file camelcase
 export interface PodcastData {
   title: string;
   creator: string;
@@ -10,6 +11,13 @@ export interface RedditData {
   subreddit: string;
   url: string;
 }
+
+export interface TwitterData {
+  tweet: string;
+  creator: string;
+  url: string;
+}
+
 export interface ParsingService {
   title: RegExp;
   creator: RegExp;
@@ -24,8 +32,27 @@ export interface ParsingPatterns {
   [key: string]: ParsingService | RegExp[];
 }
 
+export interface TwitterResponse {
+  data: {
+    author_id: string;
+    created_at: string;
+    text: string;
+    id: string;
+  };
+  includes: {
+    users:
+      {
+        verified: boolean;
+        username: string;
+        id: string;
+        name: string;
+      }[];
+  };
+}
+
 export interface RecordData {
-  title: string;
+  title?: string;
+  tweet?: string;
   content?: string;
   creator?: string;
   subreddit?: string;

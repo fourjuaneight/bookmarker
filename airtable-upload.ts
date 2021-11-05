@@ -9,7 +9,7 @@ import { AirtableError, AirtableResp, RecordData } from "./typings.d.ts";
  *
  * @param {string} table Airtable table name
  * @param {RecordData} record formatted podcast record to upload
- * @return {void}
+ * @returns {void}
  */
 export const airtableUpload = async (
   table: string,
@@ -47,7 +47,11 @@ export const airtableUpload = async (
       );
     }
 
-    return (results as AirtableResp).records[0].fields.title;
+    const recordFields = (results as AirtableResp).records[0].fields;
+
+    return (
+      (recordFields.title || recordFields.tweet || recordFields.content) ?? ""
+    );
   } catch (error) {
     throw new Error(`Uploading repos to Airtable: \n ${error}`);
   }
