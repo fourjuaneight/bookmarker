@@ -132,7 +132,7 @@ const getPodcastDetails = async (
       url: link,
     };
   } catch (error) {
-    throw new Error(`Gettin podcast details: \n ${error}`);
+    throw new Error(`Getting podcast details: \n ${error}`);
   }
 };
 

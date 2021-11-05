@@ -163,7 +163,7 @@ const getTweetDetails = async (url: string): Promise<TwitterData> => {
       url: `https://twitter.com/${username}/status/${response.data.id}`,
     };
   } catch (error) {
-    throw new Error(`Gettin tweet details: \n ${error}`);
+    throw new Error(`Getting tweet details: \n ${error}`);
   }
 };
 

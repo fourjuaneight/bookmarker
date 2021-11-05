@@ -49,9 +49,10 @@ const getVimeoDetails = async (url: string): Promise<BookmarkData> => {
       url,
     };
   } catch (error) {
-    throw new Error(`Gettin vimeo details: \n ${error}`);
+    throw new Error(`Getting vimeo details: \n ${error}`);
   }
 };
+
 /**
  * Get podcast details and upload to Airtable.
  * @function

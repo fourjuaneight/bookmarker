@@ -1,6 +1,6 @@
 import { listenAndServe } from "https://deno.land/std@0.111.0/http/server.ts";
 
-import { RecordData } from "./bookmark-podcasts.ts";
+import { bookmarkPodcasts } from "./bookmark-podcasts.ts";
 
 import { BookmarkingResponse, RequestPayload } from "./typings.d.ts";
 
@@ -22,7 +22,7 @@ const errReqBody = {
 
 const handleAction = async (payload: RequestPayload): Promise<Response> => {
   try {
-    const response: BookmarkingResponse = await RecordData(
+    const response: BookmarkingResponse = await bookmarkPodcasts(
       payload.url,
       payload.tags
     );
