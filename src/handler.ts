@@ -73,7 +73,7 @@ const handleAction = async (payload: RequestPayload): Promise<Response> => {
     }
 
     return new Response(
-      JSON.stringify({ message: response.message, location: payload.table }),
+      JSON.stringify({ bookmarked: response.message, location: payload.table }),
       responseInit
     );
   } catch (error) {
