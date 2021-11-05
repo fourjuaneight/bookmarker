@@ -1085,7 +1085,12 @@ export interface BookmarkingResponse {
 }
 
 export interface RequestPayload {
+  key: string;
   url: string;
   table: string;
+  data?: {
+    title: string;
+    creator: string;
+  };
   tags: string[];
 }
