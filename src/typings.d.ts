@@ -1,4 +1,4 @@
-// deno-lint-ignore-file camelcase
+/* eslint-disable camelcase */
 export interface BookmarkData {
   title: string;
   creator: string;
@@ -691,7 +691,7 @@ export interface VimeoResponse {
         };
       };
       resource_key: string;
-      short_bio: "This is a short biography about me!";
+      short_bio: 'This is a short biography about me!';
       skills: {
         name: string;
         uri: string;

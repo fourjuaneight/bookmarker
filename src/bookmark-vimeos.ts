@@ -1,12 +1,10 @@
-import "https://deno.land/x/dotenv@v3.1.0/load.ts";
-
-import { airtableUpload } from "./airtable-upload.ts";
+import { airtableUpload } from './airtable-upload.ts';
 
 import {
   BookmarkData,
   BookmarkingResponse,
   VimeoResponse,
-} from "./typings.d.ts";
+} from './typings.d.ts';
 
 /**
  * Convert video url to API ready endpoint. Extracts video ID.
@@ -18,7 +16,7 @@ import {
 const cleanUrl = (url: string): string => {
   const updatedStr = url.replace(
     /(https:\/\/vimeo\.com\/)(.*)/g,
-    "https://api.vimeo.com/videos/$2"
+    'https://api.vimeo.com/videos/$2'
   );
 
   return updatedStr;
@@ -38,7 +36,7 @@ const getVimeoDetails = async (url: string): Promise<BookmarkData> => {
     const endpoint = cleanUrl(url);
     const request = await fetch(endpoint, {
       headers: {
-        Authorization: `Bearer ${Deno.env.get("VIMEO_KEY")}`,
+        Authorization: `Bearer ${VIMEO_KEY}`,
       },
     });
     const response: VimeoResponse = await request.json();
@@ -68,13 +66,13 @@ export const bookmarkVimeo = async (
 ): Promise<BookmarkingResponse> => {
   try {
     const vimeoData = await getVimeoDetails(url);
-    const airtableResp = await airtableUpload("Videos", {
+    const airtableResp = await airtableUpload('Videos', {
       ...vimeoData,
       tags,
     });
 
-    return { success: true, message: airtableResp, source: "bookmarkVimeo" };
+    return { success: true, message: airtableResp, source: 'bookmarkVimeo' };
   } catch (error) {
-    return { success: false, message: error, source: "bookmarkVimeo" };
+    return { success: false, message: error, source: 'bookmarkVimeo' };
   }
 };

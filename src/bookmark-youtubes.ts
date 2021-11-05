@@ -1,13 +1,11 @@
-import "https://deno.land/x/dotenv@v3.1.0/load.ts";
-
-import { airtableUpload } from "./airtable-upload.ts";
+import { airtableUpload } from './airtable-upload.ts';
 
 import {
   BookmarkData,
   BookmarkingResponse,
   YouTubeAPIEndpoint,
   YouTubeResponse,
-} from "./typings.d.ts";
+} from './typings.d.ts';
 
 /**
  * Convert video url to API ready endpoint. Extracts youtube ID.
@@ -18,8 +16,8 @@ import {
  */
 const cleanUrl = (url: string): YouTubeAPIEndpoint => {
   const extractedID = url
-    .replace(/(https\:\/\/)(youtu.*)\.(be|com)\/(watch\?v=)?/g, "")
-    .replace("&feature=share", "");
+    .replace(/(https:\/\/)(youtu.*)\.(be|com)\/(watch\?v=)?/g, '')
+    .replace('&feature=share', '');
   const endpoint = `https://youtube.googleapis.com/youtube/v3/videos?id=${extractedID}`;
   const link = `https://youtu.be/${extractedID}`;
 
@@ -38,9 +36,7 @@ const cleanUrl = (url: string): YouTubeAPIEndpoint => {
 const getYouTubeDetails = async (url: string): Promise<BookmarkData> => {
   try {
     const { endpoint, link } = cleanUrl(url);
-    const request = await fetch(
-      `${endpoint}&key=${Deno.env.get("YOUTUBE_KEY")}`
-    );
+    const request = await fetch(`${endpoint}&key=${YOUTUBE_KEY}`);
     const response: YouTubeResponse = await request.json();
     const video = response.items[0].snippet;
 
@@ -69,13 +65,13 @@ export const bookmarkYouTube = async (
 ): Promise<BookmarkingResponse> => {
   try {
     const youtTubeData = await getYouTubeDetails(url);
-    const airtableResp = await airtableUpload("Videos", {
+    const airtableResp = await airtableUpload('Videos', {
       ...youtTubeData,
       tags,
     });
 
-    return { success: true, message: airtableResp, source: "bookmarkYouTube" };
+    return { success: true, message: airtableResp, source: 'bookmarkYouTube' };
   } catch (error) {
-    return { success: false, message: error, source: "bookmarkYouTube" };
+    return { success: false, message: error, source: 'bookmarkYouTube' };
   }
 };

@@ -1,6 +1,4 @@
-import "https://deno.land/x/dotenv@v3.1.0/load.ts";
-
-import { AirtableError, AirtableResp, RecordData } from "./typings.d.ts";
+import { AirtableError, AirtableResp, RecordData } from './typings.d.ts';
 
 /**
  * Upload podcast record object to Airtable
@@ -16,10 +14,10 @@ export const airtableUpload = async (
   record: RecordData
 ): Promise<string> => {
   const options: RequestInit = {
-    method: "POST",
+    method: 'POST',
     headers: {
-      Authorization: `Bearer ${Deno.env.get("AIRTABLE_API")}`,
-      "Content-Type": "application/json",
+      Authorization: `Bearer ${AIRTABLE_API}`,
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({
       records: [
@@ -34,7 +32,7 @@ export const airtableUpload = async (
 
   try {
     const response: Response = await fetch(
-      `${Deno.env.get("AIRTABLE_BOOKMARKS_ENDPOINT")}/${table}`,
+      `${AIRTABLE_BOOKMARKS_ENDPOINT}/${table}`,
       options
     );
     const results: AirtableResp | AirtableError = await response.json();
@@ -50,7 +48,7 @@ export const airtableUpload = async (
     const recordFields = (results as AirtableResp).records[0].fields;
 
     return (
-      (recordFields.title || recordFields.tweet || recordFields.content) ?? ""
+      (recordFields.title || recordFields.tweet || recordFields.content) ?? ''
     );
   } catch (error) {
     throw new Error(`Uploading repos to Airtable: \n ${error}`);
