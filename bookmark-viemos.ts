@@ -54,11 +54,11 @@ const getVimeoDetails = async (url: string): Promise<BookmarkData> => {
 };
 
 /**
- * Get podcast details and upload to Airtable.
+ * Get Vimeo video details and upload to Airtable.
  * @function
  * @async
  *
- * @param {string} url podcast url
+ * @param {string} url video url
  * @param {string[]} tags record tags
  * @returns {Promise<BookmarkingResponse>} result of record upload
  */
