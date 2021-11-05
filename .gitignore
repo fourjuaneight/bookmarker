@@ -1,1 +1,6 @@
+dist
+node_modules
+transpiled
+worker
 .env
+.env.*
