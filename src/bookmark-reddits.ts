@@ -1,6 +1,6 @@
-import { airtableUpload } from "./airtable-upload.ts";
+import { airtableUpload } from './airtable-upload.ts';
 
-import { BookmarkingResponse, RedditData } from "./typings.d.ts";
+import { BookmarkingResponse, RedditData } from './typings.d.ts';
 
 /**
  * Get post details via Reddit API.
@@ -43,13 +43,13 @@ export const bookmarkReddits = async (
 ): Promise<BookmarkingResponse> => {
   try {
     const redditData = await getRedditDetails(url);
-    const airtableResp = await airtableUpload("Reddits", {
+    const airtableResp = await airtableUpload('Reddits', {
       ...redditData,
       tags,
     });
 
-    return { success: true, message: airtableResp, source: "bookmarkReddits" };
+    return { success: true, message: airtableResp, source: 'bookmarkReddits' };
   } catch (error) {
-    return { success: false, message: error, source: "bookmarkReddits" };
+    return { success: false, message: error, source: 'bookmarkReddits' };
   }
 };

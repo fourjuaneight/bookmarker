@@ -1,6 +1,6 @@
-import { airtableUpload } from "./airtable-upload.ts";
+import { airtableUpload } from './airtable-upload.ts';
 
-import { BookmarkingResponse } from "./typings.d.ts";
+import { BookmarkingResponse } from './typings.d.ts';
 
 /**
  * Upload article|comic to Airtable.
@@ -29,8 +29,8 @@ export const bookmarkPage = async (
       tags,
     });
 
-    return { success: true, message: airtableResp, source: "bookmarkPage" };
+    return { success: true, message: airtableResp, source: 'bookmarkPage' };
   } catch (error) {
-    return { success: false, message: error, source: "bookmarkPage" };
+    return { success: false, message: error, source: 'bookmarkPage' };
   }
 };

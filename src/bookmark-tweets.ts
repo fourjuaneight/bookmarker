@@ -1,12 +1,10 @@
-import "https://deno.land/x/dotenv@v3.1.0/load.ts";
-
-import { airtableUpload } from "./airtable-upload.ts";
+import { airtableUpload } from './airtable-upload.ts';
 
 import {
   BookmarkingResponse,
   TwitterData,
   TwitterResponse,
-} from "./typings.d.ts";
+} from './typings.d.ts';
 
 // Match unicode and convert to emoji code
 const emojiRange = new RegExp(
@@ -66,7 +64,7 @@ const expandLinks = async (url: string): Promise<string> => {
 
     if (!request.url) {
       console.error({
-        message: "Expand Links: unable to expand URL.",
+        message: 'Expand Links: unable to expand URL.',
         status: request.status,
       });
 
@@ -93,7 +91,7 @@ const expandShortLink = async (str: string, regex: RegExp): Promise<string> => {
     const promises: Promise<string>[] = [];
     const pattern = new RegExp(regex);
 
-    // deno-lint-ignore no-unused-vars
+    // eslint-disable-next-line no-unused-vars
     str.replace(pattern, (match, ...args) => {
       const promise = expandLinks(match);
       promises.push(promise);
@@ -102,7 +100,7 @@ const expandShortLink = async (str: string, regex: RegExp): Promise<string> => {
     });
 
     const data = await Promise.all(promises);
-    const replacer = () => data.shift() ?? "";
+    const replacer = () => data.shift() ?? '';
 
     return str.replace(regex, replacer);
   } catch (error) {
@@ -119,10 +117,10 @@ const expandShortLink = async (str: string, regex: RegExp): Promise<string> => {
  */
 const cleanUrl = (url: string): string => {
   const updatedStr = url
-    .replace(/(https\:\/\/([a-z]+\.)?twitter\.com\/)/g, "")
+    .replace(/(https:\/\/([a-z]+\.)?twitter\.com\/)/g, '')
     .replace(
       /.*\/status\/([0-9]+)(.*)?/g,
-      "https://api.twitter.com/2/tweets/$1"
+      'https://api.twitter.com/2/tweets/$1'
     );
 
   return updatedStr;
@@ -144,8 +142,8 @@ const getTweetDetails = async (url: string): Promise<TwitterData> => {
       `${endpoint}?tweet.fields=created_at&user.fields=username&expansions=author_id`,
       {
         headers: {
-          Authorization: `Bearer ${Deno.env.get("TWITTER_KEY")}`,
-          "Content-Type": "application/json",
+          Authorization: `Bearer ${TWITTER_KEY}`,
+          'Content-Type': 'application/json',
         },
       }
     );
@@ -182,13 +180,13 @@ export const bookmarkTweets = async (
 ): Promise<BookmarkingResponse> => {
   try {
     const tweetData = await getTweetDetails(url);
-    const airtableResp = await airtableUpload("Tweets", {
+    const airtableResp = await airtableUpload('Tweets', {
       ...tweetData,
       tags,
     });
 
-    return { success: true, message: airtableResp, source: "bookmarkTweets" };
+    return { success: true, message: airtableResp, source: 'bookmarkTweets' };
   } catch (error) {
-    return { success: false, message: error, source: "bookmarkTweets" };
+    return { success: false, message: error, source: 'bookmarkTweets' };
   }
 };
