@@ -9,7 +9,6 @@ export interface RedditData {
   content: string;
   subreddit: string;
   url: string;
-  category: string;
 }
 export interface ParsingService {
   title: RegExp;
