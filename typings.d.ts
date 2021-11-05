@@ -42,8 +42,14 @@ export interface AirtableError {
   }[];
 }
 
+export interface BookmarkingResponse {
+  success: boolean;
+  message: string;
+  source: string;
+}
+
 export interface RequestPayload {
   url: string;
-  source: string;
+  table: string;
   tags: string[];
 }
