@@ -4,7 +4,7 @@ import {
   BookmarkingResponse,
   ParsingPatterns,
   ParsingService,
-  PodcastData,
+  BookmarkData ,
 } from "./typings.d.ts";
 
 // list of regular expressions to find and replace
@@ -102,12 +102,12 @@ const titleCleaner = (string: string, patterns: RegExp[]): string => {
  *
  * @param {string} url episode url
  * @param {string} source episode source; castro || overcast
- * @returns {Promise<PodcastData>} episode title, podcast, and url
+ * @returns {Promise<BookmarkData >} episode title, podcast, and url
  */
 const getPodcastDetails = async (
   url: string,
   source: string
-): Promise<PodcastData> => {
+): Promise<BookmarkData > => {
   const request = await fetch(url);
 
   try {
