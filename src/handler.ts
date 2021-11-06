@@ -141,9 +141,8 @@ export const handleRequest = async (request: Request): Promise<Response> => {
           JSON.stringify({ error: "Missing 'url' parameter." }),
           badReqBody
         );
-      case payload.table !== 'Tags' && 
-        payload.data?.tags.length === 0 ||
-        !Array.isArray(payload.data?.tags):
+      case payload.table !== 'Tags' &&
+        (payload.data?.tags.length === 0 || !Array.isArray(payload.data?.tags)):
         return new Response(
           JSON.stringify({ error: "Missing 'tags' parameter." }),
           badReqBody

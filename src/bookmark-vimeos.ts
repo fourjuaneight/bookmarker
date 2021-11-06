@@ -1,10 +1,6 @@
 import { airtableUpload } from './airtable-upload';
 
-import {
-  BookmarkData,
-  BookmarkingResponse,
-  VimeoResponse,
-} from './typings.d';
+import { BookmarkData, BookmarkingResponse, VimeoResponse } from './typings.d';
 
 /**
  * Convert video url to API ready endpoint. Extracts video ID.
