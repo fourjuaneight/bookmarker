@@ -5,6 +5,10 @@ export interface BookmarkData {
   url: string;
 }
 
+export interface PageData extends BookmarkData {
+  tags: string[];
+}
+
 export interface RedditData {
   title: string;
   content: string;
@@ -1086,11 +1090,7 @@ export interface BookmarkingResponse {
 
 export interface RequestPayload {
   key: string;
-  url: string;
   table: string;
-  data?: {
-    title: string;
-    creator: string;
-  };
-  tags: string[];
+  tagList?: string;
+  data?: PageData;
 }

@@ -1,11 +1,12 @@
-import { bookmarkPage } from './bookmark-page.ts';
-import { bookmarkPodcasts } from './bookmark-podcasts.ts';
-import { bookmarkReddits } from './bookmark-reddits.ts';
-import { bookmarkTweets } from './bookmark-tweets.ts';
-import { bookmarkVimeo } from './bookmark-vimeos.ts';
-import { bookmarkYouTube } from './bookmark-youtubes.ts';
+import { bookmarkPage } from './bookmark-page';
+import { bookmarkPodcasts } from './bookmark-podcasts';
+import { bookmarkReddits } from './bookmark-reddits';
+import { bookmarkTweets } from './bookmark-tweets';
+import { bookmarkVimeo } from './bookmark-vimeos';
+import { bookmarkYouTube } from './bookmark-youtubes';
+import { bookmarks, github, stackoverflow, media, manga } from './tags';
 
-import { BookmarkingResponse, RequestPayload } from './typings.d.ts';
+import { BookmarkingResponse, PageData, RequestPayload } from './typings.d';
 
 const responseInit = {
   headers: {
@@ -27,40 +28,50 @@ const noAuthReqBody = {
   statusText: 'Unauthorized',
   ...responseInit,
 };
+const tagsList: { [key: string]: string[] } = {
+  bookmarks,
+  github,
+  stackoverflow,
+  media,
+  manga,
+};
 
 const handleAction = async (payload: RequestPayload): Promise<Response> => {
   try {
     let response: BookmarkingResponse;
 
     switch (true) {
-      case payload.table === 'Podcasts': {
-        response = await bookmarkPodcasts(payload.url, payload.tags);
+      case payload.table === 'Tags': {
+        return new Response(
+          JSON.stringify({
+            tags: tagsList[payload.tagList],
+            location: payload.tagList,
+          }),
+          responseInit
+        );
+      }
+      case payload.table === 'Podcasts' && payload.data: {
+        response = await bookmarkPodcasts(payload.data.url, payload.data.tags);
         break;
       }
-      case payload.table === 'Reddits': {
-        response = await bookmarkReddits(payload.url, payload.tags);
+      case payload.table === 'Reddits' && payload.data: {
+        response = await bookmarkReddits(payload.data.url, payload.data.tags);
         break;
       }
-      case payload.table === 'Tweets': {
-        response = await bookmarkTweets(payload.url, payload.tags);
+      case payload.table === 'Tweets' && payload.data: {
+        response = await bookmarkTweets(payload.data.url, payload.data.tags);
         break;
       }
-      case payload.table === 'Videos': {
-        if (payload.url.includes('vimeo')) {
-          response = await bookmarkVimeo(payload.url, payload.tags);
+      case payload.table === 'Videos' && payload.data: {
+        if (payload.data.url.includes('vimeo')) {
+          response = await bookmarkVimeo(payload.data.url, payload.data.tags);
         } else {
-          response = await bookmarkYouTube(payload.url, payload.tags);
+          response = await bookmarkYouTube(payload.data.url, payload.data.tags);
         }
         break;
       }
       default: {
-        response = await bookmarkPage(
-          payload.table,
-          payload.data?.title ?? '',
-          payload.data?.creator ?? '',
-          payload.url,
-          payload.tags
-        );
+        response = await bookmarkPage(payload.table, payload.data as PageData);
         break;
       }
     }
@@ -110,6 +121,11 @@ export const handleRequest = async (request: Request): Promise<Response> => {
           JSON.stringify({ error: "Missing 'table' parameter." }),
           badReqBody
         );
+      case payload.table === 'Tags' && !payload.tagList:
+        return new Response(
+          JSON.stringify({ error: "Missing 'tagList' parameter." }),
+          badReqBody
+        );
       case payload.table === 'Articles' && !payload.data?.title:
         return new Response(
           JSON.stringify({ error: "Missing 'data.title' parameter." }),
@@ -120,12 +136,13 @@ export const handleRequest = async (request: Request): Promise<Response> => {
           JSON.stringify({ error: "Missing 'data.creator' parameter." }),
           badReqBody
         );
-      case !payload.url:
+      case !payload.data?.url:
         return new Response(
           JSON.stringify({ error: "Missing 'url' parameter." }),
           badReqBody
         );
-      case payload.tags.length === 0 || !Array.isArray(payload.tags):
+      case payload.data?.tags.length === 0 ||
+        !Array.isArray(payload.data?.tags):
         return new Response(
           JSON.stringify({ error: "Missing 'tags' parameter." }),
           badReqBody
