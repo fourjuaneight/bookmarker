@@ -1,10 +1,10 @@
-import { airtableUpload } from './airtable-upload.ts';
+import { airtableUpload } from './airtable-upload';
 
 import {
   BookmarkingResponse,
   TwitterData,
   TwitterResponse,
-} from './typings.d.ts';
+} from './typings.d';
 
 // Match unicode and convert to emoji code
 const emojiRange = new RegExp(

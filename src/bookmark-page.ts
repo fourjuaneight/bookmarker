@@ -1,32 +1,26 @@
-import { airtableUpload } from './airtable-upload.ts';
+import { airtableUpload } from './airtable-upload';
 
-import { BookmarkingResponse } from './typings.d.ts';
+import { BookmarkingResponse, PageData } from './typings.d';
 
 /**
  * Upload article|comic to Airtable.
  * @function
  * @async
  *
- * @param {string} table table name
- * @param {string} title page title
- * @param {string} creator page creator
- * @param {string} url page url
- * @param {string[]} tags record tags
+ * @param {string} table airtable table name
+ * @param {PageData} data page data
  * @returns {Promise<BookmarkingResponse>} result of record upload
  */
 export const bookmarkPage = async (
   table: string,
-  title: string,
-  creator: string,
-  url: string,
-  tags: string[]
+  data: PageData
 ): Promise<BookmarkingResponse> => {
   try {
     const airtableResp = await airtableUpload(table, {
-      title,
-      creator,
-      url,
-      tags,
+      title: data.title,
+      creator: data.creator,
+      url: data.url,
+      tags: data.tags,
     });
 
     return { success: true, message: airtableResp, source: 'bookmarkPage' };

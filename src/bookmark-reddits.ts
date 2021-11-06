@@ -1,6 +1,6 @@
-import { airtableUpload } from './airtable-upload.ts';
+import { airtableUpload } from './airtable-upload';
 
-import { BookmarkingResponse, RedditData } from './typings.d.ts';
+import { BookmarkingResponse, RedditData } from './typings.d';
 
 /**
  * Get post details via Reddit API.

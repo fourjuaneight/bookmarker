@@ -1,4 +1,4 @@
-import { AirtableError, AirtableResp, RecordData } from './typings.d.ts';
+import { AirtableError, AirtableResp, RecordData } from './typings.d';
 
 /**
  * Upload podcast record object to Airtable

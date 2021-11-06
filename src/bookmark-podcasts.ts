@@ -1,11 +1,11 @@
-import { airtableUpload } from './airtable-upload.ts';
+import { airtableUpload } from './airtable-upload';
 
 import {
   BookmarkingResponse,
   ParsingPatterns,
   ParsingService,
   BookmarkData,
-} from './typings.d.ts';
+} from './typings.d';
 
 // list of regular expressions to find and replace
 const parsing: ParsingPatterns = {
