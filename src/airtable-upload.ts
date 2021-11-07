@@ -22,9 +22,7 @@ export const airtableUpload = async (
     body: JSON.stringify({
       records: [
         {
-          fields: {
-            ...record,
-          },
+          fields: record,
         },
       ],
     }),
