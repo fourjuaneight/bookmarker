@@ -101,16 +101,12 @@ const titleCleaner = (string: string, patterns: RegExp[]): string => {
  * @async
  *
  * @param {string} url episode url
- * @param {string} source episode source; castro || overcast
  * @returns {Promise<BookmarkData >} episode title, podcast, and url
  */
-const getPodcastDetails = async (
-  url: string,
-  source: string
-): Promise<BookmarkData> => {
-  const request = await fetch(url);
-
+const getPodcastDetails = async (url: string): Promise<BookmarkData> => {
+  const source = url.includes('castro') ? 'castro' : 'overcast';
   try {
+    const request = await fetch(url);
     const response = await request.text();
     // flatten doc; remove breakpoints and excessive spaces
     const post = response
@@ -150,7 +146,7 @@ export const bookmarkPodcasts = async (
   tags: string[]
 ): Promise<BookmarkingResponse> => {
   try {
-    const podcastData = await getPodcastDetails(url, 'castro');
+    const podcastData = await getPodcastDetails(url);
     const airtableResp = await airtableUpload('Podcasts', {
       ...podcastData,
       tags,
