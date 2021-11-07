@@ -16,7 +16,7 @@ import {
  */
 const cleanUrl = (url: string): YouTubeAPIEndpoint => {
   const extractedID = url
-    .replace(/(https:\/\/)(youtu.*)\.(be|com)\/(watch\?v=)?/g, '')
+    .replace(/(https:\/\/)(www\.)?(youtu.*)\.(be|com)\/(watch\?v=)?/g, '')
     .replace('&feature=share', '');
   const endpoint = `https://youtube.googleapis.com/youtube/v3/videos?id=${extractedID}`;
   const link = `https://youtu.be/${extractedID}`;
@@ -38,6 +38,11 @@ const getYouTubeDetails = async (url: string): Promise<BookmarkData> => {
     const { endpoint, link } = cleanUrl(url);
     const request = await fetch(`${endpoint}&key=${YOUTUBE_KEY}`);
     const response: YouTubeResponse = await request.json();
+
+    if (response.items.length === 0) {
+      throw new Error('Getting youtube details: \n No video found');
+    }
+
     const video = response.items[0].snippet;
 
     return {
@@ -46,7 +51,7 @@ const getYouTubeDetails = async (url: string): Promise<BookmarkData> => {
       url: link,
     };
   } catch (error) {
-    throw new Error(`Gettingg youtube details: \n ${error}`);
+    throw new Error(`Getting youtube details: \n ${error}`);
   }
 };
 
