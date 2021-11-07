@@ -22,7 +22,7 @@ const cleanUrl = (url: string): YouTubeAPIEndpoint => {
   const link = `https://youtu.be/${extractedID}`;
   const data: YouTubeAPIEndpoint = { endpoint, link };
   
-  console.info('[cleanUrl]:', data);
+  console.log('[cleanUrl]:', data);
   return data;
 };
 
@@ -41,7 +41,7 @@ const getYouTubeDetails = async (url: string): Promise<BookmarkData> => {
     const request = await fetch(`${endpoint}&key=${YOUTUBE_KEY}`);
     const response: YouTubeResponse = await request.json();
     
-    console.info('[getYouTubeDetails]:', response);
+    console.log('[getYouTubeDetails]:', response);
 
     if (response.items.length === 0) {
       throw new Error('Getting youtube details: \n No video found');
@@ -73,13 +73,13 @@ export const bookmarkYouTube = async (
   tags: string[]
 ): Promise<BookmarkingResponse> => {
   try {
-    const youtTubeData = await getYouTubeDetails(url);
+    const youTubeData = await getYouTubeDetails(url);
     const airtableResp = await airtableUpload('Videos', {
-      ...youtTubeData,
+      ...youTubeData,
       tags,
     });
 
-    console.info('[bookmarkYouTube]:', airtableResp);
+    console.log('[bookmarkYouTube]:', airtableResp);
     return { success: true, message: airtableResp, source: 'bookmarkYouTube' };
   } catch (error) {
     return { success: false, message: error, source: 'bookmarkYouTube' };
