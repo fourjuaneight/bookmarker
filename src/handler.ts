@@ -39,6 +39,7 @@ const tagsList: { [key: string]: string[] } = {
 const handleAction = async (payload: RequestPayload): Promise<Response> => {
   try {
     let response: BookmarkingResponse;
+    console.log('[handleAction]:', payload);
 
     switch (true) {
       case payload.table === 'Tags': {
