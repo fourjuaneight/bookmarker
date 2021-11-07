@@ -38,8 +38,9 @@ const tagsList: { [key: string]: string[] } = {
 
 const handleAction = async (payload: RequestPayload): Promise<Response> => {
   try {
+    const data = payload.data as PageData;
     let response: BookmarkingResponse;
-    console.log('[handleAction]:', payload);
+    let location: string = 'None';
 
     switch (true) {
       case payload.table === 'Tags': {
@@ -51,28 +52,29 @@ const handleAction = async (payload: RequestPayload): Promise<Response> => {
           responseInit
         );
       }
-      case payload.table === 'Podcasts' && payload.data: {
-        response = await bookmarkPodcasts(payload.data.url, payload.data.tags);
+      case payload.table === 'Podcasts':
+        location = 'Podcasts';
+        response = await bookmarkPodcasts(data.url, data.tags);
         break;
-      }
-      case payload.table === 'Reddits' && payload.data: {
-        response = await bookmarkReddits(payload.data.url, payload.data.tags);
+      case payload.table === 'Reddits':
+        location = 'Reddits';
+        response = await bookmarkReddits(data.url, data.tags);
         break;
-      }
-      case payload.table === 'Tweets' && payload.data: {
-        response = await bookmarkTweets(payload.data.url, payload.data.tags);
+      case payload.table === 'Tweets':
+        location = 'Tweets';
+        response = await bookmarkTweets(data.url, data.tags);
         break;
-      }
-      case payload.table === 'Videos' && payload.data: {
-        if (payload.data.url.includes('vimeo')) {
-          response = await bookmarkVimeo(payload.data.url, payload.data.tags);
+      case payload.table === 'Videos':
+        location = 'Videos';
+        if (data.url.includes('vimeo')) {
+          response = await bookmarkVimeo(data.url, data.tags);
         } else {
-          response = await bookmarkYouTube(payload.data.url, payload.data.tags);
+          response = await bookmarkYouTube(data.url, data.tags);
         }
         break;
-      }
       default: {
-        response = await bookmarkPage(payload.table, payload.data as PageData);
+        location = 'Page';
+        response = await bookmarkPage(payload.table, data as PageData);
         break;
       }
     }
@@ -85,7 +87,10 @@ const handleAction = async (payload: RequestPayload): Promise<Response> => {
     }
 
     return new Response(
-      JSON.stringify({ bookmarked: response.message, location: payload.table }),
+      JSON.stringify({
+        bookmarked: response.message,
+        location,
+      }),
       responseInit
     );
   } catch (error) {
