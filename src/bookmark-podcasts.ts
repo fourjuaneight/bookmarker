@@ -32,6 +32,7 @@ const parsing: ParsingPatterns = {
     new RegExp(/\s—\sOvercast/, 'g'),
     new RegExp(/\s-\sYouTube/, 'g'),
     new RegExp(/\s+on Vimeo/, 'g'),
+    new RegExp(/The\sAdventure\sZone\:/, 'g'),
     new RegExp(/\s-\sEp\.?\s\d+$/, 'g'),
     new RegExp(/:\sArticles\sof\sInterest\s#\d+$/, 'g'),
     new RegExp(/\s\D\s([0-9A-Za-z]+\s)+\D\s(Overcast)/, 'g'),
