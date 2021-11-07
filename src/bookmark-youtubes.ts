@@ -20,8 +20,10 @@ const cleanUrl = (url: string): YouTubeAPIEndpoint => {
     .replace('&feature=share', '');
   const endpoint = `https://youtube.googleapis.com/youtube/v3/videos?id=${extractedID}`;
   const link = `https://youtu.be/${extractedID}`;
-
-  return { endpoint, link };
+  const data: YouTubeAPIEndpoint = { endpoint, link };
+  
+  console.info('[cleanUrl]:', data);
+  return data;
 };
 
 /**
@@ -38,6 +40,8 @@ const getYouTubeDetails = async (url: string): Promise<BookmarkData> => {
     const { endpoint, link } = cleanUrl(url);
     const request = await fetch(`${endpoint}&key=${YOUTUBE_KEY}`);
     const response: YouTubeResponse = await request.json();
+    
+    console.info('[getYouTubeDetails]:', response);
 
     if (response.items.length === 0) {
       throw new Error('Getting youtube details: \n No video found');
@@ -75,6 +79,7 @@ export const bookmarkYouTube = async (
       tags,
     });
 
+    console.info('[bookmarkYouTube]:', airtableResp);
     return { success: true, message: airtableResp, source: 'bookmarkYouTube' };
   } catch (error) {
     return { success: false, message: error, source: 'bookmarkYouTube' };
