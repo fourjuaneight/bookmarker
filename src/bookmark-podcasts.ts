@@ -42,6 +42,7 @@ const parsing: ParsingPatterns = {
     ),
     new RegExp(/\s(—)(\s[A-Za-z]+)+/, 'g'),
     new RegExp(/\s$/, 'g'),
+    new RegExp(/^\s/, 'g'),
   ],
 };
 
