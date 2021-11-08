@@ -8,6 +8,7 @@ import { bookmarks, github, stackoverflow, media, manga } from './tags';
 
 import { BookmarkingResponse, PageData, RequestPayload } from './typings.d';
 
+// default responses
 const responseInit = {
   headers: {
     'Content-Type': 'application/json; charset=utf-8',
@@ -28,6 +29,7 @@ const noAuthReqBody = {
   statusText: 'Unauthorized',
   ...responseInit,
 };
+// match tags list to array of tags
 const tagsList: { [key: string]: string[] } = {
   bookmarks,
   github,
@@ -36,12 +38,23 @@ const tagsList: { [key: string]: string[] } = {
   manga,
 };
 
+/**
+ * Helper method to determine which table/category to use.
+ * @function
+ * @async
+ *
+ * @param payload request payload
+ * @returns {Promise<Response>} response
+ */
 const handleAction = async (payload: RequestPayload): Promise<Response> => {
   try {
+    // payload data is present at time point
     const data = payload.data as PageData;
-    let response: BookmarkingResponse;
+    // default helps to determine if switch statement runs and correct table is used
     let location: string = 'None';
+    let response: BookmarkingResponse;
 
+    // determine which table and method to use
     switch (true) {
       case payload.table === 'Tags': {
         return new Response(
@@ -66,6 +79,7 @@ const handleAction = async (payload: RequestPayload): Promise<Response> => {
         break;
       case payload.table === 'Videos':
         location = 'Videos';
+
         if (data.url.includes('vimeo')) {
           response = await bookmarkVimeo(data.url, data.tags);
         } else {
@@ -101,7 +115,16 @@ const handleAction = async (payload: RequestPayload): Promise<Response> => {
   }
 };
 
+/**
+ * Handler method for all requests.
+ * @function
+ * @async
+ *
+ * @param {Request} request request object
+ * @returns {Promise<Response>} response object
+ */
 export const handleRequest = async (request: Request): Promise<Response> => {
+  // POST requests only
   if (request.method !== 'POST') {
     return new Response(null, {
       status: 405,
@@ -109,6 +132,7 @@ export const handleRequest = async (request: Request): Promise<Response> => {
     });
   }
 
+  // content-type check (required)
   if (!request.headers.has('content-type')) {
     return new Response(
       JSON.stringify({ error: "Please provide 'content-type' header." }),
@@ -121,6 +145,7 @@ export const handleRequest = async (request: Request): Promise<Response> => {
   if (contentType?.includes('application/json')) {
     const payload: RequestPayload = await request.json();
 
+    // check for required fields
     switch (true) {
       case !payload.table:
         return new Response(
@@ -171,6 +196,7 @@ export const handleRequest = async (request: Request): Promise<Response> => {
     }
   }
 
+  // default to bad content-type
   return new Response(null, {
     status: 415,
     statusText: 'Unsupported Media Type',
