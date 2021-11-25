@@ -47,7 +47,6 @@ export const bookmarks = [
   'journalism',
   'knowledge',
   'language',
-  'language',
   'life',
   'linguistics',
   'literature',
