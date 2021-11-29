@@ -4,6 +4,7 @@
   "containerUser": "node",
   "extensions": [],
   "settings": {
+    "terminal.integrated.automationShell.linux" : "/usr/bin/zsh",
     "workbench.colorCustomizations": {
       "statusBar.background": "#066300",
       "statusBar.foreground": "#ffffff"
