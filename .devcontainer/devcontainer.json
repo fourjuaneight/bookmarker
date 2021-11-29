@@ -1,6 +1,7 @@
 {
   "name": "Node Codespace",
   "dockerFile": "Dockerfile",
+  "containerUser": "node",
   "extensions": [],
   "settings": {
     "workbench.colorCustomizations": {
