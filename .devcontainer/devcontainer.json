@@ -2,9 +2,12 @@
   "name": "Node Codespace",
   "dockerFile": "Dockerfile",
   "containerUser": "node",
+  "remoteUser": "node",
   "extensions": [],
+  "postCreateCommand": "npm install",
   "settings": {
     "terminal.integrated.automationShell.linux" : "/usr/bin/zsh",
+    "terminal.integrated.shell.linux": "/usr/bin/zsh"
     "workbench.colorCustomizations": {
       "statusBar.background": "#066300",
       "statusBar.foreground": "#ffffff"
