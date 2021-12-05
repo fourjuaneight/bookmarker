@@ -52,6 +52,7 @@ export const bookmarks = [
   'linguistics',
   'literature',
   'machine-learning',
+  'manga',
   'mathematics',
   'mechanical-keyboards',
   'mechanics',
