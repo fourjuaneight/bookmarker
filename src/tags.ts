@@ -4,6 +4,7 @@ export const bookmarks = [
   'ai',
   'ancestry',
   'animals',
+  'anime',
   'anthropology',
   'architecture',
   'art',
