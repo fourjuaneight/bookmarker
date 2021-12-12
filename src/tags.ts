@@ -133,7 +133,7 @@ export const github = [
   'WebAssembly',
 ];
 
-export const stackoverflow = [
+export const stackexchange = [
   'actionscript',
   'adsense',
   'ajax',

@@ -1,10 +1,11 @@
 import { bookmarkPage } from './bookmark-page';
 import { bookmarkPodcasts } from './bookmark-podcasts';
 import { bookmarkReddits } from './bookmark-reddits';
+import { bookmarkStackExchange } from './bookmark-stackexchange';
 import { bookmarkTweets } from './bookmark-tweets';
 import { bookmarkVimeo } from './bookmark-vimeos';
 import { bookmarkYouTube } from './bookmark-youtubes';
-import { bookmarks, github, stackoverflow, media, manga } from './tags';
+import { bookmarks, github, stackexchange, media, manga } from './tags';
 
 import { BookmarkingResponse, PageData, RequestPayload } from './typings.d';
 
@@ -33,7 +34,7 @@ const noAuthReqBody = {
 const tagsList: { [key: string]: string[] } = {
   bookmarks,
   github,
-  stackoverflow,
+  stackexchange,
   media,
   manga,
 };
@@ -66,19 +67,23 @@ const handleAction = async (payload: RequestPayload): Promise<Response> => {
         );
       }
       case payload.table === 'Podcasts':
-        location = 'Podcasts';
+        location = payload.table;
         response = await bookmarkPodcasts(data.url, data.tags);
         break;
       case payload.table === 'Reddits':
-        location = 'Reddits';
+        location = payload.table;
         response = await bookmarkReddits(data.url, data.tags);
         break;
+      case payload.table === 'StackExchange':
+        location = payload.table;
+        response = await bookmarkStackExchange(data.url, data.tags);
+        break;
       case payload.table === 'Tweets':
-        location = 'Tweets';
+        location = payload.table;
         response = await bookmarkTweets(data.url, data.tags);
         break;
       case payload.table === 'Videos':
-        location = 'Videos';
+        location = payload.table;
 
         if (data.url.includes('vimeo')) {
           response = await bookmarkVimeo(data.url, data.tags);
