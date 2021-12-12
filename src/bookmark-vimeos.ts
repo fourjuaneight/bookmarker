@@ -19,7 +19,7 @@ const cleanUrl = (url: string): string => {
 };
 
 /**
- * Get tweet details via Vimeo API.
+ * Get video details via Vimeo API.
  * Docs: https://developer.vimeo.com/api/reference/videos#get_video
  * @function
  * @async
