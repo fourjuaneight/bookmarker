@@ -7,11 +7,13 @@ import { AirtableError, AirtableResp, RecordData } from './typings.d';
  *
  * @param {string} table Airtable table name
  * @param {RecordData} record formatted podcast record to upload
+ * @param {[boolean]} dev use development endpoint
  * @returns {void}
  */
 export const airtableUpload = async (
   table: string,
-  record: RecordData
+  record: RecordData,
+  dev?: boolean = false
 ): Promise<string> => {
   const options: RequestInit = {
     method: 'POST',
@@ -27,12 +29,12 @@ export const airtableUpload = async (
       ],
     }),
   };
+  const endpoint = dev
+    ? `${AIRTABLE_DEVELOPMENT_ENDPOINT}/${table}`
+    : `${AIRTABLE_BOOKMARKS_ENDPOINT}/${table}`;
 
   try {
-    const response: Response = await fetch(
-      `${AIRTABLE_BOOKMARKS_ENDPOINT}/${table}`,
-      options
-    );
+    const response: Response = await fetch(endpoint, options);
     const results: AirtableResp | AirtableError = await response.json();
 
     if ((results as AirtableError).errors) {
