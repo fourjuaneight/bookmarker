@@ -16,6 +16,13 @@ export interface RedditData {
   url: string;
 }
 
+export interface StackExchangeData {
+  title: string;
+  question: string;
+  answer: string;
+  tags: string[];
+}
+
 export interface TwitterData {
   tweet: string;
   creator: string;
@@ -39,6 +46,44 @@ export interface ParsingPatterns {
 export interface YouTubeAPIEndpoint {
   endpoint: string;
   link: string;
+}
+
+export interface QuestionOwner {
+  account_id: number;
+  reputation: number;
+  user_id: number;
+  user_type: string;
+  accept_rate: number;
+  profile_image: string;
+  display_name: string;
+  link: string;
+}
+
+export interface QuestionItems {
+  tags: string[];
+  owner: QuestionOwner;
+  is_answered: boolean;
+  view_count: number;
+  protected_date: number;
+  accepted_answer_id: number;
+  answer_count: number;
+  community_owned_date: number;
+  score: number;
+  locked_date: number;
+  last_activity_date: number;
+  creation_date: number;
+  last_edit_date: number;
+  question_id: number;
+  content_license: string;
+  link: string;
+  title: string;
+}
+
+export interface StackExchangeResponse {
+  items: QuestionItems[];
+  has_more: boolean;
+  quota_max: number;
+  quota_remaining: number;
 }
 
 export interface TwitterResponse {
@@ -1056,13 +1101,15 @@ export interface YouTubeResponse {
 }
 
 export interface RecordData {
+  answer?: string;
   title?: string;
   tweet?: string;
   content?: string;
   creator?: string;
+  question?: string;
   subreddit?: string;
-  url: string;
   tags: string[];
+  url?: string;
 }
 
 export interface Records {
