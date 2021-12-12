@@ -28,6 +28,7 @@ jobs:
           AUTH_KEY: ${{ secrets.AUTH_KEY }}
           AIRTABLE_API: ${{ secrets.AIRTABLE_API }}
           AIRTABLE_BOOKMARKS_ENDPOINT: ${{ secrets.AIRTABLE_BOOKMARKS_ENDPOINT }}
+          AIRTABLE_DEVELOPMENT_ENDPOINT: ${{ secrets.AIRTABLE_DEVELOPMENT_ENDPOINT }}
           TWITTER_KEY: ${{ secrets.TWITTER_KEY }}
           VIMEO_KEY: ${{ secrets.VIMEO_KEY }}
           YOUTUBE_KEY: ${{ secrets.YOUTUBE_KEY }}
