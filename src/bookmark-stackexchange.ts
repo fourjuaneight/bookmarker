@@ -4,7 +4,7 @@ import {
   BookmarkingResponse,
   StackExchangeData,
   StackExchangeResponse,
-} from './typings';
+} from './typings.d';
 
 /**
  * Convert question url to API ready endpoint. Extracts question ID and site.
