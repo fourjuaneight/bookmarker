@@ -34,6 +34,7 @@ const cleanUrl = (url: string): string => {
 const getQuestionDetails = async (url: string): Promise<StackExchangeData> => {
   try {
     const endpoint = cleanUrl(url);
+    const site = url.replace(/https:\/\/([a-zA-Z0-9]+)\.com\/.*/g, '$1');
     const request = await fetch(endpoint);
     const response: StackExchangeResponse = await request.json();
 
@@ -43,9 +44,9 @@ const getQuestionDetails = async (url: string): Promise<StackExchangeData> => {
 
     return {
       title: response.items[0].title,
-      question: url,
+      question: `https://${site}.com/q/${response.items[0].question_id}`,
       answer: response.items[0].is_answered
-        ? `https://stackoverflow.com/a/${response.items[0].accepted_answer_id}`
+        ? `https://${site}.com/a/${response.items[0].accepted_answer_id}`
         : '',
     };
   } catch (error) {
