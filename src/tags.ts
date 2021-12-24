@@ -394,6 +394,7 @@ export const stackexchange = [
   'youtube-api',
   'youtube-dl',
   'zip',
+  'zfs',
   'zsh',
 ];
 
