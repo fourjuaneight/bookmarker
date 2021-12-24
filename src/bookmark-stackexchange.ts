@@ -37,13 +37,17 @@ const getQuestionDetails = async (url: string): Promise<StackExchangeData> => {
     const site = url.replace(/https:\/\/([a-zA-Z0-9]+)\.com\/.*/g, '$1');
     const request = await fetch(endpoint);
     const response: StackExchangeResponse = await request.json();
+    const decodeHtmlCharCodes = (str: string): string =>
+      str.replace(/(&#(\d+);)/g, (match, capture, charCode) =>
+        String.fromCharCode(charCode)
+      );
 
     if (response.items.length === 0) {
       throw new Error('No question found');
     }
 
     return {
-      title: response.items[0].title.replace(/&#39;/g, "'"),
+      title: decodeHtmlCharCodes(response.items[0].title),
       question: `https://${site}.com/q/${response.items[0].question_id}`,
       answer: response.items[0].is_answered
         ? `https://${site}.com/a/${response.items[0].accepted_answer_id}`
