@@ -372,6 +372,7 @@ export const stackexchange = [
   'time',
   'time-complexity',
   'timestamp',
+  'timezone',
   'timezone-offset',
   'tty',
   'turbolinks',
