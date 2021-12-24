@@ -366,8 +366,6 @@ export const stackexchange = [
   'switch-statement',
   'symlink',
   'syntax',
-  'tail-call-optimization',
-  'tail-recursion',
   'temp',
   'time',
   'time-complexity',
