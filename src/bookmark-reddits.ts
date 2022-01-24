@@ -23,7 +23,7 @@ const getRedditDetails = async (url: string): Promise<RedditData> => {
         post.selftext ||
         post.media.reddit_video.fallback_url?.replace('?source=fallback', '') ||
         post.url_overridden_by_dest,
-      subreddit: `r/${post.subreddit}`,
+      subreddit: post.subreddit_name_prefixed,
       url,
     };
   } catch (error) {
