@@ -19,7 +19,10 @@ const getRedditDetails = async (url: string): Promise<RedditData> => {
 
     return {
       title: post.title,
-      content: post.selftext || post.media.reddit_video.scrubber_media_url || post.url_overridden_by_dest,
+      content:
+        post.selftext ||
+        post.media.reddit_video.fallback_url?.replace('?source=fallback', '') ||
+        post.url_overridden_by_dest,
       subreddit: `r/${post.subreddit}`,
       url,
     };
