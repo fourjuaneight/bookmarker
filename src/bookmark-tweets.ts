@@ -69,7 +69,7 @@ const expandLinks = async (url: string): Promise<string> => {
 
     return request.url;
   } catch (error) {
-    throw new Error(`Expanding shorten link: \n ${error}`);
+    throw `Expanding shorten link: \n ${error}`;
   }
 };
 
@@ -100,7 +100,7 @@ const expandShortLink = async (str: string, regex: RegExp): Promise<string> => {
 
     return str.replace(regex, replacer);
   } catch (error) {
-    throw new Error(`Expanding all shorten link: \n ${error}`);
+    throw `Expanding all shorten link: \n ${error}`;
   }
 };
 
@@ -157,7 +157,7 @@ const getTweetDetails = async (url: string): Promise<TwitterData> => {
       url: `https://twitter.com/${username}/status/${response.data.id}`,
     };
   } catch (error) {
-    throw new Error(`Getting tweet details: \n ${error}`);
+    throw `Getting tweet details: \n ${error}`;
   }
 };
 

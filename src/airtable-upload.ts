@@ -51,6 +51,6 @@ export const airtableUpload = async (
       (recordFields.title || recordFields.tweet || recordFields.content) ?? ''
     );
   } catch (error) {
-    throw new Error(`Uploading repos to Airtable: \n ${error}`);
+    throw `Uploading repos to Airtable: \n ${error}`;
   }
 };

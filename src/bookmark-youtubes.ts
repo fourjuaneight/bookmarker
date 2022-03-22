@@ -52,7 +52,7 @@ const getYouTubeDetails = async (url: string): Promise<BookmarkData> => {
       url: link,
     };
   } catch (error) {
-    throw new Error(`Getting youtube details: \n ${error}`);
+    throw `Getting youtube details: \n ${error}`;
   }
 };
 
