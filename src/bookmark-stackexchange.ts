@@ -47,7 +47,10 @@ const getQuestionDetails = async (url: string): Promise<StackExchangeData> => {
     }
 
     return {
-      title: decodeHtmlCharCodes(response.items[0].title).replace(/&quot;/g, '"'),
+      title: decodeHtmlCharCodes(response.items[0].title).replace(
+        /&quot;/g,
+        '"'
+      ),
       question: `https://${site}.com/q/${response.items[0].question_id}`,
       answer: response.items[0].is_answered
         ? `https://${site}.com/a/${response.items[0].accepted_answer_id}`
