@@ -57,7 +57,7 @@ const getQuestionDetails = async (url: string): Promise<StackExchangeData> => {
         : '',
     };
   } catch (error) {
-    throw `Getting vimeo details: \n ${error}`;
+    throw `Getting stackexchange details: \n ${error}`;
   }
 };
 
