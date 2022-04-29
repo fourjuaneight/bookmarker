@@ -99,6 +99,7 @@ export const bookmarks = [
   'travel',
   'tv',
   'war',
+  'web',
   'wood-working',
   'work',
   'writing',
