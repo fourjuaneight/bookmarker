@@ -182,6 +182,7 @@ export const bookmarkTweets = async (
     const airtableResp = await airtableUpload('Tweets', {
       ...tweetData,
       tags,
+      status: 'alive',
     });
 
     return { success: true, message: airtableResp, source: 'bookmarkTweets' };

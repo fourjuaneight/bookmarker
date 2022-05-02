@@ -1100,6 +1100,8 @@ export interface YouTubeResponse {
   };
 }
 
+export type FieldStatus = 'alive' | 'dead';
+
 export interface RecordData {
   answer?: string;
   title?: string;
@@ -1107,9 +1109,10 @@ export interface RecordData {
   content?: string;
   creator?: string;
   question?: string;
+  status?: FieldStatus;
   subreddit?: string;
   tags: string[];
-  url?: string;
+  url: string;
 }
 
 export interface Records {

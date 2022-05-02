@@ -65,6 +65,7 @@ export const bookmarkVimeo = async (
     const airtableResp = await airtableUpload('Videos', {
       ...vimeoData,
       tags,
+      status: 'alive',
     });
 
     return { success: true, message: airtableResp, source: 'bookmarkVimeo' };

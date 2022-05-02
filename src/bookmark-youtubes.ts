@@ -74,6 +74,7 @@ export const bookmarkYouTube = async (
     const airtableResp = await airtableUpload('Videos', {
       ...youTubeData,
       tags,
+      status: 'alive',
     });
 
     return { success: true, message: airtableResp, source: 'bookmarkYouTube' };

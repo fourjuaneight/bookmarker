@@ -152,6 +152,7 @@ export const bookmarkPodcasts = async (
     const airtableResp = await airtableUpload('Podcasts', {
       ...podcastData,
       tags,
+      status: 'alive',
     });
 
     return { success: true, message: airtableResp, source: 'bookmarkPodcasts' };

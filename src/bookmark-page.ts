@@ -21,6 +21,7 @@ export const bookmarkPage = async (
       creator: data.creator,
       url: data.url,
       tags: data.tags,
+      status: 'alive',
     });
 
     return { success: true, message: airtableResp, source: 'bookmarkPage' };

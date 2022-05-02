@@ -52,6 +52,7 @@ export const bookmarkReddits = async (
     const airtableResp = await airtableUpload('Reddits', {
       ...redditData,
       tags,
+      status: 'alive',
     });
 
     return { success: true, message: airtableResp, source: 'bookmarkReddits' };
