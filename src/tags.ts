@@ -1,4 +1,5 @@
 export const bookmarks = [
+  'accessibility',
   'adventure',
   'advertising',
   'ai',
