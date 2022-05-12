@@ -1,6 +1,6 @@
-import { airtableUpload } from './airtable-upload';
+import { addHasuraRecord } from './hasura-upload';
 
-import { BookmarkingResponse, PageData } from './typings.d';
+import { BookmarkingResponse, PageData, RecordData } from './typings.d';
 
 /**
  * Upload article|comic to Airtable.
@@ -15,18 +15,24 @@ export const bookmarkPage = async (
   table: string,
   data: PageData
 ): Promise<BookmarkingResponse> => {
-  try {
-    const airtableResp = await airtableUpload(table, {
-      title: data.title,
-      author: data.author,
-      site: data.site,
-      url: data.url,
-      tags: data.tags,
-      status: 'alive',
-    });
+  const isArticle = table === 'Articles';
+  const list = isArticle ? 'bookmarks_articles' : 'bookmarks_comics';
+  const source = isArticle ? 'bookmarkPage:articles' : 'bookmarkPage:comics';
+  const baseData = {
+    title: data.title,
+    url: data.url,
+    tags: data.tags,
+    dead: false,
+  };
+  const record = isArticle
+    ? ({ ...baseData, author: data.author, site: data.site } as RecordData)
+    : ({ ...baseData, creator: data.creator } as RecordData);
 
-    return { success: true, message: airtableResp, source: 'bookmarkPage' };
+  try {
+    const hasuraResp = await addHasuraRecord(list, record);
+
+    return { success: true, message: hasuraResp, source };
   } catch (error) {
-    return { success: false, message: error, source: 'bookmarkPage' };
+    return { success: false, message: error, source };
   }
 };

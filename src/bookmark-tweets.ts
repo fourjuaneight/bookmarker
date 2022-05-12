@@ -1,4 +1,4 @@
-import { airtableUpload } from './airtable-upload';
+import { addHasuraRecord } from './hasura-upload';
 
 import { BookmarkingResponse, TwitterData, TwitterResponse } from './typings.d';
 
@@ -179,13 +179,13 @@ export const bookmarkTweets = async (
 ): Promise<BookmarkingResponse> => {
   try {
     const tweetData = await getTweetDetails(url);
-    const airtableResp = await airtableUpload('Tweets', {
+    const hasuraResp = await addHasuraRecord('bookmarks_tweets', {
       ...tweetData,
       tags,
-      status: 'alive',
+      dead: false,
     });
 
-    return { success: true, message: airtableResp, source: 'bookmarkTweets' };
+    return { success: true, message: hasuraResp, source: 'bookmarkTweets' };
   } catch (error) {
     return { success: false, message: error, source: 'bookmarkTweets' };
   }

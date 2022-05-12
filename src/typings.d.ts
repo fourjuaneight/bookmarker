@@ -1114,7 +1114,8 @@ export interface RecordData {
   content?: string;
   creator?: string;
   question?: string;
-  status?: FieldStatus;
+  site?: string;
+  dead?: boolean;
   subreddit?: string;
   tags: string[];
   url: string;
@@ -1149,4 +1150,20 @@ export interface RequestPayload {
   table: string;
   tagList?: string;
   data?: PageData;
+}
+
+export interface HasuraQueryResp {
+  [key: string]: {
+    [key: string]: any;
+  };
+}
+
+export interface HasuraErrors {
+  errors: {
+    extensions: {
+      path: string;
+      code: string;
+    };
+    message: string;
+  }[];
 }

@@ -1,4 +1,4 @@
-import { airtableUpload } from './airtable-upload';
+import { addHasuraRecord } from './hasura-upload';
 
 import {
   BookmarkingResponse,
@@ -149,13 +149,13 @@ export const bookmarkPodcasts = async (
 ): Promise<BookmarkingResponse> => {
   try {
     const podcastData = await getPodcastDetails(url);
-    const airtableResp = await airtableUpload('Podcasts', {
+    const hasuraResp = await addHasuraRecord('bookmarks_podcasts', {
       ...podcastData,
       tags,
-      status: 'alive',
+      dead: false,
     });
 
-    return { success: true, message: airtableResp, source: 'bookmarkPodcasts' };
+    return { success: true, message: hasuraResp, source: 'bookmarkPodcasts' };
   } catch (error) {
     return { success: false, message: error, source: 'bookmarkPodcasts' };
   }

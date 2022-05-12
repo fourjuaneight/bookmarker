@@ -1,4 +1,4 @@
-import { airtableUpload } from './airtable-upload';
+import { addHasuraRecord } from './hasura-upload';
 
 import { BookmarkData, BookmarkingResponse, VimeoResponse } from './typings.d';
 
@@ -62,13 +62,13 @@ export const bookmarkVimeo = async (
 ): Promise<BookmarkingResponse> => {
   try {
     const vimeoData = await getVimeoDetails(url);
-    const airtableResp = await airtableUpload('Videos', {
+    const hasuraResp = await addHasuraRecord('bookmarks_videos', {
       ...vimeoData,
       tags,
-      status: 'alive',
+      dead: false,
     });
 
-    return { success: true, message: airtableResp, source: 'bookmarkVimeo' };
+    return { success: true, message: hasuraResp, source: 'bookmarkVimeo' };
   } catch (error) {
     return { success: false, message: error, source: 'bookmarkVimeo' };
   }

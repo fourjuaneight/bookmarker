@@ -1,4 +1,4 @@
-import { airtableUpload } from './airtable-upload';
+import { addHasuraRecord } from './hasura-upload';
 
 import {
   BookmarkingResponse,
@@ -76,18 +76,14 @@ export const bookmarkStackExchange = async (
 ): Promise<BookmarkingResponse> => {
   try {
     const questionData = await getQuestionDetails(url);
-    const airtableResp = await airtableUpload(
-      'StackExchange',
-      {
-        ...questionData,
-        tags,
-      },
-      true
-    );
+    const hasuraResp = await addHasuraRecord('development_stack_exchange', {
+      ...questionData,
+      tags,
+    });
 
     return {
       success: true,
-      message: airtableResp,
+      message: hasuraResp,
       source: 'bookmarkStackExchange',
     };
   } catch (error) {

@@ -1,4 +1,4 @@
-import { airtableUpload } from './airtable-upload';
+import { addHasuraRecord } from './hasura-upload';
 
 import { BookmarkingResponse, RedditData } from './typings.d';
 
@@ -49,13 +49,13 @@ export const bookmarkReddits = async (
 ): Promise<BookmarkingResponse> => {
   try {
     const redditData = await getRedditDetails(url);
-    const airtableResp = await airtableUpload('Reddits', {
+    const hasuraResp = await addHasuraRecord('bookmarks_reddits', {
       ...redditData,
       tags,
-      status: 'alive',
+      dead: false,
     });
 
-    return { success: true, message: airtableResp, source: 'bookmarkReddits' };
+    return { success: true, message: hasuraResp, source: 'bookmarkReddits' };
   } catch (error) {
     return { success: false, message: error, source: 'bookmarkReddits' };
   }

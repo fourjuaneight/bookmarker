@@ -1,4 +1,4 @@
-import { airtableUpload } from './airtable-upload';
+import { addHasuraRecord } from './hasura-upload';
 
 import {
   BookmarkData,
@@ -71,13 +71,13 @@ export const bookmarkYouTube = async (
 ): Promise<BookmarkingResponse> => {
   try {
     const youTubeData = await getYouTubeDetails(url);
-    const airtableResp = await airtableUpload('Videos', {
+    const hasuraResp = await addHasuraRecord('bookmarks_videos', {
       ...youTubeData,
       tags,
-      status: 'alive',
+      dead: false,
     });
 
-    return { success: true, message: airtableResp, source: 'bookmarkYouTube' };
+    return { success: true, message: hasuraResp, source: 'bookmarkYouTube' };
   } catch (error) {
     return { success: false, message: error, source: 'bookmarkYouTube' };
   }
