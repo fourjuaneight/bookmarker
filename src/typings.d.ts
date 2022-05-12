@@ -5,7 +5,11 @@ export interface BookmarkData {
   url: string;
 }
 
-export interface PageData extends BookmarkData {
+export interface PageData {
+  title: string;
+  author: string;
+  site: string;
+  url: string;
   tags: string[];
 }
 
@@ -25,7 +29,7 @@ export interface StackExchangeData {
 
 export interface TwitterData {
   tweet: string;
-  creator: string;
+  user: string;
   url: string;
 }
 
@@ -1103,6 +1107,7 @@ export interface YouTubeResponse {
 export type FieldStatus = 'alive' | 'dead';
 
 export interface RecordData {
+  author?: string;
   answer?: string;
   title?: string;
   tweet?: string;
@@ -1113,6 +1118,7 @@ export interface RecordData {
   subreddit?: string;
   tags: string[];
   url: string;
+  user?: string;
 }
 
 export interface Records {

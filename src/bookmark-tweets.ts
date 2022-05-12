@@ -156,7 +156,7 @@ const getTweetDetails = async (url: string): Promise<TwitterData> => {
 
     return {
       tweet: cleanText,
-      creator: `@${username}`,
+      user: `@${username}`,
       url: `https://twitter.com/${username}/status/${response.data.id}`,
     };
   } catch (error) {

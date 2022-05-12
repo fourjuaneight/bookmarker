@@ -18,7 +18,8 @@ export const bookmarkPage = async (
   try {
     const airtableResp = await airtableUpload(table, {
       title: data.title,
-      creator: data.creator,
+      author: data.author,
+      site: data.site,
       url: data.url,
       tags: data.tags,
       status: 'alive',
