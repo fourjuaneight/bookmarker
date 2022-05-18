@@ -1152,9 +1152,11 @@ export interface RequestPayload {
   data?: PageData;
 }
 
-export interface HasuraQueryResp {
+export interface HasuraMutationResp {
   [key: string]: {
-    [key: string]: any;
+    returning: {
+      id: string;
+    }[];
   };
 }
 
