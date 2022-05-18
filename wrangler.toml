@@ -1,0 +1,9 @@
+name = "bookmarker"
+type = "javascript"
+workers_dev = true
+
+[build]
+command = "npm install && npm run build"
+
+[build.upload]
+format = "service-worker"
