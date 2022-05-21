@@ -42,7 +42,7 @@ module.exports = {
     'no-console': [
       'error',
       {
-        allow: ['error', 'info'],
+        allow: ['error', 'log'],
       },
     ],
     'no-case-declarations': 0,
