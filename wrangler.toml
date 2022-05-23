@@ -3,7 +3,7 @@ type = "javascript"
 workers_dev = true
 
 [build]
-command = "npm install && npm run build"
+command = "npm run build"
 
 [build.upload]
 format = "service-worker"
