@@ -85,7 +85,8 @@ const handleAction = async (payload: RequestPayload): Promise<Response> => {
 
         const searchResults = await searchBookmarkItems(
           payload.table,
-          payload.query ?? ''
+          payload.query ?? '',
+          payload.column
         );
 
         return new Response(

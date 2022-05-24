@@ -71,6 +71,8 @@ export const addHasuraRecord = async (
         .join('\n')} \n ${query}`;
     }
 
+    console.log('addHasuraRecord', response);
+
     return (response as HasuraInsertResp)[`insert_${list}_one`].id;
   } catch (error) {
     console.log('addHasuraRecord', error);
@@ -120,6 +122,8 @@ export const queryBookmarkItems = async (
         .join('\n')} \n ${query}`;
     }
 
+    console.log('queryBookmarkItems', response);
+
     return (response as HasuraQueryResp).data[`bookmarks_${table}`];
   } catch (error) {
     console.log('queryBookmarkItems', error);
@@ -133,19 +137,21 @@ export const queryBookmarkItems = async (
  * @async
  *
  * @param {string} table
- * @param {string} pattern bookmark item title
+ * @param {string} pattern
+ * @param {[string]} column
  * @returns {Promise<RecordData[]>}
  */
 export const searchBookmarkItems = async (
   table: string,
-  pattern: string
+  pattern: string,
+  column?: string
 ): Promise<RecordData[]> => {
-  const column = table === 'tweets' ? 'tweet' : 'title';
+  const col = column || table === 'tweets' ? 'tweet' : 'title';
   const query = `
     {
       bookmarks_${table}(
-        order_by: {${column}: asc},
-        where: {${column}: {_iregex: ".*${pattern}.*"}}
+        order_by: {${col}: asc},
+        where: {${col}: {_iregex: ".*${pattern}.*"}}
       ) {
         ${BK_FIELDS[table].join('\n')}
         dead
@@ -172,6 +178,8 @@ export const searchBookmarkItems = async (
         .map(err => `${err.extensions.path}: ${err.message}`)
         .join('\n')} \n ${query}`;
     }
+
+    console.log('searchBookmarkItems', response);
 
     return (response as HasuraQueryResp).data[`bookmarks_${table}`];
   } catch (error) {

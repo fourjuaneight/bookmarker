@@ -1132,6 +1132,7 @@ export interface RequestPayload {
   table: string;
   tagList?: string;
   query?: string;
+  column?: string;
   data?: PageData;
 }
 
