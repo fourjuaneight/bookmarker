@@ -201,6 +201,11 @@ export const handleRequest = async (request: Request): Promise<Response> => {
           JSON.stringify({ error: "Missing 'query' parameter." }),
           badReqBody
         );
+      case payload.type === 'Search' && !payload.column:
+        return new Response(
+          JSON.stringify({ error: "Missing 'column' parameter." }),
+          badReqBody
+        );
       case payload.table === 'Articles' && !payload.data?.title:
         return new Response(
           JSON.stringify({ error: "Missing 'data.title' parameter." }),

@@ -144,14 +144,13 @@ export const queryBookmarkItems = async (
 export const searchBookmarkItems = async (
   table: string,
   pattern: string,
-  column?: string
+  column: string
 ): Promise<RecordData[]> => {
-  const col = column || table === 'tweets' ? 'tweet' : 'title';
   const query = `
     {
       bookmarks_${table}(
-        order_by: {${col}: asc},
-        where: {${col}: {_iregex: ".*${pattern}.*"}}
+        order_by: {${column}: asc},
+        where: {${column}: {_iregex: ".*${pattern}.*"}}
       ) {
         ${BK_FIELDS[table].join('\n')}
         dead
