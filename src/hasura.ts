@@ -73,7 +73,7 @@ export const addHasuraRecord = async (
 
     console.log('addHasuraRecord', response);
 
-    return (response as HasuraInsertResp)[`insert_${list}_one`].id;
+    return (response as HasuraInsertResp).data[`insert_${list}_one`].id;
   } catch (error) {
     console.log('addHasuraRecord', error);
     throw `Adding record to Hasura - ${list}: \n ${error}`;

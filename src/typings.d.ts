@@ -1137,8 +1137,10 @@ export interface RequestPayload {
 }
 
 export interface HasuraInsertResp {
-  [key: string]: {
-    id: string;
+  data: {
+    [key: string]: {
+      id: string;
+    };
   };
 }
 
