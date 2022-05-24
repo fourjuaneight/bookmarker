@@ -216,7 +216,7 @@ export const handleRequest = async (request: Request): Promise<Response> => {
           badReqBody
         );
       case payload.type !== 'Tags' &&
-        (data?.tags.length === 0 || !Array.isArray(payload.data?.tags)):
+        (payload.data?.tags.length === 0 || !Array.isArray(payload.data?.tags)):
         return new Response(
           JSON.stringify({ error: "Missing 'tags' parameter." }),
           badReqBody
