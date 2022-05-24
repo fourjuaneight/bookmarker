@@ -1,4 +1,4 @@
-import { addHasuraRecord } from './hasura-upload';
+import { addHasuraRecord } from './hasura';
 
 import {
   BookmarkData,
