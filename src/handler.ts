@@ -210,7 +210,7 @@ export const handleRequest = async (request: Request): Promise<Response> => {
           JSON.stringify({ error: "Missing 'data.creator' parameter." }),
           badReqBody
         );
-      case payload.type !== 'Tags' && !payload.data?.url:
+      case payload.type === 'Insert' && !payload.data?.url:
         return new Response(
           JSON.stringify({ error: "Missing 'url' parameter." }),
           badReqBody
