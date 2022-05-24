@@ -97,7 +97,6 @@ export const queryBookmarkItems = async (
         ${table === 'tweets' ? 'tweet' : 'title'}: asc
       }) {
         ${BK_FIELDS[table].join('\n')}
-        dead
       }
     }
   `;
@@ -153,7 +152,6 @@ export const searchBookmarkItems = async (
         where: {${column}: {_iregex: ".*${pattern}.*"}}
       ) {
         ${BK_FIELDS[table].join('\n')}
-        dead
       }
     }
   `;
