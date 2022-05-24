@@ -1,6 +1,6 @@
 import {
   HasuraErrors,
-  HasuraMutationResp,
+  HasuraInsertResp,
   HasuraQueryResp,
   RecordData,
 } from './typings.d';
@@ -45,10 +45,8 @@ export const addHasuraRecord = async (
 ): Promise<string> => {
   const query = `
     mutation {
-      insert_${list}(objects: [{${objToQueryString(record)}}]) {
-        returning {
-          id
-        }
+      insert_${list}_one(object: { ${objToQueryString(record)} }) {
+        id
       }
     }
   `;
@@ -62,7 +60,7 @@ export const addHasuraRecord = async (
       },
       body: JSON.stringify({ query }),
     });
-    const response: HasuraMutationResp | HasuraErrors = await request.json();
+    const response: HasuraInsertResp | HasuraErrors = await request.json();
 
     if (response.errors) {
       const { errors } = response as HasuraErrors;
@@ -73,7 +71,7 @@ export const addHasuraRecord = async (
         .join('\n')} \n ${query}`;
     }
 
-    return (response as HasuraMutationResp)[`insert_${list}`].returning[0].id;
+    return (response as HasuraInsertResp)[`insert_${list}`].id;
   } catch (error) {
     console.log('addHasuraRecord', error);
     throw `Adding record to Hasura - ${list}: \n ${error}`;
