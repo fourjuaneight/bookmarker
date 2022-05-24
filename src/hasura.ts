@@ -32,12 +32,12 @@ const objToQueryString = (obj: { [key: string]: any }) =>
  *
  * @param {string} list table name
  * @param {RecordData} record data to upload
- * @returns {Promise<void>}
+ * @returns {Promise<string>}
  */
 export const addHasuraRecord = async (
   list: string,
   record: RecordData
-): Promise<void> => {
+): Promise<string> => {
   const query = `
     mutation {
       insert_${list}(objects: [{${objToQueryString(record)}}]) {
@@ -62,11 +62,15 @@ export const addHasuraRecord = async (
     if (response.errors) {
       const { errors } = response as HasuraErrors;
 
+      console.log('addHasuraRecord', errors);
       throw `Adding record to Hasura - ${list}: \n ${errors
         .map(err => `${err.extensions.path}: ${err.message}`)
         .join('\n')} \n ${query}`;
     }
+
+    return (response as HasuraMutationResp)[`insert_${list}`].returning[0].id;
   } catch (error) {
+    console.log('addHasuraRecord', error);
     throw `Adding record to Hasura - ${list}: \n ${error}`;
   }
 };
