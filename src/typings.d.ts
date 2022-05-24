@@ -1104,8 +1104,6 @@ export interface YouTubeResponse {
   };
 }
 
-export type FieldStatus = 'alive' | 'dead';
-
 export interface RecordData {
   author?: string;
   answer?: string;
@@ -1122,23 +1120,6 @@ export interface RecordData {
   user?: string;
 }
 
-export interface Records {
-  id: string;
-  fields: RecordData;
-  createdTime: string;
-}
-
-export interface AirtableResp {
-  records: Records[];
-}
-
-export interface AirtableError {
-  errors: {
-    error: string;
-    message: string;
-  }[];
-}
-
 export interface BookmarkingResponse {
   success: boolean;
   message: string;
@@ -1147,8 +1128,10 @@ export interface BookmarkingResponse {
 
 export interface RequestPayload {
   key: string;
+  type: string;
   table: string;
   tagList?: string;
+  query?: string;
   data?: PageData;
 }
 
@@ -1157,6 +1140,11 @@ export interface HasuraMutationResp {
     returning: {
       id: string;
     }[];
+  };
+}
+export interface HasuraQueryResp {
+  data: {
+    [key: string]: RecordData[];
   };
 }
 

@@ -1,4 +1,9 @@
-import { HasuraErrors, HasuraMutationResp, RecordData } from './typings.d';
+import {
+  HasuraErrors,
+  HasuraMutationResp,
+  HasuraQueryResp,
+  RecordData,
+} from './typings.d';
 
 const BK_FIELDS = {
   articles: ['title', 'author', 'site', 'url'],

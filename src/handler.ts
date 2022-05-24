@@ -6,6 +6,7 @@ import { bookmarkTweets } from './bookmark-tweets';
 import { bookmarkVimeo } from './bookmark-vimeos';
 import { bookmarkYouTube } from './bookmark-youtubes';
 import { bookmarks, github, stackexchange, media, manga } from './tags';
+import { queryBookmarkItems, searchBookmarkItems } from './hasura';
 
 import { BookmarkingResponse, PageData, RequestPayload } from './typings.d';
 
@@ -48,20 +49,49 @@ const tagsList: { [key: string]: string[] } = {
  * @returns {Promise<Response>} response
  */
 const handleAction = async (payload: RequestPayload): Promise<Response> => {
-  try {
-    // payload data is present at time point
-    const data = payload.data as PageData;
-    // default helps to determine if switch statement runs and correct table is used
-    let location: string = 'None';
-    let response: BookmarkingResponse;
+  // payload data is present at time point
+  const data: PageData = payload.type === 'Insert' ? payload.data : {};
+  // default helps to determine if switch statement runs and correct table is used
+  let location: string = 'None';
+  let response: BookmarkingResponse;
 
+  try {
     // determine which table and method to use
     switch (true) {
-      case payload.table === 'Tags': {
+      case payload.type === 'Tags': {
         return new Response(
           JSON.stringify({
-            tags: tagsList[payload.tagList],
+            tags: tagsList[payload.tagList as string],
             location: payload.tagList,
+          }),
+          responseInit
+        );
+      }
+      case payload.type === 'Query': {
+        location = `${payload.type}-${payload.table}`;
+
+        const queryResults = await queryBookmarkItems(payload.table);
+
+        return new Response(
+          JSON.stringify({
+            bookmarks: queryResults,
+            location,
+          }),
+          responseInit
+        );
+      }
+      case payload.type === 'Search': {
+        location = `${payload.type}-${payload.table}`;
+
+        const searchResults = await searchBookmarkItems(
+          payload.table,
+          payload.query ?? ''
+        );
+
+        return new Response(
+          JSON.stringify({
+            bookmarks: searchResults,
+            location,
           }),
           responseInit
         );
@@ -114,10 +144,7 @@ const handleAction = async (payload: RequestPayload): Promise<Response> => {
     );
   } catch (error) {
     console.log(error);
-    return new Response(
-      JSON.stringify({ error, location: payload.table }),
-      errReqBody
-    );
+    return new Response(JSON.stringify({ error, location }), errReqBody);
   }
 };
 
@@ -153,33 +180,43 @@ export const handleRequest = async (request: Request): Promise<Response> => {
 
     // check for required fields
     switch (true) {
-      case !payload.table:
+      case !payload.type:
+        return new Response(
+          JSON.stringify({ error: "Missing 'type' parameter." }),
+          badReqBody
+        );
+      case payload.type !== 'Tags' && !payload.table:
         return new Response(
           JSON.stringify({ error: "Missing 'table' parameter." }),
           badReqBody
         );
-      case payload.table === 'Tags' && !payload.tagList:
+      case payload.type === 'Tags' && !payload.tagList:
         return new Response(
           JSON.stringify({ error: "Missing 'tagList' parameter." }),
           badReqBody
         );
-      case payload.table === 'Articles' && !payload.data?.title:
+      case payload.type === 'Search' && !payload.query:
+        return new Response(
+          JSON.stringify({ error: "Missing 'query' parameter." }),
+          badReqBody
+        );
+      case payload.table === 'Articles' && !data?.title:
         return new Response(
           JSON.stringify({ error: "Missing 'data.title' parameter." }),
           badReqBody
         );
-      case payload.table === 'Comics' && !payload.data?.creator:
+      case payload.table === 'Comics' && !data?.creator:
         return new Response(
           JSON.stringify({ error: "Missing 'data.creator' parameter." }),
           badReqBody
         );
-      case payload.table !== 'Tags' && !payload.data?.url:
+      case payload.type !== 'Tags' && !data?.url:
         return new Response(
           JSON.stringify({ error: "Missing 'url' parameter." }),
           badReqBody
         );
-      case payload.table !== 'Tags' &&
-        (payload.data?.tags.length === 0 || !Array.isArray(payload.data?.tags)):
+      case payload.type !== 'Tags' &&
+        (data?.tags.length === 0 || !Array.isArray(data?.tags)):
         return new Response(
           JSON.stringify({ error: "Missing 'tags' parameter." }),
           badReqBody
