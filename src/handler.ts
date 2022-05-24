@@ -200,23 +200,23 @@ export const handleRequest = async (request: Request): Promise<Response> => {
           JSON.stringify({ error: "Missing 'query' parameter." }),
           badReqBody
         );
-      case payload.table === 'Articles' && !data?.title:
+      case payload.table === 'Articles' && !payload.data?.title:
         return new Response(
           JSON.stringify({ error: "Missing 'data.title' parameter." }),
           badReqBody
         );
-      case payload.table === 'Comics' && !data?.creator:
+      case payload.table === 'Comics' && !payload.data?.creator:
         return new Response(
           JSON.stringify({ error: "Missing 'data.creator' parameter." }),
           badReqBody
         );
-      case payload.type !== 'Tags' && !data?.url:
+      case payload.type !== 'Tags' && !payload.data?.url:
         return new Response(
           JSON.stringify({ error: "Missing 'url' parameter." }),
           badReqBody
         );
       case payload.type !== 'Tags' &&
-        (data?.tags.length === 0 || !Array.isArray(data?.tags)):
+        (data?.tags.length === 0 || !Array.isArray(payload.data?.tags)):
         return new Response(
           JSON.stringify({ error: "Missing 'tags' parameter." }),
           badReqBody
