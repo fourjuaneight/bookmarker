@@ -178,6 +178,7 @@ export const handleRequest = async (request: Request): Promise<Response> => {
 
   if (contentType?.includes('application/json')) {
     const payload: RequestPayload = await request.json();
+    const key = request.headers.get('key');
 
     // check for required fields
     switch (true) {
@@ -227,12 +228,12 @@ export const handleRequest = async (request: Request): Promise<Response> => {
           JSON.stringify({ error: "Missing 'tags' parameter." }),
           badReqBody
         );
-      case !payload.key:
+      case !key:
         return new Response(
-          JSON.stringify({ error: "Missing 'key' parameter." }),
+          JSON.stringify({ error: "Missing 'key' header." }),
           noAuthReqBody
         );
-      case payload.key !== AUTH_KEY:
+      case key !== AUTH_KEY:
         return new Response(
           JSON.stringify({
             error: "You're not authorized to access this API.",

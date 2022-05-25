@@ -1127,7 +1127,6 @@ export interface BookmarkingResponse {
 }
 
 export interface RequestPayload {
-  key: string;
   type: string;
   table: string;
   tagList?: string;
