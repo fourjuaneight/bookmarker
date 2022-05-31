@@ -160,7 +160,11 @@ export const addHasuraRecord = async (
   `;
 
   try {
-    const existing = await searchBookmarkItems(list, bkTitle ?? '', bkColumn);
+    const existing = await searchBookmarkItems(
+      list.replace('bookmarks_', ''),
+      bkTitle ?? '',
+      bkColumn
+    );
 
     if (existing.length !== 0) {
       console.log('addHasuraRecord', 'Bookmark already exists.');
