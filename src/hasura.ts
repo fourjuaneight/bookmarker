@@ -31,56 +31,6 @@ const objToQueryString = (obj: { [key: string]: any }) =>
   });
 
 /**
- * Upload record object to Hasura.
- * @function
- * @async
- *
- * @param {string} list table name
- * @param {RecordData} record data to upload
- * @returns {Promise<string>}
- */
-export const addHasuraRecord = async (
-  list: string,
-  record: RecordData
-): Promise<string> => {
-  const query = `
-    mutation {
-      insert_${list}_one(object: { ${objToQueryString(record)} }) {
-        id
-      }
-    }
-  `;
-
-  try {
-    const request = await fetch(`${HASURA_ENDPOINT}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Hasura-Admin-Secret': `${HASURA_ADMIN_SECRET}`,
-      },
-      body: JSON.stringify({ query }),
-    });
-    const response: HasuraInsertResp | HasuraErrors = await request.json();
-
-    if (response.errors) {
-      const { errors } = response as HasuraErrors;
-
-      console.log('addHasuraRecord', errors);
-      throw `Adding record to Hasura - ${list}: \n ${errors
-        .map(err => `${err.extensions.path}: ${err.message}`)
-        .join('\n')} \n ${query}`;
-    }
-
-    console.log('addHasuraRecord', response);
-
-    return (response as HasuraInsertResp).data[`insert_${list}_one`].id;
-  } catch (error) {
-    console.log('addHasuraRecord', error);
-    throw `Adding record to Hasura - ${list}: \n ${error}`;
-  }
-};
-
-/**
  * Get bookmark entries from Hasura.
  * @function
  * @async
@@ -182,5 +132,66 @@ export const searchBookmarkItems = async (
   } catch (error) {
     console.log('searchBookmarkItems', error);
     throw `Searching records from Hasura - Bookmarks - ${table}: \n ${error}`;
+  }
+};
+
+/**
+ * Upload record object to Hasura.
+ * @function
+ * @async
+ *
+ * @param {string} list table name
+ * @param {RecordData} record data to upload
+ * @returns {Promise<string>}
+ */
+export const addHasuraRecord = async (
+  list: string,
+  record: RecordData
+): Promise<string> => {
+  const isTweet = list === 'bookmarks_tweets';
+  const bkColumn = isTweet ? 'tweet' : 'title';
+  const bkTitle = isTweet ? record.tweet : record.title;
+  const query = `
+    mutation {
+      insert_${list}_one(object: { ${objToQueryString(record)} }) {
+        id
+      }
+    }
+  `;
+
+  try {
+    const existing = await searchBookmarkItems(list, bkTitle ?? '', bkColumn);
+
+    if (existing.length !== 0) {
+      console.log('addHasuraRecord', 'Bookmark already exists.');
+
+      throw 'Adding record to Hasura - Bookmark already exists.';
+    }
+
+    const request = await fetch(`${HASURA_ENDPOINT}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Hasura-Admin-Secret': `${HASURA_ADMIN_SECRET}`,
+      },
+      body: JSON.stringify({ query }),
+    });
+    const response: HasuraInsertResp | HasuraErrors = await request.json();
+
+    if (response.errors) {
+      const { errors } = response as HasuraErrors;
+
+      console.log('addHasuraRecord', errors);
+      throw `Adding record to Hasura - ${list}: \n ${errors
+        .map(err => `${err.extensions.path}: ${err.message}`)
+        .join('\n')} \n ${query}`;
+    }
+
+    console.log('addHasuraRecord', response);
+
+    return (response as HasuraInsertResp).data[`insert_${list}_one`].id;
+  } catch (error) {
+    console.log('addHasuraRecord', error);
+    throw `Adding record to Hasura - ${list}: \n ${error}`;
   }
 };
