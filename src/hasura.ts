@@ -71,8 +71,6 @@ export const queryTags = async (
         .join('\n')} \n ${query}`;
     }
 
-    console.log('queryTags', response);
-
     const tags = (response as HasuraQueryTagsResp).data.meta_tags.map(
       tag => tag.name
     );
@@ -119,18 +117,15 @@ export const queryBookmarkItems = async (
     if (response.errors) {
       const { errors } = response as HasuraErrors;
 
-      console.log('queryBookmarkItems', errors);
       throw `Querying records from Hasura - Bookmarks - ${table}: \n ${errors
         .map(err => `${err.extensions.path}: ${err.message}`)
         .join('\n')} \n ${query}`;
     }
 
-    console.log('queryBookmarkItems', response);
-
     return (response as HasuraQueryResp).data[`bookmarks_${table}`];
   } catch (error) {
     console.log('queryBookmarkItems', error);
-    throw `Querying records from Hasura - Bookmarks - ${table}: \n ${error}`;
+    throw error;
   }
 };
 
@@ -174,18 +169,15 @@ export const searchBookmarkItems = async (
     if (response.errors) {
       const { errors } = response as HasuraErrors;
 
-      console.log('searchBookmarkItems', errors);
       throw `Searching records from Hasura - Bookmarks - ${table}: \n ${errors
         .map(err => `${err.extensions.path}: ${err.message}`)
         .join('\n')} \n ${query}`;
     }
 
-    console.log('searchBookmarkItems', response);
-
     return (response as HasuraQueryResp).data[`bookmarks_${table}`];
   } catch (error) {
     console.log('searchBookmarkItems', error);
-    throw `Searching records from Hasura - Bookmarks - ${table}: \n ${error}`;
+    throw error;
   }
 };
 
@@ -221,8 +213,6 @@ export const addHasuraRecord = async (
     );
 
     if (existing.length !== 0) {
-      console.log('addHasuraRecord', 'Bookmark already exists.');
-
       throw 'Adding record to Hasura - Bookmark already exists.';
     }
 
@@ -239,17 +229,14 @@ export const addHasuraRecord = async (
     if (response.errors) {
       const { errors } = response as HasuraErrors;
 
-      console.log('addHasuraRecord', errors);
       throw `Adding record to Hasura - ${list}: \n ${errors
         .map(err => `${err.extensions.path}: ${err.message}`)
         .join('\n')} \n ${query}`;
     }
 
-    console.log('addHasuraRecord', response);
-
     return (response as HasuraInsertResp).data[`insert_${list}_one`].id;
   } catch (error) {
     console.log('addHasuraRecord', error);
-    throw `Adding record to Hasura - ${list}: \n ${error}`;
+    throw error;
   }
 };
