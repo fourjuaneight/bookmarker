@@ -5,7 +5,7 @@ import { bookmarkStackExchange } from './bookmark-stackexchange';
 import { bookmarkTweets } from './bookmark-tweets';
 import { bookmarkVimeo } from './bookmark-vimeos';
 import { bookmarkYouTube } from './bookmark-youtubes';
-import { bookmarks, github, stackexchange, media, manga } from './tags';
+import { bookmarks, github, stackexchange } from './tags';
 import { queryBookmarkItems, searchBookmarkItems } from './hasura';
 
 import { BookmarkingResponse, PageData, RequestPayload } from './typings.d';
@@ -36,8 +36,6 @@ const tagsList: { [key: string]: string[] } = {
   bookmarks,
   github,
   stackexchange,
-  media,
-  manga,
 };
 
 /**
