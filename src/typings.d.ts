@@ -1150,9 +1150,16 @@ export interface HasuraMutationResp {
     }[];
   };
 }
+
 export interface HasuraQueryResp {
   data: {
     [key: string]: RecordData[];
+  };
+}
+
+export interface HasuraQueryTagsResp {
+  data: {
+    meta_tags: { name: string }[];
   };
 }
 

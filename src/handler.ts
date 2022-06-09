@@ -5,8 +5,7 @@ import { bookmarkStackExchange } from './bookmark-stackexchange';
 import { bookmarkTweets } from './bookmark-tweets';
 import { bookmarkVimeo } from './bookmark-vimeos';
 import { bookmarkYouTube } from './bookmark-youtubes';
-import { bookmarks, github, stackexchange } from './tags';
-import { queryBookmarkItems, searchBookmarkItems } from './hasura';
+import { queryBookmarkItems, queryTags, searchBookmarkItems } from './hasura';
 
 import { BookmarkingResponse, PageData, RequestPayload } from './typings.d';
 
@@ -32,10 +31,24 @@ const noAuthReqBody = {
   ...responseInit,
 };
 // match tags list to array of tags
-const tagsList: { [key: string]: string[] } = {
-  bookmarks,
-  github,
-  stackexchange,
+const tagsList: {
+  [key: string]: {
+    table: string;
+    type: string;
+  };
+} = {
+  bookmarks: {
+    table: 'bookmarks',
+    type: 'all',
+  },
+  github: {
+    table: 'development',
+    type: 'github',
+  },
+  stackexchange: {
+    table: 'development',
+    type: 'stack_exchange',
+  },
 };
 
 /**
@@ -57,9 +70,15 @@ const handleAction = async (payload: RequestPayload): Promise<Response> => {
     // determine which table and method to use
     switch (true) {
       case payload.type === 'Tags': {
+        const selectedTagList = tagsList[payload.tagList as string];
+        const tags = await queryTags(
+          selectedTagList.table,
+          selectedTagList.type
+        );
+
         return new Response(
           JSON.stringify({
-            tags: tagsList[payload.tagList as string],
+            tags,
             location: payload.tagList,
           }),
           responseInit
