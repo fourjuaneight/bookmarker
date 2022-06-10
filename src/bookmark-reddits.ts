@@ -30,7 +30,7 @@ const getRedditDetails = async (url: string): Promise<RedditData> => {
       url,
     };
   } catch (error) {
-    throw `Getting reddit post details: \n ${error}`;
+    throw `(getRedditDetails): \n ${error}`;
   }
 };
 

@@ -36,17 +36,17 @@ const objToQueryString = (obj: { [key: string]: any }) =>
  * @function
  * @async
  *
+ * @param {string} schema
  * @param {string} table
- * @param {string} type
  * @returns {Promise<RecordData[]>}
  */
 export const queryTags = async (
-  table: string,
-  type: string
+  schema: string,
+  table: string
 ): Promise<string[]> => {
   const query = `
     {
-      meta_tags(where: {table: {_eq: "${table}"}, type: {_eq: "${type}"}}) {
+      meta_tags(where: {schema: {_eq: "${schema}"}, table: {_eq: "${table}"}}) {
         name
       }
     }
@@ -66,7 +66,7 @@ export const queryTags = async (
     if (response.errors) {
       const { errors } = response as HasuraErrors;
 
-      throw `Querying tags from Hasura - ${table} - ${type}: \n ${errors
+      throw `(queryTags) - ${schema} - ${table}: \n ${errors
         .map(err => `${err.extensions.path}: ${err.message}`)
         .join('\n')} \n ${query}`;
     }
@@ -77,7 +77,7 @@ export const queryTags = async (
 
     return tags;
   } catch (error) {
-    console.log('queryTags', error);
+    console.log(error);
     throw error;
   }
 };
@@ -117,14 +117,14 @@ export const queryBookmarkItems = async (
     if (response.errors) {
       const { errors } = response as HasuraErrors;
 
-      throw `Querying records from Hasura - Bookmarks - ${table}: \n ${errors
+      throw `(queryBookmarkItems) - ${table}: \n ${errors
         .map(err => `${err.extensions.path}: ${err.message}`)
         .join('\n')} \n ${query}`;
     }
 
     return (response as HasuraQueryResp).data[`bookmarks_${table}`];
   } catch (error) {
-    console.log('queryBookmarkItems', error);
+    console.log(error);
     throw error;
   }
 };
@@ -169,14 +169,14 @@ export const searchBookmarkItems = async (
     if (response.errors) {
       const { errors } = response as HasuraErrors;
 
-      throw `Searching records from Hasura - Bookmarks - ${table}: \n ${errors
+      throw `(searchBookmarkItems) - ${table}: \n ${errors
         .map(err => `${err.extensions.path}: ${err.message}`)
         .join('\n')} \n ${query}`;
     }
 
     return (response as HasuraQueryResp).data[`bookmarks_${table}`];
   } catch (error) {
-    console.log('searchBookmarkItems', error);
+    console.log(error);
     throw error;
   }
 };
@@ -213,7 +213,7 @@ export const addHasuraRecord = async (
     );
 
     if (existing.length !== 0) {
-      throw 'Adding record to Hasura - Bookmark already exists.';
+      throw '(addHasuraRecord): Bookmark already exists.';
     }
 
     const request = await fetch(`${HASURA_ENDPOINT}`, {
@@ -229,14 +229,14 @@ export const addHasuraRecord = async (
     if (response.errors) {
       const { errors } = response as HasuraErrors;
 
-      throw `Adding record to Hasura - ${list}: \n ${errors
+      throw `(addHasuraRecord) - ${list}: \n ${errors
         .map(err => `${err.extensions.path}: ${err.message}`)
         .join('\n')} \n ${query}`;
     }
 
     return (response as HasuraInsertResp).data[`insert_${list}_one`].id;
   } catch (error) {
-    console.log('addHasuraRecord', error);
+    console.log(error);
     throw error;
   }
 };

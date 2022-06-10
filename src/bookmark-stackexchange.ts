@@ -43,7 +43,7 @@ const getQuestionDetails = async (url: string): Promise<StackExchangeData> => {
       );
 
     if (response.items.length === 0) {
-      throw new Error('No question found');
+      throw '(getQuestionDetails): No question found';
     }
 
     return {
@@ -57,7 +57,7 @@ const getQuestionDetails = async (url: string): Promise<StackExchangeData> => {
         : '',
     };
   } catch (error) {
-    throw `Getting stackexchange details: \n ${error}`;
+    throw `(getQuestionDetails):\n${error}`;
   }
 };
 

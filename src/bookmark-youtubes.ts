@@ -41,7 +41,7 @@ const getYouTubeDetails = async (url: string): Promise<BookmarkData> => {
     const response: YouTubeResponse = await request.json();
 
     if (response.items.length === 0) {
-      throw new Error('Getting youtube details: \n No video found');
+      throw '(getYouTubeDetails): No video found';
     }
 
     const video = response.items[0].snippet;
@@ -52,7 +52,7 @@ const getYouTubeDetails = async (url: string): Promise<BookmarkData> => {
       url: link,
     };
   } catch (error) {
-    throw `Getting youtube details: \n ${error}`;
+    throw `(getYouTubeDetails): \n ${error}`;
   }
 };
 

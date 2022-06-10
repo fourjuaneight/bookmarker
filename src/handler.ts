@@ -33,21 +33,21 @@ const noAuthReqBody = {
 // match tags list to array of tags
 const tagsList: {
   [key: string]: {
+    schema: string;
     table: string;
-    type: string;
   };
 } = {
   bookmarks: {
-    table: 'bookmarks',
-    type: 'all',
+    schema: 'bookmarks',
+    table: 'all',
   },
   github: {
-    table: 'development',
-    type: 'github',
+    schema: 'development',
+    table: 'github',
   },
   stackexchange: {
-    table: 'development',
-    type: 'stack_exchange',
+    schema: 'development',
+    table: 'stack_exchange',
   },
 };
 
@@ -72,8 +72,8 @@ const handleAction = async (payload: RequestPayload): Promise<Response> => {
       case payload.type === 'Tags': {
         const selectedTagList = tagsList[payload.tagList as string];
         const tags = await queryTags(
-          selectedTagList.table,
-          selectedTagList.type
+          selectedTagList.schema,
+          selectedTagList.table
         );
 
         return new Response(
