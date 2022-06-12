@@ -100,7 +100,7 @@ export const queryBookmarkItems = async (
       }) {
         id
         ${BK_FIELDS[table].join('\n')}
-        tags
+        archive
       }
     }
   `;
@@ -154,7 +154,7 @@ export const searchBookmarkItems = async (
       ) {
         id
         ${BK_FIELDS[table].join('\n')}
-        tags
+        archive
       }
     }
   `;
