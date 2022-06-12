@@ -98,7 +98,9 @@ export const queryBookmarkItems = async (
       bookmarks_${table}(order_by: {
         ${table === 'tweets' ? 'tweet' : 'title'}: asc
       }) {
+        id
         ${BK_FIELDS[table].join('\n')}
+        tags
       }
     }
   `;
@@ -150,7 +152,9 @@ export const searchBookmarkItems = async (
         order_by: {${column}: asc},
         where: {${column}: {_iregex: ".*${pattern}.*"}}
       ) {
+        id
         ${BK_FIELDS[table].join('\n')}
+        tags
       }
     }
   `;

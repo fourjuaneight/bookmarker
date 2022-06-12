@@ -1105,6 +1105,7 @@ export interface YouTubeResponse {
 }
 
 export interface RecordData {
+  id: string;
   author?: string;
   answer?: string;
   title?: string;
@@ -1115,9 +1116,10 @@ export interface RecordData {
   site?: string;
   dead?: boolean;
   subreddit?: string;
-  tags: string[];
+  tags: string;
   url: string;
   user?: string;
+  archive?: string;
 }
 
 export interface BookmarkingResponse {
