@@ -5,13 +5,15 @@ export interface BookmarkData {
   url: string;
 }
 
-export interface PageData {
+export interface ArticleData {
   title: string;
   author: string;
   site: string;
   url: string;
   tags: string[];
 }
+
+export type PageData = ArticleData | BookmarkData;
 
 export interface RedditData {
   title: string;

@@ -7,7 +7,7 @@ import { bookmarkVimeo } from './bookmark-vimeos';
 import { bookmarkYouTube } from './bookmark-youtubes';
 import { queryBookmarkItems, queryTags, searchBookmarkItems } from './hasura';
 
-import { BookmarkingResponse, PageData, RequestPayload } from './typings.d';
+import { BookmarkingResponse, RecordData, RequestPayload } from './typings.d';
 
 // default responses
 const responseInit = {
@@ -61,7 +61,7 @@ const tagsList: {
  */
 const handleAction = async (payload: RequestPayload): Promise<Response> => {
   // payload data is present at time point
-  const data: PageData = payload.type === 'Insert' ? payload.data : {};
+  const data: RecordData = payload.type === 'Insert' ? payload.data : {};
   // default helps to determine if switch statement runs and correct table is used
   let location: string = 'None';
   let response: BookmarkingResponse;
@@ -141,7 +141,7 @@ const handleAction = async (payload: RequestPayload): Promise<Response> => {
         break;
       default: {
         location = 'Page';
-        response = await bookmarkPage(payload.table, data as PageData);
+        response = await bookmarkPage(payload.table, data as RecordData);
         break;
       }
     }
