@@ -7,12 +7,12 @@ import {
 } from './typings.d';
 
 const BK_FIELDS = {
-  articles: ['title', 'author', 'site', 'url'],
-  comics: ['title', 'creator', 'url'],
-  podcasts: ['title', 'creator', 'url'],
-  reddits: ['title', 'subreddit', 'url'],
+  articles: ['title', 'author', 'site', 'url', 'archive'],
+  comics: ['title', 'creator', 'url', 'archive'],
+  podcasts: ['title', 'creator', 'url', 'archive'],
+  reddits: ['title', 'subreddit', 'url', 'archive'],
   tweets: ['tweet', 'user', 'url'],
-  videos: ['title', 'creator', 'url'],
+  videos: ['title', 'creator', 'url', 'archive'],
 };
 
 const objToQueryString = (obj: { [key: string]: any }) =>
@@ -100,7 +100,6 @@ export const queryBookmarkItems = async (
       }) {
         id
         ${BK_FIELDS[table].join('\n')}
-        archive
       }
     }
   `;
@@ -154,7 +153,6 @@ export const searchBookmarkItems = async (
       ) {
         id
         ${BK_FIELDS[table].join('\n')}
-        archive
       }
     }
   `;
