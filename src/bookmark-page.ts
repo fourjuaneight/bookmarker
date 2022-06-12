@@ -20,6 +20,8 @@ export const bookmarkPage = async (
   const source = isArticle ? 'bookmarkPage:articles' : 'bookmarkPage:comics';
   const baseData = {
     title: data.title,
+    author: data.author,
+    site: data.site,
     url: data.url,
     tags: data.tags,
     dead: false,
