@@ -27,7 +27,6 @@ export const bookmarkPage = async (
   const record = isArticle
     ? ({ ...baseData, author: data.author, site: data.site } as RecordData)
     : ({ ...baseData, creator: data.creator } as RecordData);
-  console.log('bookmarkPage', { data, record });
 
   try {
     const hasuraResp = await addHasuraRecord(list, record);
