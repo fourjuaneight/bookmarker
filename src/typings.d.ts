@@ -3,6 +3,7 @@ export interface BookmarkData {
   title: string;
   creator: string;
   url: string;
+  tags: string[];
 }
 
 export interface ArticleData {
@@ -20,6 +21,7 @@ export interface RedditData {
   content: string;
   subreddit: string;
   url: string;
+  tags: string[];
 }
 
 export interface StackExchangeData {
@@ -1118,7 +1120,7 @@ export interface RecordData {
   site?: string;
   dead?: boolean;
   subreddit?: string;
-  tags: string;
+  tags: string[];
   url: string;
   user?: string;
   archive?: string;

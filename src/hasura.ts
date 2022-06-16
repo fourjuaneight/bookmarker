@@ -25,7 +25,7 @@ const objToQueryString = (obj: { [key: string]: any }) =>
             .replace(/"/g, '\\"')
             .replace(/\n/g, '\\n')}"`
         : Array.isArray(value)
-        ? `"${value.join(',')}"`
+        ? `"{${value.join(',')}}"`
         : value;
 
     return `${key}: ${fmtValue}`;
