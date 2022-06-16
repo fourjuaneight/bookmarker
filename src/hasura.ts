@@ -46,7 +46,10 @@ export const queryTags = async (
 ): Promise<string[]> => {
   const query = `
     {
-      meta_tags(where: {schema: {_eq: "${schema}"}, table: {_eq: "${table}"}}) {
+      meta_tags(
+        order_by: {name: asc},
+        where: {schema: {_eq: "${schema}"}, table: {_eq: "${table}"}}
+      ) {
         name
       }
     }
@@ -74,7 +77,6 @@ export const queryTags = async (
     const tags = (response as HasuraQueryTagsResp).data.meta_tags.map(
       tag => tag.name
     );
-    console.log({ response, tags });
 
     return tags;
   } catch (error) {
