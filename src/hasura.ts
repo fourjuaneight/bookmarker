@@ -74,6 +74,7 @@ export const queryTags = async (
     const tags = (response as HasuraQueryTagsResp).data.meta_tags.map(
       tag => tag.name
     );
+    console.log({ response, tags });
 
     return tags;
   } catch (error) {
