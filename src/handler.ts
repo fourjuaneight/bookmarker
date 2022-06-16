@@ -5,7 +5,12 @@ import { bookmarkStackExchange } from './bookmark-stackexchange';
 import { bookmarkTweets } from './bookmark-tweets';
 import { bookmarkVimeo } from './bookmark-vimeos';
 import { bookmarkYouTube } from './bookmark-youtubes';
-import { queryBookmarkItems, queryTags, searchBookmarkItems } from './hasura';
+import {
+  queryBookmarkAggregateCount,
+  queryBookmarkItems,
+  queryTags,
+  searchBookmarkItems,
+} from './hasura';
 
 import { BookmarkingResponse, RecordData, RequestPayload } from './typings.d';
 
@@ -109,6 +114,22 @@ const handleAction = async (payload: RequestPayload): Promise<Response> => {
         return new Response(
           JSON.stringify({
             bookmarks: searchResults,
+            location,
+          }),
+          responseInit
+        );
+      }
+      case payload.type === 'Count': {
+        location = `${payload.type}-${payload.table}`;
+
+        const queryResults = await queryBookmarkAggregateCount(
+          payload.table,
+          payload.countColumn
+        );
+
+        return new Response(
+          JSON.stringify({
+            count: queryResults,
             location,
           }),
           responseInit
@@ -222,6 +243,16 @@ export const handleRequest = async (request: Request): Promise<Response> => {
       case payload.type === 'Search' && !payload.column:
         return new Response(
           JSON.stringify({ error: "Missing 'column' parameter." }),
+          badReqBody
+        );
+      case payload.type === 'Count' && !payload.countColumn:
+        return new Response(
+          JSON.stringify({ error: "Missing 'countColumn' parameter." }),
+          badReqBody
+        );
+      case payload.type === 'Count' && !payload.table:
+        return new Response(
+          JSON.stringify({ error: "Missing 'table' parameter." }),
           badReqBody
         );
       case payload.table === 'Articles' && !payload.data?.title:

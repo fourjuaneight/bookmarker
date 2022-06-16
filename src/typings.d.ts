@@ -1126,6 +1126,19 @@ export interface RecordData {
   archive?: string;
 }
 
+export interface RecordColumnAggregateCount {
+  [key: string]: number;
+}
+
+export type CountColumn =
+  | 'author'
+  | 'creator'
+  | 'site'
+  | 'dead'
+  | 'subreddit'
+  | 'tags'
+  | 'user';
+
 export interface BookmarkingResponse {
   success: boolean;
   message: string;
@@ -1138,6 +1151,7 @@ export interface RequestPayload {
   tagList?: string;
   query?: string;
   column?: string;
+  countColumn?: CountColumn;
   data?: PageData;
 }
 
@@ -1160,6 +1174,12 @@ export interface HasuraMutationResp {
 export interface HasuraQueryResp {
   data: {
     [key: string]: RecordData[];
+  };
+}
+
+export interface HasuraQueryAggregateResp {
+  data: {
+    [key: string]: string | string[];
   };
 }
 

@@ -1,8 +1,11 @@
 import {
   HasuraErrors,
   HasuraInsertResp,
+  HasuraQueryAggregateResp,
   HasuraQueryResp,
   HasuraQueryTagsResp,
+  CountColumn,
+  RecordColumnAggregateCount,
   RecordData,
 } from './typings.d';
 
@@ -30,6 +33,22 @@ const objToQueryString = (obj: { [key: string]: any }) =>
 
     return `${key}: ${fmtValue}`;
   });
+
+const countUnique = (iterable: string[]) =>
+  iterable.reduce((acc: RecordColumnAggregateCount, item) => {
+    acc[item] = (acc[item] || 0) + 1;
+    return acc;
+  }, {});
+
+const countUniqueSorted = (iterable: string[]) =>
+  // sort descending by count
+  Object.entries(countUnique(iterable))
+    .sort((a, b) => b[1] - a[1])
+    .reduce(
+      (acc: RecordColumnAggregateCount, [key, val]) =>
+        ({ ...acc, [key]: val } as RecordColumnAggregateCount),
+      {}
+    );
 
 /**
  * Get bookmark tags from Hasura.
@@ -127,6 +146,65 @@ export const queryBookmarkItems = async (
     }
 
     return (response as HasuraQueryResp).data[`bookmarks_${table}`];
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+/**
+ * Get aggregated count of bookmark column from Hasura.
+ * @function
+ * @async
+ *
+ * @param {string} table
+ * @param {CountColumn} column
+ * @returns {Promise<RecordColumnAggregateCount>}
+ */
+export const queryBookmarkAggregateCount = async (
+  table: string,
+  column: CountColumn
+): Promise<RecordColumnAggregateCount> => {
+  const sort = column === 'tags' ? 'title' : column;
+  const query = `
+    {
+      bookmarks_${table}(order_by: {${sort}: asc}) {
+        ${column}
+      }
+    }
+  `;
+
+  try {
+    const request = await fetch(`${HASURA_ENDPOINT}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Hasura-Admin-Secret': `${HASURA_ADMIN_SECRET}`,
+      },
+      body: JSON.stringify({ query }),
+    });
+    const response: any = await request.json();
+
+    if (response.errors) {
+      const { errors } = response as HasuraErrors;
+
+      throw `(queryBookmarkAggregateCount) - ${table}: \n ${errors
+        .map(err => `${err.extensions.path}: ${err.message}`)
+        .join('\n')} \n ${query}`;
+    }
+
+    const data = (response as HasuraQueryAggregateResp).data[
+      `bookmarks_${table}`
+    ];
+    let collection: string[];
+
+    if (column === 'tags') {
+      collection = data.map(item => item[column] as string[]).flat();
+    } else {
+      collection = data.map(item => item[column] as string);
+    }
+
+    return countUniqueSorted(collection);
   } catch (error) {
     console.log(error);
     throw error;
