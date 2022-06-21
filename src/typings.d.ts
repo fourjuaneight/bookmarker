@@ -1139,6 +1139,14 @@ export type CountColumn =
   | 'tags'
   | 'user';
 
+export type TableAggregate =
+  | 'articles'
+  | 'comics'
+  | 'podcasts'
+  | 'reddits'
+  | 'tweets'
+  | 'videos';
+
 export interface BookmarkingResponse {
   success: boolean;
   message: string;
