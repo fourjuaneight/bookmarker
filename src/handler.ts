@@ -12,7 +12,13 @@ import {
   searchBookmarkItems,
 } from './hasura';
 
-import { BookmarkingResponse, RecordData, RequestPayload } from './typings.d';
+import {
+  BookmarkingResponse,
+  CountColumn,
+  RecordData,
+  RequestPayload,
+  TableAggregate,
+} from './typings.d';
 
 // default responses
 const responseInit = {
@@ -123,8 +129,8 @@ const handleAction = async (payload: RequestPayload): Promise<Response> => {
         location = `${payload.type}-${payload.table}`;
 
         const queryResults = await queryBookmarkAggregateCount(
-          payload.table,
-          payload.countColumn
+          payload.table as TableAggregate,
+          payload.countColumn as CountColumn
         );
 
         return new Response(
