@@ -1179,7 +1179,9 @@ export interface HasuraQueryResp {
 
 export interface HasuraQueryAggregateResp {
   data: {
-    [key: string]: string | string[];
+    [key: string]: {
+      [key: string]: string | string[];
+    }[];
   };
 }
 
