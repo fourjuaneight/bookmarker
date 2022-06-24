@@ -2,11 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
-## [unreleased]
+## [1.1.1] - 2022-06-24
+
+### Bug Fixes
+
+- [Minor typing adjustments.](https://github.com/fourjuaneight/bookmarker/commit/3d701113842dc9fc7ed3a89c6550af53943577e1)
+- [Add missing types.](https://github.com/fourjuaneight/bookmarker/commit/63e6f505d9f4660fdd59b09771ff0a4edee1ae6d)
+
+### Features
+
+- [Add links to every commit message in changelog.](https://github.com/fourjuaneight/bookmarker/commit/a4b8748d8d86980ef0067f033c7461ba0d04daed)
+- [Order tags query by name ascending.](https://github.com/fourjuaneight/bookmarker/commit/82739ba44b2c55216150d797ffa72b607cef7739)
+- [Update tags type from string to array.](https://github.com/fourjuaneight/bookmarker/commit/dd001fbcf9de13047d06239f9db050bb74a6f26a)
+- [Add query for table column aggregate count.](https://github.com/fourjuaneight/bookmarker/commit/5eba9cc8f63ec85e1f8caea6747c36388c82e639)
 
 ### Miscellaneous Tasks
 
 - [Update Changelog.](https://github.com/fourjuaneight/bookmarker/commit/a16a301711ab9cfce97a61b1962af129b478d0df)
+- [Add logs for debugging.](https://github.com/fourjuaneight/bookmarker/commit/c2dad78809f0b914cb7349e8d711d31ab8551ea7)
+- [Minor typing optimizations.](https://github.com/fourjuaneight/bookmarker/commit/caba4d954f0abd11c50a58d1d964159e4035ccca)
+- [Bump version.](https://github.com/fourjuaneight/bookmarker/commit/12b19d1bc59582684913a38f932f9e9df667d3e3)
 
 ## [1.0.1] - 2022-06-15
 
