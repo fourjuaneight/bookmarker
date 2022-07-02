@@ -97,10 +97,9 @@ const expandShortLink = async (str: string, regex: RegExp): Promise<string> => {
     });
 
     const data = await Promise.all(promises);
-    console.log({ data });
     const replacer = () => data.shift() ?? '';
-    console.log({ replacer, str });
-
+    console.log({ str });
+    console.log({ replacer });
     return str.replace(regex, replacer);
   } catch (error) {
     console.log('(expandShortLink):', error);
@@ -150,7 +149,6 @@ const getTweetDetails = async (url: string): Promise<TwitterData> => {
     const response: TwitterResponse = await request.json();
     const { username } = response.includes.users[0];
     const formattedText = emojiUnicode(response.data.text);
-    console.log({ formattedText });
     const cleanText = await expandShortLink(
       formattedText,
       /(https:\/\/t.co\/[a-zA-z0-9]+)/g
