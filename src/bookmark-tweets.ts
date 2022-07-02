@@ -152,12 +152,15 @@ const getTweetDetails = async (url: string): Promise<TwitterData> => {
       formattedText,
       /(https:\/\/t.co\/[a-zA-z0-9]+)/g
     )
+    console.log({ cleanText });
+    const tweet = cleanText
       .replace(/“/g, `"`)
       .replace(/”/g, `"`)
       .replace(/’/g, `'`);
+    console.log({ tweet });
 
     return {
-      tweet: cleanText,
+      tweet,
       user: `@${username}`,
       url: `https://twitter.com/${username}/status/${response.data.id}`,
     };
