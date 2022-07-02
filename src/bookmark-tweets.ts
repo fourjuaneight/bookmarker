@@ -98,9 +98,8 @@ const expandShortLink = async (str: string, regex: RegExp): Promise<string> => {
 
     const data = await Promise.all(promises);
     const replacer = () => data.shift() ?? '';
-    console.log({ str });
-    console.log({ replacer });
-    return str.replace(regex, replacer);
+
+    return replacer ? str.replace(regex, replacer) : str;
   } catch (error) {
     console.log('(expandShortLink):', error);
     throw `(expandShortLink):\n${error}`;
