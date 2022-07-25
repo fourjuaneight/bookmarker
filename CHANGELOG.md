@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.0] - 2022-07-25
+
+### Bug Fixes
+
+- [Pass original text when there's no link to expand on tweets.](https://github.com/fourjuaneight/bookmarker/commit/fa2936bcc12a1b973008fad3856e152744a8ce3e)
+
+### Features
+
+- [Update node version and migrate to pnpm.](https://github.com/fourjuaneight/bookmarker/commit/1467d1d25eea74b6207bc5d033ad68ed26b4aafb)
+
+### Miscellaneous Tasks
+
+- [Update Changelog.](https://github.com/fourjuaneight/bookmarker/commit/23963b579cca73d0fb60afaf8814a9cda1e8e60a)
+- [Add logs for debugging.](https://github.com/fourjuaneight/bookmarker/commit/d4e227862ddb97d4cdbb0dcc15526c5204298981)
+- [Further debugging.](https://github.com/fourjuaneight/bookmarker/commit/699017c59154015b959b26b3ad29d63c28b45ad9)
+- [More debugging logs.](https://github.com/fourjuaneight/bookmarker/commit/50ee82d38b60bea3a0635dd1a5fc17b5020ed149)
+- [Cleanup logs.](https://github.com/fourjuaneight/bookmarker/commit/c47b0d72036d65b6b6cd438ef18982356040cf07)
+
 ## [1.1.1] - 2022-06-24
 
 ### Bug Fixes
