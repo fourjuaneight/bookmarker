@@ -151,7 +151,7 @@ const getTweetDetails = async (url: string): Promise<TwitterData> => {
     const cleanText = await expandShortLink(
       formattedText,
       /(https:\/\/t.co\/[a-zA-z0-9]+)/g
-    )
+    );
     const tweet = cleanText
       .replace(/“/g, `"`)
       .replace(/”/g, `"`)

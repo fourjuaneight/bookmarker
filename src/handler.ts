@@ -17,7 +17,7 @@ import {
   CountColumn,
   RecordData,
   RequestPayload,
-  TableAggregate,
+  TablesAggregate,
 } from './typings.d';
 
 // default responses
@@ -73,6 +73,7 @@ const tagsList: {
 const handleAction = async (payload: RequestPayload): Promise<Response> => {
   // payload data is present at time point
   const data: RecordData = payload.type === 'Insert' ? payload.data : {};
+  const fmtTable = payload.table.toLowerCase();
   // default helps to determine if switch statement runs and correct table is used
   let location: string = 'None';
   let response: BookmarkingResponse;
@@ -96,9 +97,9 @@ const handleAction = async (payload: RequestPayload): Promise<Response> => {
         );
       }
       case payload.type === 'Query': {
-        location = `${payload.type}-${payload.table}`;
+        location = `${payload.type}-${fmtTable}`;
 
-        const queryResults = await queryBookmarkItems(payload.table);
+        const queryResults = await queryBookmarkItems(fmtTable);
 
         return new Response(
           JSON.stringify({
@@ -109,10 +110,10 @@ const handleAction = async (payload: RequestPayload): Promise<Response> => {
         );
       }
       case payload.type === 'Search': {
-        location = `${payload.type}-${payload.table}`;
+        location = `${payload.type}-${fmtTable}`;
 
         const searchResults = await searchBookmarkItems(
-          payload.table,
+          fmtTable,
           payload.query ?? '',
           payload.column ?? ''
         );
@@ -126,10 +127,10 @@ const handleAction = async (payload: RequestPayload): Promise<Response> => {
         );
       }
       case payload.type === 'Count': {
-        location = `${payload.type}-${payload.table}`;
+        location = `${payload.type}-${fmtTable}`;
 
         const queryResults = await queryBookmarkAggregateCount(
-          payload.table as TableAggregate,
+          fmtTable as TablesAggregate,
           payload.countColumn as CountColumn
         );
 
@@ -142,23 +143,23 @@ const handleAction = async (payload: RequestPayload): Promise<Response> => {
         );
       }
       case payload.table === 'Podcasts':
-        location = payload.table;
+        location = fmtTable;
         response = await bookmarkPodcasts(data.url, data.tags);
         break;
       case payload.table === 'Reddits':
-        location = payload.table;
+        location = fmtTable;
         response = await bookmarkReddits(data.url, data.tags);
         break;
       case payload.table === 'StackExchange':
-        location = payload.table;
+        location = fmtTable;
         response = await bookmarkStackExchange(data.url, data.tags);
         break;
       case payload.table === 'Tweets':
-        location = payload.table;
+        location = fmtTable;
         response = await bookmarkTweets(data.url, data.tags);
         break;
       case payload.table === 'Videos':
-        location = payload.table;
+        location = fmtTable;
 
         if (data.url.includes('vimeo')) {
           response = await bookmarkVimeo(data.url, data.tags);

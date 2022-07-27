@@ -7,7 +7,7 @@ import {
   CountColumn,
   RecordColumnAggregateCount,
   RecordData,
-  TableAggregate,
+  TablesAggregate,
 } from './typings.d';
 
 const BK_FIELDS = {
@@ -158,12 +158,12 @@ export const queryBookmarkItems = async (
  * @function
  * @async
  *
- * @param {string} table
+ * @param {TablesAggregate} table
  * @param {CountColumn} column
  * @returns {Promise<RecordColumnAggregateCount>}
  */
 export const queryBookmarkAggregateCount = async (
-  table: TableAggregate,
+  table: TablesAggregate,
   column: CountColumn
 ): Promise<RecordColumnAggregateCount> => {
   const sort = column === 'tags' ? 'title' : column;

@@ -1139,7 +1139,7 @@ export type CountColumn =
   | 'tags'
   | 'user';
 
-export type TableAggregate =
+export type TablesAggregate =
   | 'articles'
   | 'comics'
   | 'podcasts'
@@ -1147,15 +1147,25 @@ export type TableAggregate =
   | 'tweets'
   | 'videos';
 
+export type Tables =
+  | 'Articles'
+  | 'Comics'
+  | 'Podcasts'
+  | 'Reddits'
+  | 'Tweets'
+  | 'Videos';
+
 export interface BookmarkingResponse {
   success: boolean;
   message: string;
   source: string;
 }
 
+export type Types = 'Count' | 'Tags' | 'Query' | 'Search' | 'Insert' | 'Update';
+
 export interface RequestPayload {
-  type: string;
-  table: string;
+  type: Types;
+  table: Tables;
   tagList?: string;
   query?: string;
   column?: string;
