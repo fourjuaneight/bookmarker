@@ -10,6 +10,7 @@ import {
   queryTags,
   searchBookmarkItems,
 } from './hasura';
+import { version } from '../package.json';
 
 import {
   BookmarkingResponse,
@@ -67,6 +68,7 @@ const handleAction = async (payload: RequestPayload): Promise<Response> => {
           JSON.stringify({
             tags,
             location: payload.table,
+            version,
           }),
           responseInit
         );
@@ -80,6 +82,7 @@ const handleAction = async (payload: RequestPayload): Promise<Response> => {
           JSON.stringify({
             bookmarks: queryResults,
             location,
+            version,
           }),
           responseInit
         );
@@ -97,6 +100,7 @@ const handleAction = async (payload: RequestPayload): Promise<Response> => {
           JSON.stringify({
             bookmarks: searchResults,
             location,
+            version,
           }),
           responseInit
         );
@@ -113,6 +117,7 @@ const handleAction = async (payload: RequestPayload): Promise<Response> => {
           JSON.stringify({
             count: queryResults,
             location,
+            version,
           }),
           responseInit
         );
@@ -147,7 +152,11 @@ const handleAction = async (payload: RequestPayload): Promise<Response> => {
 
     if (!response.success) {
       return new Response(
-        JSON.stringify({ error: response.message, location: response.source }),
+        JSON.stringify({
+          error: response.message,
+          location: response.source,
+          version,
+        }),
         responseInit
       );
     }
@@ -156,12 +165,16 @@ const handleAction = async (payload: RequestPayload): Promise<Response> => {
       JSON.stringify({
         bookmarked: response.message,
         location,
+        version,
       }),
       responseInit
     );
   } catch (error) {
     console.log(error);
-    return new Response(JSON.stringify({ error, location }), errReqBody);
+    return new Response(
+      JSON.stringify({ error, location, version }),
+      errReqBody
+    );
   }
 };
 
@@ -176,7 +189,7 @@ const handleAction = async (payload: RequestPayload): Promise<Response> => {
 export const handleRequest = async (request: Request): Promise<Response> => {
   // POST requests only
   if (request.method !== 'POST') {
-    return new Response(null, {
+    return new Response(JSON.stringify({ version }), {
       status: 405,
       statusText: 'Method Not Allowed',
     });
@@ -185,7 +198,10 @@ export const handleRequest = async (request: Request): Promise<Response> => {
   // content-type check (required)
   if (!request.headers.has('content-type')) {
     return new Response(
-      JSON.stringify({ error: "Please provide 'content-type' header." }),
+      JSON.stringify({
+        error: "Please provide 'content-type' header.",
+        version,
+      }),
       badReqBody
     );
   }
@@ -200,64 +216,71 @@ export const handleRequest = async (request: Request): Promise<Response> => {
     switch (true) {
       case !payload.type:
         return new Response(
-          JSON.stringify({ error: "Missing 'type' parameter." }),
+          JSON.stringify({ error: "Missing 'type' parameter.", version }),
           badReqBody
         );
       case payload.type !== 'Tags' && !payload.table:
         return new Response(
-          JSON.stringify({ error: "Missing 'table' parameter." }),
+          JSON.stringify({ error: "Missing 'table' parameter.", version }),
           badReqBody
         );
       case payload.type === 'Search' && !payload.query:
         return new Response(
-          JSON.stringify({ error: "Missing 'query' parameter." }),
+          JSON.stringify({ error: "Missing 'query' parameter.", version }),
           badReqBody
         );
       case payload.type === 'Search' && !payload.column:
         return new Response(
-          JSON.stringify({ error: "Missing 'column' parameter." }),
+          JSON.stringify({ error: "Missing 'column' parameter.", version }),
           badReqBody
         );
       case payload.type === 'Count' && !payload.countColumn:
         return new Response(
-          JSON.stringify({ error: "Missing 'countColumn' parameter." }),
+          JSON.stringify({
+            error: "Missing 'countColumn' parameter.",
+            version,
+          }),
           badReqBody
         );
       case payload.type === 'Count' && !payload.table:
         return new Response(
-          JSON.stringify({ error: "Missing 'table' parameter." }),
+          JSON.stringify({ error: "Missing 'table' parameter.", version }),
           badReqBody
         );
       case payload.table === 'articles' && !payload.data?.title:
         return new Response(
-          JSON.stringify({ error: "Missing 'data.title' parameter." }),
+          JSON.stringify({ error: "Missing 'data.title' parameter.", version }),
           badReqBody
         );
       case payload.table === 'comics' && !payload.data?.creator:
         return new Response(
-          JSON.stringify({ error: "Missing 'data.creator' parameter." }),
+          JSON.stringify({
+            error: "Missing 'data.creator' parameter.",
+            version,
+          }),
           badReqBody
         );
       case payload.type === 'Insert' && !payload.data?.url:
         return new Response(
-          JSON.stringify({ error: "Missing 'url' parameter." }),
+          JSON.stringify({ error: "Missing 'url' parameter.", version }),
           badReqBody
         );
       case payload.type === 'Insert' &&
         (payload.data?.tags.length === 0 || !Array.isArray(payload.data?.tags)):
         return new Response(
-          JSON.stringify({ error: "Missing 'tags' parameter." }),
+          JSON.stringify({ error: "Missing 'tags' parameter.", version }),
           badReqBody
         );
       case !key:
         return new Response(
-          JSON.stringify({ error: "Missing 'key' header." }),
+          JSON.stringify({ error: "Missing 'key' header.", version }),
           noAuthReqBody
         );
       case key !== AUTH_KEY:
         return new Response(
           JSON.stringify({
             error: "You're not authorized to access this API.",
+            version,
           }),
           noAuthReqBody
         );
@@ -268,7 +291,7 @@ export const handleRequest = async (request: Request): Promise<Response> => {
   }
 
   // default to bad content-type
-  return new Response(null, {
+  return new Response(JSON.stringify({ version }), {
     status: 415,
     statusText: 'Unsupported Media Type',
   });
