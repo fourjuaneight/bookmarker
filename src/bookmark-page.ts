@@ -18,9 +18,12 @@ export const bookmarkPage = async (
   const isArticle = table === 'Articles';
   const list = isArticle ? 'bookmarks_articles' : 'bookmarks_comics';
   const source = isArticle ? 'bookmarkPage:articles' : 'bookmarkPage:comics';
+  const cleanURL = data.url
+    .replace(/\?ref=.*/g, '')
+    .replace(/\?utm_source/g, '');
   const baseData = {
     title: data.title,
-    url: data.url,
+    url: cleanURL,
     tags: data.tags,
     dead: false,
   };
