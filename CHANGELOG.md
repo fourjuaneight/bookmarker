@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.0] - 2022-07-29
+
+### Bug Fixes
+
+- [Sign version tag commits.](https://github.com/fourjuaneight/bookmarker/commit/87cabffad433be8e276bb1cbe887bccb74c1a852)
+
+### Features
+
+- [Remove trackers from page urls.](https://github.com/fourjuaneight/bookmarker/commit/4b9ddccb87f18ae2eba81a14d66ffee847a0a24f)
+- [Add default commit message when version bumping.](https://github.com/fourjuaneight/bookmarker/commit/5834e673cddca5d0777a81463e7f4be98814731b)
+- [Return app version on response.](https://github.com/fourjuaneight/bookmarker/commit/5a671de3953dad9dbdb0f94ab047452fe2370cf2)
+
+### Miscellaneous Tasks
+
+- [Update Changelog.](https://github.com/fourjuaneight/bookmarker/commit/cc040c3eaebd9b840bd264a5e0acfbf338873f13)
+- [Minor typing optimizations.](https://github.com/fourjuaneight/bookmarker/commit/9e875d1e86be35b5c3546d0a89eaf8387ddbe371)
+- [Remove deprecate schema/table insert and streamline typings.](https://github.com/fourjuaneight/bookmarker/commit/9739545658e89f8f62b70b1d287ac2f3ab6efcbc)
+- [Update to v1.3.0.](https://github.com/fourjuaneight/bookmarker/commit/e43bc2c011cd22e6c84145b02ab73f563fc5ed9a)
+
 ## [1.2.0] - 2022-07-25
 
 ### Bug Fixes
