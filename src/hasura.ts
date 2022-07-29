@@ -7,7 +7,7 @@ import {
   CountColumn,
   RecordColumnAggregateCount,
   RecordData,
-  TablesAggregate,
+  Tables,
 } from './typings.d';
 
 const BK_FIELDS = {
@@ -56,19 +56,15 @@ const countUniqueSorted = (iterable: string[]) =>
  * @function
  * @async
  *
- * @param {string} schema
- * @param {string} table
+ * @param {Tables} table
  * @returns {Promise<RecordData[]>}
  */
-export const queryTags = async (
-  schema: string,
-  table: string
-): Promise<string[]> => {
+export const queryTags = async (table: Tables): Promise<string[]> => {
   const query = `
     {
       meta_tags(
         order_by: {name: asc},
-        where: {schema: {_eq: "${schema}"}, table: {_eq: "${table}"}}
+        where: {schema: {_eq: "bookmarks"}, table: {_eq: "${table}"}}
       ) {
         name
       }
@@ -89,7 +85,7 @@ export const queryTags = async (
     if (response.errors) {
       const { errors } = response as HasuraErrors;
 
-      throw `(queryTags) - ${schema} - ${table}: \n ${errors
+      throw `(queryTags) - ${table}: \n ${errors
         .map(err => `${err.extensions.path}: ${err.message}`)
         .join('\n')} \n ${query}`;
     }
@@ -110,11 +106,11 @@ export const queryTags = async (
  * @function
  * @async
  *
- * @param {string} table
+ * @param {Tables} table
  * @returns {Promise<RecordData[]>}
  */
 export const queryBookmarkItems = async (
-  table: string
+  table: Tables
 ): Promise<RecordData[]> => {
   const query = `
     {
@@ -158,12 +154,12 @@ export const queryBookmarkItems = async (
  * @function
  * @async
  *
- * @param {TablesAggregate} table
+ * @param {Tables} table
  * @param {CountColumn} column
  * @returns {Promise<RecordColumnAggregateCount>}
  */
 export const queryBookmarkAggregateCount = async (
-  table: TablesAggregate,
+  table: Tables,
   column: CountColumn
 ): Promise<RecordColumnAggregateCount> => {
   const sort = column === 'tags' ? 'title' : column;
@@ -217,13 +213,13 @@ export const queryBookmarkAggregateCount = async (
  * @function
  * @async
  *
- * @param {string} table
+ * @param {Tables} table
  * @param {string} pattern
  * @param {[string]} column
  * @returns {Promise<RecordData[]>}
  */
 export const searchBookmarkItems = async (
-  table: string,
+  table: Tables,
   pattern: string,
   column: string
 ): Promise<RecordData[]> => {
@@ -270,31 +266,27 @@ export const searchBookmarkItems = async (
  * @function
  * @async
  *
- * @param {string} list table name
+ * @param {Tables} table table name
  * @param {RecordData} record data to upload
  * @returns {Promise<string>}
  */
 export const addHasuraRecord = async (
-  list: string,
+  table: Tables,
   record: RecordData
 ): Promise<string> => {
-  const isTweet = list === 'bookmarks_tweets';
+  const isTweet = table === 'bookmarks_tweets';
   const bkColumn = isTweet ? 'tweet' : 'title';
   const bkTitle = isTweet ? record.tweet : record.title;
   const query = `
     mutation {
-      insert_${list}_one(object: { ${objToQueryString(record)} }) {
+      insert_bookmarks_${table}_one(object: { ${objToQueryString(record)} }) {
         id
       }
     }
   `;
 
   try {
-    const existing = await searchBookmarkItems(
-      list.replace('bookmarks_', ''),
-      bkTitle ?? '',
-      bkColumn
-    );
+    const existing = await searchBookmarkItems(table, bkTitle ?? '', bkColumn);
 
     if (existing.length !== 0) {
       throw '(addHasuraRecord): Bookmark already exists.';
@@ -313,12 +305,13 @@ export const addHasuraRecord = async (
     if (response.errors) {
       const { errors } = response as HasuraErrors;
 
-      throw `(addHasuraRecord) - ${list}: \n ${errors
+      throw `(addHasuraRecord) - ${table}: \n ${errors
         .map(err => `${err.extensions.path}: ${err.message}`)
         .join('\n')} \n ${query}`;
     }
 
-    return (response as HasuraInsertResp).data[`insert_${list}_one`].id;
+    return (response as HasuraInsertResp).data[`insert_bookmarks_${table}_one`]
+      .id;
   } catch (error) {
     console.log(error);
     throw error;

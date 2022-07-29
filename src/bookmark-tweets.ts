@@ -183,7 +183,7 @@ export const bookmarkTweets = async (
 ): Promise<BookmarkingResponse> => {
   try {
     const tweetData = await getTweetDetails(url);
-    const hasuraResp = await addHasuraRecord('bookmarks_tweets', {
+    const hasuraResp = await addHasuraRecord('tweets', {
       ...tweetData,
       tags,
       dead: false,

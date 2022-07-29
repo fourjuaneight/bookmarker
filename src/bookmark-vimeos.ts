@@ -62,7 +62,7 @@ export const bookmarkVimeo = async (
 ): Promise<BookmarkingResponse> => {
   try {
     const vimeoData = await getVimeoDetails(url);
-    const hasuraResp = await addHasuraRecord('bookmarks_videos', {
+    const hasuraResp = await addHasuraRecord('videos', {
       ...vimeoData,
       tags,
       dead: false,

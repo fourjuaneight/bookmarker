@@ -1,22 +1,21 @@
 import { addHasuraRecord } from './hasura';
 
-import { BookmarkingResponse, PageData, RecordData } from './typings.d';
+import { BookmarkingResponse, PageData, RecordData, Tables } from './typings.d';
 
 /**
  * Upload article|comic to Airtable.
  * @function
  * @async
  *
- * @param {string} table airtable table name
+ * @param {Tables} table airtable table name
  * @param {PageData} data page data
  * @returns {Promise<BookmarkingResponse>} result of record upload
  */
 export const bookmarkPage = async (
-  table: string,
+  table: Tables,
   data: PageData
 ): Promise<BookmarkingResponse> => {
-  const isArticle = table === 'Articles';
-  const list = isArticle ? 'bookmarks_articles' : 'bookmarks_comics';
+  const isArticle = table === 'articles';
   const source = isArticle ? 'bookmarkPage:articles' : 'bookmarkPage:comics';
   const cleanURL = data.url
     .replace(/\?ref=.*/g, '')
@@ -32,7 +31,7 @@ export const bookmarkPage = async (
     : ({ ...baseData, creator: data.creator } as RecordData);
 
   try {
-    const hasuraResp = await addHasuraRecord(list, record);
+    const hasuraResp = await addHasuraRecord(table, record);
 
     return { success: true, message: hasuraResp, source };
   } catch (error) {

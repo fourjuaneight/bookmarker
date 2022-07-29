@@ -1,7 +1,6 @@
 import { bookmarkPage } from './bookmark-page';
 import { bookmarkPodcasts } from './bookmark-podcasts';
 import { bookmarkReddits } from './bookmark-reddits';
-import { bookmarkStackExchange } from './bookmark-stackexchange';
 import { bookmarkTweets } from './bookmark-tweets';
 import { bookmarkVimeo } from './bookmark-vimeos';
 import { bookmarkYouTube } from './bookmark-youtubes';
@@ -17,7 +16,7 @@ import {
   CountColumn,
   RecordData,
   RequestPayload,
-  TablesAggregate,
+  Tables,
 } from './typings.d';
 
 // default responses
@@ -41,26 +40,6 @@ const noAuthReqBody = {
   statusText: 'Unauthorized',
   ...responseInit,
 };
-// match tags list to array of tags
-const tagsList: {
-  [key: string]: {
-    schema: string;
-    table: string;
-  };
-} = {
-  bookmarks: {
-    schema: 'bookmarks',
-    table: 'all',
-  },
-  github: {
-    schema: 'development',
-    table: 'github',
-  },
-  stackexchange: {
-    schema: 'development',
-    table: 'stack_exchange',
-  },
-};
 
 /**
  * Helper method to determine which table/category to use.
@@ -82,16 +61,12 @@ const handleAction = async (payload: RequestPayload): Promise<Response> => {
     // determine which table and method to use
     switch (true) {
       case payload.type === 'Tags': {
-        const selectedTagList = tagsList[payload.tagList as string];
-        const tags = await queryTags(
-          selectedTagList.schema,
-          selectedTagList.table
-        );
+        const tags = await queryTags(payload.table);
 
         return new Response(
           JSON.stringify({
             tags,
-            location: payload.tagList,
+            location: payload.table,
           }),
           responseInit
         );
@@ -130,7 +105,7 @@ const handleAction = async (payload: RequestPayload): Promise<Response> => {
         location = `${payload.type}-${fmtTable}`;
 
         const queryResults = await queryBookmarkAggregateCount(
-          fmtTable as TablesAggregate,
+          fmtTable as Tables,
           payload.countColumn as CountColumn
         );
 
@@ -142,23 +117,19 @@ const handleAction = async (payload: RequestPayload): Promise<Response> => {
           responseInit
         );
       }
-      case payload.table === 'Podcasts':
+      case payload.table === 'podcasts':
         location = fmtTable;
         response = await bookmarkPodcasts(data.url, data.tags);
         break;
-      case payload.table === 'Reddits':
+      case payload.table === 'reddits':
         location = fmtTable;
         response = await bookmarkReddits(data.url, data.tags);
         break;
-      case payload.table === 'StackExchange':
-        location = fmtTable;
-        response = await bookmarkStackExchange(data.url, data.tags);
-        break;
-      case payload.table === 'Tweets':
+      case payload.table === 'tweets':
         location = fmtTable;
         response = await bookmarkTweets(data.url, data.tags);
         break;
-      case payload.table === 'Videos':
+      case payload.table === 'videos':
         location = fmtTable;
 
         if (data.url.includes('vimeo')) {
@@ -237,11 +208,6 @@ export const handleRequest = async (request: Request): Promise<Response> => {
           JSON.stringify({ error: "Missing 'table' parameter." }),
           badReqBody
         );
-      case payload.type === 'Tags' && !payload.tagList:
-        return new Response(
-          JSON.stringify({ error: "Missing 'tagList' parameter." }),
-          badReqBody
-        );
       case payload.type === 'Search' && !payload.query:
         return new Response(
           JSON.stringify({ error: "Missing 'query' parameter." }),
@@ -262,12 +228,12 @@ export const handleRequest = async (request: Request): Promise<Response> => {
           JSON.stringify({ error: "Missing 'table' parameter." }),
           badReqBody
         );
-      case payload.table === 'Articles' && !payload.data?.title:
+      case payload.table === 'articles' && !payload.data?.title:
         return new Response(
           JSON.stringify({ error: "Missing 'data.title' parameter." }),
           badReqBody
         );
-      case payload.table === 'Comics' && !payload.data?.creator:
+      case payload.table === 'comics' && !payload.data?.creator:
         return new Response(
           JSON.stringify({ error: "Missing 'data.creator' parameter." }),
           badReqBody

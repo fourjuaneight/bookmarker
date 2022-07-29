@@ -60,6 +60,7 @@ const paramCleaner = (data: string, pattern: RegExp): string => {
   if (match && match?.length > 0) {
     return match[0].replace(pattern, '$1');
   }
+
   const error = '(paramCleaner): Unable to find match.';
 
   console.error('Unable to find match.');
@@ -149,7 +150,7 @@ export const bookmarkPodcasts = async (
 ): Promise<BookmarkingResponse> => {
   try {
     const podcastData = await getPodcastDetails(url);
-    const hasuraResp = await addHasuraRecord('bookmarks_podcasts', {
+    const hasuraResp = await addHasuraRecord('podcasts', {
       ...podcastData,
       tags,
       dead: false,

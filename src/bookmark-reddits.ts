@@ -49,7 +49,7 @@ export const bookmarkReddits = async (
 ): Promise<BookmarkingResponse> => {
   try {
     const redditData = await getRedditDetails(url);
-    const hasuraResp = await addHasuraRecord('bookmarks_reddits', {
+    const hasuraResp = await addHasuraRecord('reddits', {
       ...redditData,
       tags,
       dead: false,

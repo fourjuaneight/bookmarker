@@ -71,7 +71,7 @@ export const bookmarkYouTube = async (
 ): Promise<BookmarkingResponse> => {
   try {
     const youTubeData = await getYouTubeDetails(url);
-    const hasuraResp = await addHasuraRecord('bookmarks_videos', {
+    const hasuraResp = await addHasuraRecord('videos', {
       ...youTubeData,
       tags,
       dead: false,
