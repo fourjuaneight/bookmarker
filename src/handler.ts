@@ -247,12 +247,16 @@ export const handleRequest = async (request: Request): Promise<Response> => {
           JSON.stringify({ error: "Missing 'table' parameter.", version }),
           badReqBody
         );
-      case payload.table === 'articles' && !payload.data?.title:
+      case payload.type === 'Insert' &&
+        payload.table === 'articles' &&
+        !payload.data?.title:
         return new Response(
           JSON.stringify({ error: "Missing 'data.title' parameter.", version }),
           badReqBody
         );
-      case payload.table === 'comics' && !payload.data?.creator:
+      case payload.type === 'Insert' &&
+        payload.table === 'comics' &&
+        !payload.data?.creator:
         return new Response(
           JSON.stringify({
             error: "Missing 'data.creator' parameter.",
