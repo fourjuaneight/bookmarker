@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.1] - 2022-07-30
+
+### Bug Fixes
+
+- [Check data payload on Insert type only.](https://github.com/fourjuaneight/bookmarker/commit/8da66339ae7541bd3e868e8d0e094e7ee51baf2c)
+
+### Miscellaneous Tasks
+
+- [Update Changelog.](https://github.com/fourjuaneight/bookmarker/commit/075cc5034411bdd616728600dbc46ee56d632ad2)
+- [Update to v1.3.1.](https://github.com/fourjuaneight/bookmarker/commit/cfcded00367cbdebb07097344a189db5d228fb96)
+
 ## [1.3.0] - 2022-07-29
 
 ### Bug Fixes
