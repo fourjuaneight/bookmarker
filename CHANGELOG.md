@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.4.0] - 2022-07-31
+
+### Bug Fixes
+
+- [Add missing const inside query method.](https://github.com/fourjuaneight/bookmarker/commit/99080ed1310c13e0e65de89f54c09c0599eccb2f)
+
+### Features
+
+- [Format queries/searches keyed by title.](https://github.com/fourjuaneight/bookmarker/commit/7b9224925fdec6fb17f1e4a6a9353419627a1fbd)
+- [Return keyed object on query/search results.](https://github.com/fourjuaneight/bookmarker/commit/874fa023d47ed9da34cfa9758295b689e5a7bea6)
+
+### Miscellaneous Tasks
+
+- [Update Changelog.](https://github.com/fourjuaneight/bookmarker/commit/ff4f28e6f0618c2cea15c4ef1f7089094bf50805)
+- [Add payload logging.](https://github.com/fourjuaneight/bookmarker/commit/5a22be2e261a5e3dd5d0978745380370da927e45)
+- [Add logs for debugging.](https://github.com/fourjuaneight/bookmarker/commit/af30c9746c2d3f4344c10716675053be34867cb7)
+- [Remove logs.](https://github.com/fourjuaneight/bookmarker/commit/6c36b79a23e01d16acc9f79f043a4de33daa12d0)
+- [Update to v1.4.0.](https://github.com/fourjuaneight/bookmarker/commit/5b72dc2b56c38f53fc6648256fa919104588e5ad)
+
 ## [1.3.1] - 2022-07-30
 
 ### Bug Fixes
