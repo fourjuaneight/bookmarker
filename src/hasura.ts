@@ -112,10 +112,11 @@ export const queryTags = async (table: Tables): Promise<string[]> => {
 export const queryBookmarkItems = async (
   table: Tables
 ): Promise<{ [key:string]: RecordData }[]> => {
+  const column = table === 'tweets' ? 'tweet' : 'title';
   const query = `
     {
       bookmarks_${table}(order_by: {
-        ${table === 'tweets' ? 'tweet' : 'title'}: asc
+        ${column}: asc
       }) {
         ${BK_FIELDS[table].join('\n')}
         id
