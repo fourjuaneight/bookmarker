@@ -274,7 +274,6 @@ export const addHasuraRecord = async (
   table: Tables,
   record: RecordData
 ): Promise<string> => {
-  console.log('addHasuraRecord', { table, record });
   const isTweet = table === 'tweets';
   const bkColumn = isTweet ? 'tweet' : 'title';
   const bkTitle = isTweet ? record.tweet : record.title;
@@ -302,7 +301,6 @@ export const addHasuraRecord = async (
       body: JSON.stringify({ query }),
     });
     const response: HasuraInsertResp | HasuraErrors = await request.json();
-    console.log('addHasuraRecord', { response });
 
     if (response.errors) {
       const { errors } = response as HasuraErrors;
