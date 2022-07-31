@@ -23,6 +23,19 @@ const BK_FIELDS = {
   videos: ['title', 'creator', 'url', 'archive'],
 };
 
+const bkKey = (table: string, data: RecordData): string => {
+  const options: { [key: string]: string } = {
+    articles: `${data.title} - ${data.site}`,
+    comics: `${data.title} - ${data.creator}`,
+    podcasts: `${data.title} - ${data.creator}`,
+    reddits: `${data.title} - ${data.subreddit}`,
+    tweets: `${data.tweet}`,
+    videos: `${data.title} - ${data.creator}`,
+  };
+
+  return options[table];
+};
+
 const objToQueryString = (obj: { [key: string]: any }) =>
   Object.keys(obj).map(key => {
     const value = obj[key];
@@ -152,7 +165,7 @@ export const queryBookmarkItems = async (
 
     if (records.length !== 0) {
       keyedRecords = records.reduce((acc: KeyedRecordData, item) => {
-        acc[item[column]] = item;
+        acc[bkKey(column, item)] = item;
 
         return acc;
       }, {});
@@ -275,7 +288,7 @@ export const searchBookmarkItems = async (
 
     if (records.length !== 0) {
       keyedRecords = records.reduce((acc: KeyedRecordData, item) => {
-        acc[item[column]] = item;
+        acc[bkKey(column, item)] = item;
 
         return acc;
       }, {});
