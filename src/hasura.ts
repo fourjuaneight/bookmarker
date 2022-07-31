@@ -10,6 +10,10 @@ import {
   Tables,
 } from './typings.d';
 
+interface KeyedRecordData {
+  [key: string]: RecordData;
+}
+
 const BK_FIELDS = {
   articles: ['title', 'author', 'site', 'url', 'archive'],
   comics: ['title', 'creator', 'url', 'archive'],
@@ -107,11 +111,11 @@ export const queryTags = async (table: Tables): Promise<string[]> => {
  * @async
  *
  * @param {Tables} table
- * @returns {Promise<RecordData[]>}
+ * @returns {Promise<KeyedRecordData>}
  */
 export const queryBookmarkItems = async (
   table: Tables
-): Promise<{ [key:string]: RecordData }[]> => {
+): Promise<KeyedRecordData> => {
   const column = table === 'tweets' ? 'tweet' : 'title';
   const query = `
     {
@@ -143,10 +147,18 @@ export const queryBookmarkItems = async (
         .join('\n')} \n ${query}`;
     }
 
+    let keyedRecords: KeyedRecordData = {};
     const records = (response as HasuraQueryResp).data[`bookmarks_${table}`];
-    const hasRecords = records.length !== 0;
 
-    return hasRecords ? records.map(item => ({ [item[column]]: item })) : [];
+    if (records.length !== 0) {
+      keyedRecords = records.reduce((acc: KeyedRecordData, item) => {
+        acc[item[column]] = item;
+
+        return acc;
+      }, {});
+    }
+
+    return keyedRecords;
   } catch (error) {
     console.log(error);
     throw error;
@@ -220,13 +232,13 @@ export const queryBookmarkAggregateCount = async (
  * @param {Tables} table
  * @param {string} pattern
  * @param {[string]} column
- * @returns {Promise<RecordData[]>}
+ * @returns {Promise<KeyedRecordData>}
  */
 export const searchBookmarkItems = async (
   table: Tables,
   pattern: string,
   column: string
-): Promise<{ [key:string]: RecordData }[]> => {
+): Promise<KeyedRecordData> => {
   const query = `
     {
       bookmarks_${table}(
@@ -258,10 +270,18 @@ export const searchBookmarkItems = async (
         .join('\n')} \n ${query}`;
     }
 
+    let keyedRecords: KeyedRecordData = {};
     const records = (response as HasuraQueryResp).data[`bookmarks_${table}`];
-    const hasRecords = records.length !== 0;
 
-    return hasRecords ? records.map(item => ({ [item[column]]: item })) : [];
+    if (records.length !== 0) {
+      keyedRecords = records.reduce((acc: KeyedRecordData, item) => {
+        acc[item[column]] = item;
+
+        return acc;
+      }, {});
+    }
+
+    return keyedRecords;
   } catch (error) {
     console.log(error);
     throw error;
@@ -295,7 +315,7 @@ export const addHasuraRecord = async (
   try {
     const existing = await searchBookmarkItems(table, bkTitle ?? '', bkColumn);
 
-    if (existing.length !== 0) {
+    if (Object.keys(existing).length === 0) {
       throw '(addHasuraRecord): Bookmark already exists.';
     }
 
