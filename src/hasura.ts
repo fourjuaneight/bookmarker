@@ -165,7 +165,7 @@ export const queryBookmarkItems = async (
 
     if (records.length !== 0) {
       keyedRecords = records.reduce((acc: KeyedRecordData, item) => {
-        acc[bkKey(column, item)] = item;
+        acc[bkKey(table, item)] = item;
 
         return acc;
       }, {});
@@ -288,7 +288,7 @@ export const searchBookmarkItems = async (
 
     if (records.length !== 0) {
       keyedRecords = records.reduce((acc: KeyedRecordData, item) => {
-        acc[bkKey(column, item)] = item;
+        acc[bkKey(table, item)] = item;
 
         return acc;
       }, {});
