@@ -111,7 +111,7 @@ export const queryTags = async (table: Tables): Promise<string[]> => {
  */
 export const queryBookmarkItems = async (
   table: Tables
-): Promise<RecordData[]> => {
+): Promise<{ [key:string]: RecordData }[]> => {
   const query = `
     {
       bookmarks_${table}(order_by: {
@@ -142,7 +142,10 @@ export const queryBookmarkItems = async (
         .join('\n')} \n ${query}`;
     }
 
-    return (response as HasuraQueryResp).data[`bookmarks_${table}`];
+    const records = (response as HasuraQueryResp).data[`bookmarks_${table}`];
+    const hasRecords = records.length !== 0;
+
+    return hasRecords ? records.map(item => ({ [item[column]]: item })) : [];
   } catch (error) {
     console.log(error);
     throw error;
@@ -222,7 +225,7 @@ export const searchBookmarkItems = async (
   table: Tables,
   pattern: string,
   column: string
-): Promise<RecordData[]> => {
+): Promise<{ [key:string]: RecordData }[]> => {
   const query = `
     {
       bookmarks_${table}(
@@ -254,7 +257,10 @@ export const searchBookmarkItems = async (
         .join('\n')} \n ${query}`;
     }
 
-    return (response as HasuraQueryResp).data[`bookmarks_${table}`];
+    const records = (response as HasuraQueryResp).data[`bookmarks_${table}`];
+    const hasRecords = records.length !== 0;
+
+    return hasRecords ? records.map(item => ({ [item[column]]: item })) : [];
   } catch (error) {
     console.log(error);
     throw error;
