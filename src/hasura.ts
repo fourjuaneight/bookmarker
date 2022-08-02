@@ -97,6 +97,11 @@ export const queryTags = async (table: Tables): Promise<string[]> => {
       },
       body: JSON.stringify({ query }),
     });
+
+    if (request.status !== 200) {
+      throw `(queryTags): ${request.status} - ${request.statusText}`;
+    }
+
     const response: HasuraQueryTagsResp | HasuraErrors = await request.json();
 
     if (response.errors) {
@@ -150,6 +155,11 @@ export const queryBookmarkItems = async (
       },
       body: JSON.stringify({ query }),
     });
+
+    if (request.status !== 200) {
+      throw `(queryBookmarkItems): ${request.status} - ${request.statusText}`;
+    }
+
     const response: HasuraQueryResp | HasuraErrors = await request.json();
 
     if (response.errors) {
@@ -209,6 +219,11 @@ export const queryBookmarkAggregateCount = async (
       },
       body: JSON.stringify({ query }),
     });
+
+    if (request.status !== 200) {
+      throw `(queryBookmarkAggregateCount): ${request.status} - ${request.statusText}`;
+    }
+
     const response: any = await request.json();
 
     if (response.errors) {
@@ -273,6 +288,11 @@ export const searchBookmarkItems = async (
       },
       body: JSON.stringify({ query }),
     });
+
+    if (request.status !== 200) {
+      throw `(searchBookmarkItems): ${request.status} - ${request.statusText}`;
+    }
+
     const response: HasuraQueryResp | HasuraErrors = await request.json();
 
     if (response.errors) {
@@ -329,7 +349,15 @@ export const addHasuraRecord = async (
     const existing = await searchBookmarkItems(table, bkTitle ?? '', bkColumn);
 
     if (Object.keys(existing).length !== 0) {
-      throw '(addHasuraRecord): Bookmark already exists.';
+      throw `(addHasuraRecord): Bookmark already exists.\n${JSON.stringify(
+        {
+          table,
+          record,
+          existing,
+        },
+        null,
+        2
+      )}`;
     }
 
     const request = await fetch(`${HASURA_ENDPOINT}`, {
@@ -340,6 +368,11 @@ export const addHasuraRecord = async (
       },
       body: JSON.stringify({ query }),
     });
+
+    if (request.status !== 200) {
+      throw `(addHasuraRecord): ${request.status} - ${request.statusText}`;
+    }
+
     const response: HasuraInsertResp | HasuraErrors = await request.json();
 
     if (response.errors) {

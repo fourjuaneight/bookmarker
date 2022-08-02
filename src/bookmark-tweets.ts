@@ -145,6 +145,11 @@ const getTweetDetails = async (url: string): Promise<TwitterData> => {
         },
       }
     );
+
+    if (request.status !== 200) {
+      throw `(getTweetDetails): ${request.status} - ${request.statusText}`;
+    }
+
     const response: TwitterResponse = await request.json();
     const { username } = response.includes.users[0];
     const formattedText = emojiUnicode(response.data.text);

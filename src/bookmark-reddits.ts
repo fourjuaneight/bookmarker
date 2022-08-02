@@ -11,9 +11,13 @@ import { BookmarkingResponse, RedditData } from './typings.d';
  * @returns {Promise<RedditData>} reddit title, content, subreddit, and url
  */
 const getRedditDetails = async (url: string): Promise<RedditData> => {
-  const request = await fetch(`${url}.json`);
-
   try {
+    const request = await fetch(`${url}.json`);
+
+    if (request.status !== 200) {
+      throw `(getRedditDetails): ${request.status} - ${request.statusText}`;
+    }
+
     const response = await request.json();
     const post = response[0].data.children[0].data;
 

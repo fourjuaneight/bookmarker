@@ -35,6 +35,11 @@ const getVimeoDetails = async (url: string): Promise<BookmarkData> => {
         Authorization: `Bearer ${VIMEO_KEY}`,
       },
     });
+
+    if (request.status !== 200) {
+      throw `(getVimeoDetails): ${request.status} - ${request.statusText}`;
+    }
+
     const response: VimeoResponse = await request.json();
 
     return {

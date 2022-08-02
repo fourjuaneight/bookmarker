@@ -38,6 +38,11 @@ const getYouTubeDetails = async (url: string): Promise<BookmarkData> => {
   try {
     const { endpoint, link } = cleanUrl(url);
     const request = await fetch(`${endpoint}&key=${YOUTUBE_KEY}`);
+
+    if (request.status !== 200) {
+      throw `(getYouTubeDetails): ${request.status} - ${request.statusText}`;
+    }
+
     const response: YouTubeResponse = await request.json();
 
     if (response.items.length === 0) {

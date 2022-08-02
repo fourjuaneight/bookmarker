@@ -107,9 +107,14 @@ const titleCleaner = (string: string, patterns: RegExp[]): string => {
  * @returns {Promise<BookmarkData >} episode title, podcast, and url
  */
 const getPodcastDetails = async (url: string): Promise<BookmarkData> => {
-  const source = url.includes('castro') ? 'castro' : 'overcast';
   try {
+    const source = url.includes('castro') ? 'castro' : 'overcast';
     const request = await fetch(url);
+
+    if (request.status !== 200) {
+      throw `(getPodcastDetails): ${request.status} - ${request.statusText}`;
+    }
+
     const response = await request.text();
     // flatten doc; remove breakpoints and excessive spaces
     const post = response
