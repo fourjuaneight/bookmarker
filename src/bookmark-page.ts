@@ -1,4 +1,5 @@
 import { addHasuraRecord } from './hasura';
+import { fmtValue } from './fmt';
 
 import { BookmarkingResponse, PageData, RecordData, Tables } from './typings.d';
 
@@ -21,14 +22,18 @@ export const bookmarkPage = async (
     .replace(/\?ref=.*/g, '')
     .replace(/\?utm_source/g, '');
   const baseData = {
-    title: data.title,
+    title: fmtValue(data.title),
     url: cleanURL,
     tags: data.tags,
     dead: false,
   };
   const record = isArticle
-    ? ({ ...baseData, author: data.author, site: data.site } as RecordData)
-    : ({ ...baseData, creator: data.creator } as RecordData);
+    ? ({
+        ...baseData,
+        author: fmtValue(data.author),
+        site: fmtValue(data.site),
+      } as RecordData)
+    : ({ ...baseData, creator: fmtValue(data.creator) } as RecordData);
 
   try {
     const hasuraResp = await addHasuraRecord(table, record);

@@ -1,4 +1,5 @@
 import { addHasuraRecord } from './hasura';
+import { fmtValue } from './fmt';
 
 import { BookmarkData, BookmarkingResponse, VimeoResponse } from './typings.d';
 
@@ -43,8 +44,8 @@ const getVimeoDetails = async (url: string): Promise<BookmarkData> => {
     const response: VimeoResponse = await request.json();
 
     return {
-      title: response.name,
-      creator: response.user.name,
+      title: fmtValue(response.name),
+      creator: fmtValue(response.user.name),
       url,
     };
   } catch (error) {

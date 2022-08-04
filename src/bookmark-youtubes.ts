@@ -1,4 +1,5 @@
 import { addHasuraRecord } from './hasura';
+import { fmtValue } from './fmt';
 
 import {
   BookmarkData,
@@ -52,8 +53,8 @@ const getYouTubeDetails = async (url: string): Promise<BookmarkData> => {
     const video = response.items[0].snippet;
 
     return {
-      title: video.title,
-      creator: video.channelTitle,
+      title: fmtValue(video.title),
+      creator: fmtValue(video.channelTitle),
       url: link,
     };
   } catch (error) {

@@ -1,4 +1,5 @@
 import { addHasuraRecord } from './hasura';
+import { fmtValue } from './fmt';
 
 import {
   BookmarkingResponse,
@@ -123,7 +124,9 @@ const getPodcastDetails = async (url: string): Promise<BookmarkData> => {
       .replace(/\s+/g, ' ');
     // extract details from doc
     const service = parsing[source] as ParsingService;
-    const title = paramCleaner(post, service.title);
+    const clnTitle = paramCleaner(post, service.title);
+    const clnrTitle = titleCleaner(clnTitle, parsing.title);
+    const fmtTitle = fmtValue(clnrTitle);
     const creator = paramCleaner(post, service.creator);
     const link = paramCleaner(post, service.url).replace(
       /^(.*)\.(mp3).*/g,
@@ -131,8 +134,8 @@ const getPodcastDetails = async (url: string): Promise<BookmarkData> => {
     );
 
     return {
-      title: titleCleaner(title, parsing.title),
-      creator,
+      title: fmtTitle,
+      creator: fmtValue(creator),
       url: link,
     };
   } catch (error) {

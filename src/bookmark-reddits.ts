@@ -1,4 +1,5 @@
 import { addHasuraRecord } from './hasura';
+import { fmtValue } from './fmt';
 
 import { BookmarkingResponse, RedditData } from './typings.d';
 
@@ -22,7 +23,7 @@ const getRedditDetails = async (url: string): Promise<RedditData> => {
     const post = response[0].data.children[0].data;
 
     return {
-      title: post.title,
+      title: fmtValue(post.title),
       content:
         post.selftext ||
         post.media?.reddit_video?.fallback_url?.replace(
