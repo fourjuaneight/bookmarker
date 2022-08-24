@@ -212,6 +212,8 @@ export const handleRequest = async (request: Request): Promise<Response> => {
     const payload: RequestPayload = await request.json();
     const key = request.headers.get('key');
 
+    console.log(payload);
+
     // check for required fields
     switch (true) {
       case !payload.type:
