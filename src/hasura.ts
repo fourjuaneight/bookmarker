@@ -87,7 +87,7 @@ export const queryTags = async (table: Tables): Promise<string[]> => {
       }
     }
   `;
-  console.log('(queryTags):', table);
+  console.log('(queryTags):', `${HASURA_ENDPOINT}`);
 
   try {
     const request = await fetch(`${HASURA_ENDPOINT}`, {
@@ -98,14 +98,12 @@ export const queryTags = async (table: Tables): Promise<string[]> => {
       },
       body: JSON.stringify({ query }),
     });
-    console.log('(queryTags):', request);
 
     if (request.status !== 200) {
       throw `(queryTags): ${request.status} - ${request.statusText}`;
     }
 
     const response: HasuraQueryTagsResp | HasuraErrors = await request.json();
-    console.log('(queryTags):', response);
 
     if (response.errors) {
       const { errors } = response as HasuraErrors;

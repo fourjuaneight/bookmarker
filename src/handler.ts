@@ -62,7 +62,6 @@ const handleAction = async (payload: RequestPayload): Promise<Response> => {
     // determine which table and method to use
     switch (true) {
       case payload.type === 'Tags': {
-        console.log('(handleAction) - Tags');
         const tags = await queryTags(payload.table);
 
         return new Response(
