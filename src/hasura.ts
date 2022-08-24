@@ -87,7 +87,7 @@ export const queryTags = async (table: Tables): Promise<string[]> => {
       }
     }
   `;
-  console.log('(queryTags):', `${HASURA_ENDPOINT}`);
+  console.log('(queryTags):', `${HASURA_ADMIN_SECRET}`);
 
   try {
     const request = await fetch(`${HASURA_ENDPOINT}`, {
@@ -98,6 +98,7 @@ export const queryTags = async (table: Tables): Promise<string[]> => {
       },
       body: JSON.stringify({ query }),
     });
+    console.log('(queryTags) - request:', request);
 
     if (request.status !== 200) {
       throw `(queryTags): ${request.status} - ${request.statusText}`;
