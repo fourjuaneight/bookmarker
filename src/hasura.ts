@@ -87,7 +87,6 @@ export const queryTags = async (table: Tables): Promise<string[]> => {
       }
     }
   `;
-  console.log('(queryTags):', `${HASURA_ADMIN_SECRET}`);
 
   try {
     const request = await fetch(`${HASURA_ENDPOINT}`, {
