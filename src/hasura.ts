@@ -97,7 +97,6 @@ export const queryTags = async (table: Tables): Promise<string[]> => {
       },
       body: JSON.stringify({ query }),
     });
-    console.log('(queryTags) - request:', request);
 
     if (request.status !== 200) {
       throw `(queryTags): ${request.status} - ${request.statusText}`;
