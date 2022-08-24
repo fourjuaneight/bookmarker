@@ -103,6 +103,7 @@ export const queryTags = async (table: Tables): Promise<string[]> => {
     }
 
     const response: HasuraQueryTagsResp | HasuraErrors = await request.json();
+    console.log('(queryTags):', request, response);
 
     if (response.errors) {
       const { errors } = response as HasuraErrors;
