@@ -334,9 +334,9 @@ export const addHasuraRecord = async (
   table: Tables,
   record: RecordData
 ): Promise<string> => {
-  const isReddit = table === 'reddit';
+  const isReddit = table === 'reddits';
   const isTweet = table === 'tweets';
-  const bkColumn = isTweet ? 'tweet' : isReddit ? 'reddit' : 'title';
+  const bkColumn = isTweet ? 'tweet' : isReddit ? 'url' : 'title';
   const bkTitle = isTweet ? record.tweet : isReddit ? record.url : record.title;
   const query = `
     mutation {
