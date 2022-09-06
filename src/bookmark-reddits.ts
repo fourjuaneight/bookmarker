@@ -30,6 +30,10 @@ const getRedditDetails = async (url: string): Promise<RedditData> => {
           '?source=fallback',
           ''
         ) ||
+        post.secure_media?.oembed?.thumbnail_url?.replace(
+          'size_restricted.gif',
+          'mobile.mp4'
+        ) ||
         post.url_overridden_by_dest,
       subreddit: post.subreddit_name_prefixed,
       url,
