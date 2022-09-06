@@ -334,9 +334,10 @@ export const addHasuraRecord = async (
   table: Tables,
   record: RecordData
 ): Promise<string> => {
+  const isReddit = table === 'reddit';
   const isTweet = table === 'tweets';
-  const bkColumn = isTweet ? 'tweet' : 'title';
-  const bkTitle = isTweet ? record.tweet : record.title;
+  const bkColumn = isTweet ? 'tweet' : isReddit ? 'reddit' : 'title';
+  const bkTitle = isTweet ? record.tweet : isReddit ? record.url : record.title;
   const query = `
     mutation {
       insert_bookmarks_${table}_one(object: { ${objToQueryString(record)} }) {
