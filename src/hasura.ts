@@ -267,11 +267,12 @@ export const searchBookmarkItems = async (
   pattern: string,
   column: string
 ): Promise<KeyedRecordData> => {
+  const cleanPattern = pattern.replace(/([:;!\?-_]+)/g, '');
   const query = `
     {
       bookmarks_${table}(
         order_by: {${column}: asc},
-        where: {${column}: {_iregex: ".*${pattern}.*"}}
+        where: {${column}: {_iregex: ".*${cleanPattern}.*"}}
       ) {
         ${BK_FIELDS[table].join('\n')}
         id
