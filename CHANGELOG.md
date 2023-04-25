@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.5.1] - 2023-04-25
+
+### Bug Fixes
+
+- [Add missing tags from query by table.](https://github.com/fourjuaneight/bookmarker/commit/2f690aa903ef912c9b71a0d442a0a3b3877b0235)
+
+### Miscellaneous Tasks
+
+- [Update Changelog.](https://github.com/fourjuaneight/bookmarker/commit/9b2ec8cf655f65105bdba521d7b0d09a916c2557)
+- [Update to v1.5.1.](https://github.com/fourjuaneight/bookmarker/commit/34ef2edbc4caaa1cefa22b0a176b503fbb1eace0)
+
 ## [1.5.0] - 2023-04-25
 
 ### Bug Fixes
