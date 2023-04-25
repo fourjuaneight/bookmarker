@@ -2,16 +2,28 @@
 
 All notable changes to this project will be documented in this file.
 
-## [1.4.0] - 2022-07-31
+## [1.5.0] - 2023-04-25
 
 ### Bug Fixes
 
 - [Add missing const inside query method.](https://github.com/fourjuaneight/bookmarker/commit/99080ed1310c13e0e65de89f54c09c0599eccb2f)
+- [Pass table when generating dynamic key names.](https://github.com/fourjuaneight/bookmarker/commit/a72b57913d924d3f7adbe3c8e13ad0661e61c419)
+- [Stop mutation when bookmark already exists.](https://github.com/fourjuaneight/bookmarker/commit/dc4eb6ff63143388c02867b94ef20180ac693047)
+- [Minor syntax corrections.](https://github.com/fourjuaneight/bookmarker/commit/da1d50b64f4f8ae2d2ae5441a9f045843cad62eb)
+- [Save gifycat reddit content.](https://github.com/fourjuaneight/bookmarker/commit/633aee4058f70537752e3338daefeabb4d9170d5)
+- [Check existing tweets by url.](https://github.com/fourjuaneight/bookmarker/commit/1885416df8de552ad8a450a69bc60069b85bdd31)
+- [Remove special characters from bookmark title search.](https://github.com/fourjuaneight/bookmarker/commit/79052f7b4e5ca216224f54ce648cb05ae9cd0b59)
+- [Minor syntax corrections.](https://github.com/fourjuaneight/bookmarker/commit/76821b535149bcae484ffd011eed1e1d71f9bc71)
 
 ### Features
 
 - [Format queries/searches keyed by title.](https://github.com/fourjuaneight/bookmarker/commit/7b9224925fdec6fb17f1e4a6a9353419627a1fbd)
 - [Return keyed object on query/search results.](https://github.com/fourjuaneight/bookmarker/commit/874fa023d47ed9da34cfa9758295b689e5a7bea6)
+- [Generate dynamic key values based on table on query/search results.](https://github.com/fourjuaneight/bookmarker/commit/3982454ee1c77211aa2443855203d6170a449efb)
+- [Handle bad status on all fetch requests.](https://github.com/fourjuaneight/bookmarker/commit/dba36fad9cd87e133702560f33d2cde6cc9ce440)
+- [Remove unsafe characters from bookmark values before saving.](https://github.com/fourjuaneight/bookmarker/commit/7d9489389070e2030444312d705f2d07af48ebe6)
+- [Add release creating on new tag via changelog action.](https://github.com/fourjuaneight/bookmarker/commit/bf50ead99ea4d82371357989bf233cb9dc25e0ad)
+- [Add GET request with bookmarks response by table.](https://github.com/fourjuaneight/bookmarker/commit/fd77d04dabb931fdda8cdffd8c4511a2a2537f1b)
 
 ### Miscellaneous Tasks
 
@@ -19,7 +31,18 @@ All notable changes to this project will be documented in this file.
 - [Add payload logging.](https://github.com/fourjuaneight/bookmarker/commit/5a22be2e261a5e3dd5d0978745380370da927e45)
 - [Add logs for debugging.](https://github.com/fourjuaneight/bookmarker/commit/af30c9746c2d3f4344c10716675053be34867cb7)
 - [Remove logs.](https://github.com/fourjuaneight/bookmarker/commit/6c36b79a23e01d16acc9f79f043a4de33daa12d0)
-- [Update to v1.4.0.](https://github.com/fourjuaneight/bookmarker/commit/5b72dc2b56c38f53fc6648256fa919104588e5ad)
+- [Update to v1.4.0.](https://github.com/fourjuaneight/bookmarker/commit/6d5035649b7c05f99e21b3d93428bf5d7e445bef)
+- [Update Changelog.](https://github.com/fourjuaneight/bookmarker/commit/39e662a06a6d903d5531933aa65c92239f39dc3a)
+- [Minor logging optimizations.](https://github.com/fourjuaneight/bookmarker/commit/22efa5f17b54f5e6b193f014a1cf1fea216af434)
+- [Add chores for debugging.](https://github.com/fourjuaneight/bookmarker/commit/0469b596ec6fbe5f7c5a76a7e57dc4b099dc7719)
+- [Further logs for debugging.](https://github.com/fourjuaneight/bookmarker/commit/35f9a5ef448bd82fa436aca0d6c3aabcb82daaac)
+- [Moar debugging.](https://github.com/fourjuaneight/bookmarker/commit/3325dfd519b6333315698c37301b3ad10d3e0f38)
+- [Debugging4Ever.](https://github.com/fourjuaneight/bookmarker/commit/23ad086ff1b766182c1abefe64d6865ca69119bd)
+- [Remove logs.](https://github.com/fourjuaneight/bookmarker/commit/4eb705f066b17ed645e223fbd780862ae90fbd8f)
+- [Remove more logs.](https://github.com/fourjuaneight/bookmarker/commit/fe8821a2dc84d47a88067c746d8276c067a740c9)
+- [Lookup reddit records by url instead of title.](https://github.com/fourjuaneight/bookmarker/commit/945de408305548cc68ec4b08873668fd7ba27714)
+- [Update title cleanup before lookup.](https://github.com/fourjuaneight/bookmarker/commit/f3f3bac0a711c3ad4dc95dbde2fed6542d01022f)
+- [Update to v1.5.0.](https://github.com/fourjuaneight/bookmarker/commit/128d2d10574374f157ad79b7c28c58d644066979)
 
 ## [1.3.1] - 2022-07-30
 
