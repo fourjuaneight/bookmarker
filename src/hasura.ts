@@ -189,6 +189,55 @@ export const queryBookmarkItems = async (
 };
 
 /**
+ * Get bookmark entries from Hasura.
+ */
+export const queryBookmarkItemsByTable = async (table: Tables) => {
+  const column = table === 'tweets' ? 'tweet' : 'title';
+  const query = `
+    {
+      bookmarks_${table}(order_by: {
+        ${column}: asc
+      }) {
+        ${BK_FIELDS[table].join('\n')}
+        id
+      }
+    }
+  `;
+
+  try {
+    const request = await fetch(`${HASURA_ENDPOINT}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Hasura-Admin-Secret': `${HASURA_ADMIN_SECRET}`,
+      },
+      body: JSON.stringify({ query }),
+    });
+
+    if (request.status !== 200) {
+      throw `(queryBookmarkItems): ${request.status} - ${request.statusText}`;
+    }
+
+    const response: HasuraQueryResp | HasuraErrors = await request.json();
+
+    if (response.errors) {
+      const { errors } = response as HasuraErrors;
+
+      throw `(queryBookmarkItems) - ${table}: \n ${errors
+        .map(err => `${err.extensions.path}: ${err.message}`)
+        .join('\n')} \n ${query}`;
+    }
+
+    const records = (response as HasuraQueryResp).data[`bookmarks_${table}`];
+
+    return records;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+/**
  * Get aggregated count of bookmark column from Hasura.
  * @function
  * @async

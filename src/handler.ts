@@ -7,6 +7,7 @@ import { bookmarkYouTube } from './bookmark-youtubes';
 import {
   queryBookmarkAggregateCount,
   queryBookmarkItems,
+  queryBookmarkItemsByTable,
   queryTags,
   searchBookmarkItems,
 } from './hasura';
@@ -178,6 +179,80 @@ const handleAction = async (payload: RequestPayload): Promise<Response> => {
   }
 };
 
+const handlePost = async (request: Request): Promise<Response> => {
+  const payload: RequestPayload = await request.json();
+
+  // check for required fields
+  switch (true) {
+    case !payload.type:
+      return new Response(
+        JSON.stringify({ error: "Missing 'type' parameter.", version }),
+        badReqBody
+      );
+    case payload.type !== 'Tags' && !payload.table:
+      return new Response(
+        JSON.stringify({ error: "Missing 'table' parameter.", version }),
+        badReqBody
+      );
+    case payload.type === 'Search' && !payload.query:
+      return new Response(
+        JSON.stringify({ error: "Missing 'query' parameter.", version }),
+        badReqBody
+      );
+    case payload.type === 'Search' && !payload.column:
+      return new Response(
+        JSON.stringify({ error: "Missing 'column' parameter.", version }),
+        badReqBody
+      );
+    case payload.type === 'Count' && !payload.countColumn:
+      return new Response(
+        JSON.stringify({
+          error: "Missing 'countColumn' parameter.",
+          version,
+        }),
+        badReqBody
+      );
+    case payload.type === 'Count' && !payload.table:
+      return new Response(
+        JSON.stringify({ error: "Missing 'table' parameter.", version }),
+        badReqBody
+      );
+    case payload.type === 'Insert' &&
+      payload.table === 'articles' &&
+      !payload.data?.title:
+      return new Response(
+        JSON.stringify({ error: "Missing 'data.title' parameter.", version }),
+        badReqBody
+      );
+    case payload.type === 'Insert' &&
+      payload.table === 'comics' &&
+      !payload.data?.creator:
+      return new Response(
+        JSON.stringify({
+          error: "Missing 'data.creator' parameter.",
+          version,
+        }),
+        badReqBody
+      );
+    case payload.type === 'Insert' && !payload.data?.url:
+      return new Response(
+        JSON.stringify({ error: "Missing 'url' parameter.", version }),
+        badReqBody
+      );
+    case payload.type === 'Insert' &&
+      (payload.data?.tags.length === 0 || !Array.isArray(payload.data?.tags)):
+      return new Response(
+        JSON.stringify({ error: "Missing 'tags' parameter.", version }),
+        badReqBody
+      );
+    default: {
+      console.log('handleRequest', { payload });
+
+      return handleAction(payload);
+    }
+  }
+};
+
 /**
  * Handler method for all requests.
  * @function
@@ -187,120 +262,56 @@ const handleAction = async (payload: RequestPayload): Promise<Response> => {
  * @returns {Promise<Response>} response object
  */
 export const handleRequest = async (request: Request): Promise<Response> => {
-  // POST requests only
-  if (request.method !== 'POST') {
-    return new Response(JSON.stringify({ version }), {
-      status: 405,
-      statusText: 'Method Not Allowed',
-    });
-  }
-
-  // content-type check (required)
-  if (!request.headers.has('content-type')) {
-    return new Response(
-      JSON.stringify({
-        error: "Please provide 'content-type' header.",
-        version,
-      }),
-      badReqBody
-    );
-  }
-
   const contentType = request.headers.get('content-type');
+  const key = request.headers.get('key');
+  const table = request.headers.get('table');
+  const isPost = request.method === 'POST';
+  const isGet = request.method === 'GET';
+  const isJson = contentType?.includes('application/json');
 
-  if (contentType?.includes('application/json')) {
-    const payload: RequestPayload = await request.json();
-    const key = request.headers.get('key');
+  switch (true) {
+    case !contentType:
+      return new Response(
+        JSON.stringify({
+          error: "Please provide 'content-type' header.",
+          version,
+        }),
+        badReqBody
+      );
+    case !isJson:
+      return new Response(JSON.stringify({ version }), {
+        status: 415,
+        statusText: 'Unsupported Media Type',
+      });
+    case isGet && !table:
+      return new Response(
+        JSON.stringify({ error: "Missing 'table' header.", version }),
+        badReqBody
+      );
+    case isGet:
+      const queryItems = await queryBookmarkItemsByTable(table);
 
-    console.log(payload);
-
-    // check for required fields
-    switch (true) {
-      case !payload.type:
-        return new Response(
-          JSON.stringify({ error: "Missing 'type' parameter.", version }),
-          badReqBody
-        );
-      case payload.type !== 'Tags' && !payload.table:
-        return new Response(
-          JSON.stringify({ error: "Missing 'table' parameter.", version }),
-          badReqBody
-        );
-      case payload.type === 'Search' && !payload.query:
-        return new Response(
-          JSON.stringify({ error: "Missing 'query' parameter.", version }),
-          badReqBody
-        );
-      case payload.type === 'Search' && !payload.column:
-        return new Response(
-          JSON.stringify({ error: "Missing 'column' parameter.", version }),
-          badReqBody
-        );
-      case payload.type === 'Count' && !payload.countColumn:
-        return new Response(
-          JSON.stringify({
-            error: "Missing 'countColumn' parameter.",
-            version,
-          }),
-          badReqBody
-        );
-      case payload.type === 'Count' && !payload.table:
-        return new Response(
-          JSON.stringify({ error: "Missing 'table' parameter.", version }),
-          badReqBody
-        );
-      case payload.type === 'Insert' &&
-        payload.table === 'articles' &&
-        !payload.data?.title:
-        return new Response(
-          JSON.stringify({ error: "Missing 'data.title' parameter.", version }),
-          badReqBody
-        );
-      case payload.type === 'Insert' &&
-        payload.table === 'comics' &&
-        !payload.data?.creator:
-        return new Response(
-          JSON.stringify({
-            error: "Missing 'data.creator' parameter.",
-            version,
-          }),
-          badReqBody
-        );
-      case payload.type === 'Insert' && !payload.data?.url:
-        return new Response(
-          JSON.stringify({ error: "Missing 'url' parameter.", version }),
-          badReqBody
-        );
-      case payload.type === 'Insert' &&
-        (payload.data?.tags.length === 0 || !Array.isArray(payload.data?.tags)):
-        return new Response(
-          JSON.stringify({ error: "Missing 'tags' parameter.", version }),
-          badReqBody
-        );
-      case !key:
-        return new Response(
-          JSON.stringify({ error: "Missing 'key' header.", version }),
-          noAuthReqBody
-        );
-      case key !== AUTH_KEY:
-        return new Response(
-          JSON.stringify({
-            error: "You're not authorized to access this API.",
-            version,
-          }),
-          noAuthReqBody
-        );
-      default: {
-        console.log('handleRequest', { payload });
-
-        return handleAction(payload);
-      }
-    }
+      console.log('handleRequest', { queryItems });
+      return new Response(JSON.stringify(queryItems), responseInit);
+    case !key:
+      return new Response(
+        JSON.stringify({ error: "Missing 'key' header.", version }),
+        noAuthReqBody
+      );
+    case key !== AUTH_KEY:
+      return new Response(
+        JSON.stringify({
+          error: "You're not authorized to access this API.",
+          version,
+        }),
+        noAuthReqBody
+      );
+    case isPost:
+      return handlePost(request);
+    default:
+      return new Response(JSON.stringify({ version }), {
+        status: 405,
+        statusText: 'Method Not Allowed',
+      });
   }
-
-  // default to bad content-type
-  return new Response(JSON.stringify({ version }), {
-    status: 415,
-    statusText: 'Unsupported Media Type',
-  });
 };
