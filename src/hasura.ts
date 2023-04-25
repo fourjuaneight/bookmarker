@@ -199,6 +199,7 @@ export const queryBookmarkItemsByTable = async (table: Tables) => {
         ${column}: asc
       }) {
         ${BK_FIELDS[table].join('\n')}
+        tags
         id
       }
     }
