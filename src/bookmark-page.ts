@@ -30,10 +30,10 @@ export const bookmarkPage = async (
   const record = isArticle
     ? ({
         ...baseData,
-        author: fmtValue(data.author),
+        author: fmtValue(data.creator),
         site: fmtValue(data.site),
       } as RecordData)
-    : ({ ...baseData, creator: fmtValue(data.creator) } as RecordData);
+    : ({ ...baseData, author: fmtValue(data.creator) } as RecordData);
 
   try {
     const hasuraResp = await addHasuraRecord(table, record);
