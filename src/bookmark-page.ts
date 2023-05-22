@@ -16,7 +16,6 @@ export const bookmarkPage = async (
   table: Tables,
   data: PageData
 ): Promise<BookmarkingResponse> => {
-  console.log('bookmarkPage', { table, data });
   const isArticle = table === 'articles';
   const source = isArticle ? 'bookmarkPage:articles' : 'bookmarkPage:comics';
   const cleanURL = data.url
@@ -37,7 +36,6 @@ export const bookmarkPage = async (
     : ({ ...baseData, author: fmtValue(data.creator) } as RecordData);
 
   try {
-    console.log('bookmarkPage', { table, data, record });
     const hasuraResp = await addHasuraRecord(table, record);
 
     return { success: true, message: hasuraResp, source };
