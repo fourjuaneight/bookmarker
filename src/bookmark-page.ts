@@ -36,6 +36,7 @@ export const bookmarkPage = async (
     : ({ ...baseData, author: fmtValue(data.creator) } as RecordData);
 
   try {
+    console.log('bookmarkPage', { table, data, record });
     const hasuraResp = await addHasuraRecord(table, record);
 
     return { success: true, message: hasuraResp, source };

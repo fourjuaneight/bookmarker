@@ -318,6 +318,7 @@ export const searchBookmarkItems = async (
   column: string
 ): Promise<KeyedRecordData> => {
   const cleanPattern = pattern.replace(/([:;!?-_()[\]]+)/g, '');
+  console.log('searchBookmarkItems', { table, cleanPattern, column });
   const query = `
     {
       bookmarks_${table}(
@@ -398,6 +399,12 @@ export const addHasuraRecord = async (
   `;
 
   try {
+    console.log('addHasuraRecord', {
+      table,
+      record,
+      bkTitle: bkTitle ?? '',
+      bkColumn,
+    });
     const existing = await searchBookmarkItems(table, bkTitle ?? '', bkColumn);
 
     if (Object.keys(existing).length !== 0) {
