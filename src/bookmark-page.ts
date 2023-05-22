@@ -16,6 +16,7 @@ export const bookmarkPage = async (
   table: Tables,
   data: PageData
 ): Promise<BookmarkingResponse> => {
+  console.log('bookmarkPage', { table, data });
   const isArticle = table === 'articles';
   const source = isArticle ? 'bookmarkPage:articles' : 'bookmarkPage:comics';
   const cleanURL = data.url
