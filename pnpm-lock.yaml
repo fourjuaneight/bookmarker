@@ -1,4 +1,4 @@
-lockfileVersion: '6.0'
+lockfileVersion: '6.1'
 
 settings:
   autoInstallPeers: true
@@ -47,8 +47,8 @@ devDependencies:
     specifier: ^11.2.6
     version: 11.2.6
   pnpm:
-    specifier: ^7.6.0
-    version: 7.6.0
+    specifier: ^8.6.11
+    version: 8.6.11
   prettier:
     specifier: ^2.4.1
     version: 2.7.1
@@ -1870,9 +1870,9 @@ packages:
       semver-compare: 1.0.0
     dev: true
 
-  /pnpm@7.6.0:
-    resolution: {integrity: sha512-pCFZ4OSM3M7JUHShnmk4Hlt9A8QDxLx+i+9kkK4g60YuYhhhD3oqBfWrHax0/XMDvr7GwK0fqFjA8iD8HlZ8Kw==}
-    engines: {node: '>=14.6'}
+  /pnpm@8.6.11:
+    resolution: {integrity: sha512-jqknppuj45tDzJsLcLqkAxytBHZXIx9JTYkGNq0/7pSRggpio9wRxTDj4NA2ilOHPlJ5BVjB5Ij5dx65woMi5A==}
+    engines: {node: '>=16.14'}
     hasBin: true
     dev: true
 
