@@ -1,5 +1,6 @@
 name = "bookmarker"
 type = "javascript"
+main = "./dist/worker.js"
 workers_dev = true
 
 [build]
