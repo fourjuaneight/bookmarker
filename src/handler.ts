@@ -157,7 +157,7 @@ const handleAction = async (
       version,
     });
   } catch (error) {
-    console.log(error);
+    console.log('handleAction', error);
     ctx.status(500);
     return ctx.json<BookmarkResponse>({
       error,
