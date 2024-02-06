@@ -1095,6 +1095,7 @@ export type CountColumn =
   | 'user';
 
 export type Tables =
+  | 'all'
   | 'articles'
   | 'comics'
   | 'podcasts'
@@ -1164,4 +1165,18 @@ export interface HasuraErrors {
     };
     message: string;
   }[];
+}
+
+export interface KeyedRecordData {
+  [key: string]: RecordData;
+}
+
+export interface BookmarkResponse {
+  error?: string;
+  bookmarks?: RecordData[];
+  results?: KeyedRecordData;
+  tags?: string[];
+  count?: RecordColumnAggregateCount;
+  location?: Tables;
+  version: string;
 }

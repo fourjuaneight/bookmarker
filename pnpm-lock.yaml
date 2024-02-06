@@ -8,6 +8,9 @@ dependencies:
   '@cloudflare/wrangler':
     specifier: ^1.21.0
     version: 1.21.0
+  hono:
+    specifier: ^3.12.11
+    version: 3.12.11
 
 devDependencies:
   '@cloudflare/workers-types':
@@ -1511,6 +1514,11 @@ packages:
     dependencies:
       function-bind: 1.1.2
     dev: true
+
+  /hono@3.12.11:
+    resolution: {integrity: sha512-LSpxVgIMR3UzyFiXZaPvqBUGqyOKG0LMZqgMn2RXz9f+YAdkHSfFQQX0dtU72fPm5GnEMh5AYXs0ek5NYgMOmA==}
+    engines: {node: '>=16.0.0'}
+    dev: false
 
   /human-signals@2.1.0:
     resolution: {integrity: sha512-B4FFZ6q/T2jhhksgkbEW3HBvWIfDW85snkQgawt07S7J5QXTk6BkNV+0yAeZrM5QpMAdYlocGoljn0sJ/WQkFw==}

@@ -1,18 +1,15 @@
 import {
+  CountColumn,
   HasuraErrors,
   HasuraInsertResp,
   HasuraQueryAggregateResp,
   HasuraQueryResp,
   HasuraQueryTagsResp,
-  CountColumn,
+  KeyedRecordData,
   RecordColumnAggregateCount,
   RecordData,
   Tables,
 } from './typings.d';
-
-interface KeyedRecordData {
-  [key: string]: RecordData;
-}
 
 const BK_FIELDS = {
   articles: ['title', 'author', 'site', 'url', 'archive'],
@@ -74,9 +71,15 @@ const countUniqueSorted = (iterable: string[]) =>
  * @async
  *
  * @param {Tables} table
+ * @param {string} endpoint Hasura endpoint
+ * @param {string} secret Hasura secret
  * @returns {Promise<RecordData[]>}
  */
-export const queryTags = async (table: Tables): Promise<string[]> => {
+export const queryTags = async (
+  table: Tables,
+  endpoint: string,
+  secret: string
+): Promise<string[]> => {
   const query = `
     {
       meta_tags(
@@ -89,11 +92,11 @@ export const queryTags = async (table: Tables): Promise<string[]> => {
   `;
 
   try {
-    const request = await fetch(`${HASURA_ENDPOINT}`, {
+    const request = await fetch(endpoint, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-Hasura-Admin-Secret': `${HASURA_ADMIN_SECRET}`,
+        'X-Hasura-Admin-Secret': secret,
       },
       body: JSON.stringify({ query }),
     });
@@ -129,10 +132,14 @@ export const queryTags = async (table: Tables): Promise<string[]> => {
  * @async
  *
  * @param {Tables} table
+ * @param {string} endpoint Hasura endpoint
+ * @param {string} secret Hasura secret
  * @returns {Promise<KeyedRecordData>}
  */
 export const queryBookmarkItems = async (
-  table: Tables
+  table: Tables,
+  endpoint: string,
+  secret: string
 ): Promise<KeyedRecordData> => {
   const column = table === 'tweets' ? 'tweet' : 'title';
   const query = `
@@ -147,11 +154,11 @@ export const queryBookmarkItems = async (
   `;
 
   try {
-    const request = await fetch(`${HASURA_ENDPOINT}`, {
+    const request = await fetch(endpoint, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-Hasura-Admin-Secret': `${HASURA_ADMIN_SECRET}`,
+        'X-Hasura-Admin-Secret': secret,
       },
       body: JSON.stringify({ query }),
     });
@@ -191,7 +198,21 @@ export const queryBookmarkItems = async (
 /**
  * Get bookmark entries from Hasura.
  */
-export const queryBookmarkItemsByTable = async (table: Tables) => {
+/**
+ * Get bookmark entries from Hasura.
+ * @function
+ * @async
+ *
+ * @param {Tables} table table name
+ * @param {string} endpoint Hasura endpoint
+ * @param {string} secret Hasura secret
+ * @returns {Promise<RecordData[]>}
+ */
+export const queryBookmarkItemsByTable = async (
+  table: Tables,
+  endpoint: string,
+  secret: string
+) => {
   const column = table === 'tweets' ? 'tweet' : 'title';
   const query = `
     {
@@ -206,11 +227,11 @@ export const queryBookmarkItemsByTable = async (table: Tables) => {
   `;
 
   try {
-    const request = await fetch(`${HASURA_ENDPOINT}`, {
+    const request = await fetch(endpoint, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-Hasura-Admin-Secret': `${HASURA_ADMIN_SECRET}`,
+        'X-Hasura-Admin-Secret': secret,
       },
       body: JSON.stringify({ query }),
     });
@@ -245,11 +266,15 @@ export const queryBookmarkItemsByTable = async (table: Tables) => {
  *
  * @param {Tables} table
  * @param {CountColumn} column
+ * @param {string} endpoint Hasura endpoint
+ * @param {string} secret Hasura secret
  * @returns {Promise<RecordColumnAggregateCount>}
  */
 export const queryBookmarkAggregateCount = async (
   table: Tables,
-  column: CountColumn
+  column: CountColumn,
+  endpoint: string,
+  secret: string
 ): Promise<RecordColumnAggregateCount> => {
   const sort = column === 'tags' ? 'title' : column;
   const query = `
@@ -261,11 +286,11 @@ export const queryBookmarkAggregateCount = async (
   `;
 
   try {
-    const request = await fetch(`${HASURA_ENDPOINT}`, {
+    const request = await fetch(endpoint, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-Hasura-Admin-Secret': `${HASURA_ADMIN_SECRET}`,
+        'X-Hasura-Admin-Secret': secret,
       },
       body: JSON.stringify({ query }),
     });
@@ -310,12 +335,16 @@ export const queryBookmarkAggregateCount = async (
  * @param {Tables} table
  * @param {string} pattern
  * @param {[string]} column
+ * @param {string} endpoint Hasura endpoint
+ * @param {string} secret Hasura secret
  * @returns {Promise<KeyedRecordData>}
  */
 export const searchBookmarkItems = async (
   table: Tables,
   pattern: string,
-  column: string
+  column: string,
+  endpoint: string,
+  secret: string
 ): Promise<KeyedRecordData> => {
   const cleanPattern = pattern.replace(/([:;!?-_()[\]]+)/g, '');
   const query = `
@@ -331,11 +360,11 @@ export const searchBookmarkItems = async (
   `;
 
   try {
-    const request = await fetch(`${HASURA_ENDPOINT}`, {
+    const request = await fetch(endpoint, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-Hasura-Admin-Secret': `${HASURA_ADMIN_SECRET}`,
+        'X-Hasura-Admin-Secret': secret,
       },
       body: JSON.stringify({ query }),
     });
@@ -379,11 +408,15 @@ export const searchBookmarkItems = async (
  *
  * @param {Tables} table table name
  * @param {RecordData} record data to upload
+ * @param {string} endpoint Hasura endpoint
+ * @param {string} secret Hasura secret
  * @returns {Promise<string>}
  */
 export const addHasuraRecord = async (
   table: Tables,
-  record: RecordData
+  record: RecordData,
+  endpoint: string,
+  secret: string
 ): Promise<string> => {
   const isReddit = table === 'reddits';
   const isTweet = table === 'tweets';
@@ -412,11 +445,11 @@ export const addHasuraRecord = async (
       )}`;
     }
 
-    const request = await fetch(`${HASURA_ENDPOINT}`, {
+    const request = await fetch(endpoint, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-Hasura-Admin-Secret': `${HASURA_ADMIN_SECRET}`,
+        'X-Hasura-Admin-Secret': secret,
       },
       body: JSON.stringify({ query }),
     });

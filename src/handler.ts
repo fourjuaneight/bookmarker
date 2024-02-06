@@ -1,3 +1,5 @@
+import { Context } from 'hono';
+
 import { bookmarkPage } from './bookmark-page';
 import { bookmarkPodcasts } from './bookmark-podcasts';
 import { bookmarkReddits } from './bookmark-reddits';
@@ -15,43 +17,27 @@ import { version } from '../package.json';
 
 import {
   BookmarkingResponse,
+  BookmarkResponse,
   CountColumn,
   RecordData,
   RequestPayload,
   Tables,
 } from './typings.d';
 
-// default responses
-const responseInit = {
-  headers: {
-    'Content-Type': 'application/json; charset=utf-8',
-  },
-};
-const badReqBody = {
-  status: 400,
-  statusText: 'Bad Request',
-  ...responseInit,
-};
-const errReqBody = {
-  status: 500,
-  statusText: 'Internal Error',
-  ...responseInit,
-};
-const noAuthReqBody = {
-  status: 401,
-  statusText: 'Unauthorized',
-  ...responseInit,
-};
-
 /**
  * Helper method to determine which table/category to use.
  * @function
  * @async
  *
- * @param payload request payload
+ * @param {Context} ctx Hono context
+ * @param payload req payload
  * @returns {Promise<Response>} response
  */
-const handleAction = async (payload: RequestPayload): Promise<Response> => {
+const handleAction = async (
+  ctx: Context,
+  payload: RequestPayload
+): Promise<Response> => {
+  const { HASURA_ENDPOINT, HASURA_ADMIN_SECRET } = ctx.env;
   // payload data is present at time point
   const data: RecordData = payload.type === 'Insert' ? payload.data : {};
   const fmtTable = payload.table.toLowerCase();
@@ -63,30 +49,34 @@ const handleAction = async (payload: RequestPayload): Promise<Response> => {
     // determine which table and method to use
     switch (true) {
       case payload.type === 'Tags': {
-        const tags = await queryTags(payload.table);
-
-        return new Response(
-          JSON.stringify({
-            tags,
-            location: payload.table,
-            version,
-          }),
-          responseInit
+        const tags = await queryTags(
+          payload.table,
+          HASURA_ENDPOINT,
+          HASURA_ADMIN_SECRET
         );
+
+        ctx.status(200);
+        return ctx.json<BookmarkResponse>({
+          tags,
+          location: payload.table,
+          version,
+        });
       }
       case payload.type === 'Query': {
         location = `${payload.type}-${fmtTable}`;
 
-        const queryResults = await queryBookmarkItems(fmtTable);
-
-        return new Response(
-          JSON.stringify({
-            bookmarks: queryResults,
-            location,
-            version,
-          }),
-          responseInit
+        const queryResults = await queryBookmarkItems(
+          fmtTable,
+          HASURA_ENDPOINT,
+          HASURA_ADMIN_SECRET
         );
+
+        ctx.status(200);
+        return ctx.json<BookmarkResponse>({
+          results: queryResults,
+          location,
+          version,
+        });
       }
       case payload.type === 'Search': {
         location = `${payload.type}-${fmtTable}`;
@@ -94,34 +84,34 @@ const handleAction = async (payload: RequestPayload): Promise<Response> => {
         const searchResults = await searchBookmarkItems(
           fmtTable,
           payload.query ?? '',
-          payload.column ?? ''
+          payload.column ?? '',
+          HASURA_ENDPOINT,
+          HASURA_ADMIN_SECRET
         );
 
-        return new Response(
-          JSON.stringify({
-            bookmarks: searchResults,
-            location,
-            version,
-          }),
-          responseInit
-        );
+        ctx.status(200);
+        return ctx.json<BookmarkResponse>({
+          results: searchResults,
+          location,
+          version,
+        });
       }
       case payload.type === 'Count': {
         location = `${payload.type}-${fmtTable}`;
 
         const queryResults = await queryBookmarkAggregateCount(
           fmtTable as Tables,
-          payload.countColumn as CountColumn
+          payload.countColumn as CountColumn,
+          HASURA_ENDPOINT,
+          HASURA_ADMIN_SECRET
         );
 
-        return new Response(
-          JSON.stringify({
-            count: queryResults,
-            location,
-            version,
-          }),
-          responseInit
-        );
+        ctx.status(200);
+        return ctx.json<BookmarkResponse>({
+          count: queryResults,
+          location,
+          version,
+        });
       }
       case payload.table === 'podcasts':
         location = fmtTable;
@@ -152,166 +142,202 @@ const handleAction = async (payload: RequestPayload): Promise<Response> => {
     }
 
     if (!response.success) {
-      return new Response(
-        JSON.stringify({
-          error: response.message,
-          location: response.source,
-          version,
-        }),
-        responseInit
-      );
+      ctx.status(400);
+      return ctx.json<BookmarkResponse>({
+        error: response.message,
+        location: response.source,
+        version,
+      });
     }
 
-    return new Response(
-      JSON.stringify({
-        bookmarked: response.message,
-        location,
-        version,
-      }),
-      responseInit
-    );
+    ctx.status(200);
+    return ctx.json<BookmarkResponse>({
+      error: response.message,
+      location,
+      version,
+    });
   } catch (error) {
     console.log(error);
-    return new Response(
-      JSON.stringify({ error, location, version }),
-      errReqBody
-    );
+    ctx.status(500);
+    return ctx.json<BookmarkResponse>({
+      error,
+      location,
+      version,
+    });
   }
 };
 
-const handlePost = async (request: Request): Promise<Response> => {
-  const payload: RequestPayload = await request.json();
+/**
+ * Handle GET requests.
+ * @function
+ * @async
+ *
+ * @param {Context} ctx Hono context
+ * @returns {Promise<Response>} response object
+ */
+export const handleGet = async (ctx: Context): Promise<Response> => {
+  const { AUTH_KEY, HASURA_ENDPOINT, HASURA_ADMIN_SECRET } = ctx.env;
+  const contentType = ctx.req.headers.get('content-type');
+  const key = ctx.req.headers.get('key');
+  const isJson = contentType?.includes('application/json');
+  const table = ctx.req.headers.get('table');
 
   // check for required fields
   switch (true) {
-    case !payload.type:
-      return new Response(
-        JSON.stringify({ error: "Missing 'type' parameter.", version }),
-        badReqBody
-      );
-    case payload.type !== 'Tags' && !payload.table:
-      return new Response(
-        JSON.stringify({ error: "Missing 'table' parameter.", version }),
-        badReqBody
-      );
-    case payload.type === 'Search' && !payload.query:
-      return new Response(
-        JSON.stringify({ error: "Missing 'query' parameter.", version }),
-        badReqBody
-      );
-    case payload.type === 'Search' && !payload.column:
-      return new Response(
-        JSON.stringify({ error: "Missing 'column' parameter.", version }),
-        badReqBody
-      );
-    case payload.type === 'Count' && !payload.countColumn:
-      return new Response(
-        JSON.stringify({
-          error: "Missing 'countColumn' parameter.",
-          version,
-        }),
-        badReqBody
-      );
-    case payload.type === 'Count' && !payload.table:
-      return new Response(
-        JSON.stringify({ error: "Missing 'table' parameter.", version }),
-        badReqBody
-      );
-    case payload.type === 'Insert' &&
-      payload.table === 'articles' &&
-      !payload.data?.title:
-      return new Response(
-        JSON.stringify({ error: "Missing 'data.title' parameter.", version }),
-        badReqBody
-      );
-    case payload.type === 'Insert' &&
-      payload.table === 'comics' &&
-      !payload.data?.creator:
-      return new Response(
-        JSON.stringify({
-          error: "Missing 'data.creator' parameter.",
-          version,
-        }),
-        badReqBody
-      );
-    case payload.type === 'Insert' && !payload.data?.url:
-      return new Response(
-        JSON.stringify({ error: "Missing 'url' parameter.", version }),
-        badReqBody
-      );
-    case payload.type === 'Insert' &&
-      (payload.data?.tags.length === 0 || !Array.isArray(payload.data?.tags)):
-      return new Response(
-        JSON.stringify({ error: "Missing 'tags' parameter.", version }),
-        badReqBody
-      );
+    case !contentType:
+      ctx.status(400);
+      return ctx.json<BookmarkResponse>({
+        error: "Please provide 'content-type' header.",
+        version,
+      });
+    case !isJson:
+      ctx.status(415);
+      return ctx.json<BookmarkResponse>({
+        error: 'Unsupported Media Type.',
+        version,
+      });
+    case !key:
+      ctx.status(401);
+      return ctx.json<BookmarkResponse>({
+        error: "Missing 'key' header.",
+        version,
+      });
+    case key !== AUTH_KEY:
+      ctx.status(401);
+      return ctx.json<BookmarkResponse>({
+        error: "You're not authorized to access this API.",
+        version,
+      });
+    case !table:
+      ctx.status(400);
+      return ctx.json<BookmarkResponse>({
+        error: "Missing 'table' header.",
+        version,
+      });
     default: {
-      console.log('handleRequest', { payload });
+      const queryItems = await queryBookmarkItemsByTable(
+        table,
+        HASURA_ENDPOINT,
+        HASURA_ADMIN_SECRET
+      );
 
-      return handleAction(payload);
+      ctx.status(200);
+      return ctx.json<BookmarkResponse>({
+        bookmarks: queryItems,
+        version,
+      });
     }
   }
 };
 
 /**
- * Handler method for all requests.
+ * Handle POST requests.
  * @function
  * @async
  *
- * @param {Request} request request object
+ * @param {Context} ctx Hono context
  * @returns {Promise<Response>} response object
  */
-export const handleRequest = async (request: Request): Promise<Response> => {
-  const contentType = request.headers.get('content-type');
-  const key = request.headers.get('key');
-  const table = request.headers.get('table');
-  const isPost = request.method === 'POST';
-  const isGet = request.method === 'GET';
+export const handlePost = async (ctx: Context): Promise<Response> => {
+  const { AUTH_KEY } = ctx.env;
+  const contentType = ctx.req.headers.get('content-type');
+  const key = ctx.req.headers.get('key');
   const isJson = contentType?.includes('application/json');
+  const payload = await ctx.req.json<RequestPayload>();
 
+  // check for required fields
   switch (true) {
     case !contentType:
-      return new Response(
-        JSON.stringify({
-          error: "Please provide 'content-type' header.",
-          version,
-        }),
-        badReqBody
-      );
+      ctx.status(400);
+      return ctx.json<BookmarkResponse>({
+        error: "Please provide 'content-type' header.",
+        version,
+      });
     case !isJson:
-      return new Response(JSON.stringify({ version }), {
-        status: 415,
-        statusText: 'Unsupported Media Type',
+      ctx.status(415);
+      return ctx.json<BookmarkResponse>({
+        error: 'Unsupported Media Type.',
+        version,
       });
-    case isGet && !table:
-      return new Response(
-        JSON.stringify({ error: "Missing 'table' header.", version }),
-        badReqBody
-      );
-    case isGet:
-      const queryItems = await queryBookmarkItemsByTable(table);
-
-      console.log('handleRequest', { queryItems });
-      return new Response(JSON.stringify(queryItems), responseInit);
     case !key:
-      return new Response(
-        JSON.stringify({ error: "Missing 'key' header.", version }),
-        noAuthReqBody
-      );
-    case key !== AUTH_KEY:
-      return new Response(
-        JSON.stringify({
-          error: "You're not authorized to access this API.",
-          version,
-        }),
-        noAuthReqBody
-      );
-    case isPost:
-      return handlePost(request);
-    default:
-      return new Response(JSON.stringify({ version }), {
-        status: 405,
-        statusText: 'Method Not Allowed',
+      ctx.status(401);
+      return ctx.json<BookmarkResponse>({
+        error: "Missing 'key' header.",
+        version,
       });
+    case key !== AUTH_KEY:
+      ctx.status(401);
+      return ctx.json<BookmarkResponse>({
+        error: "You're not authorized to access this API.",
+        version,
+      });
+    case !payload.type:
+      ctx.status(400);
+      return ctx.json<BookmarkResponse>({
+        error: "Missing 'type' parameter.",
+        version,
+      });
+    case payload.type !== 'Tags' && !payload.table:
+      ctx.status(400);
+      return ctx.json<BookmarkResponse>({
+        error: "Missing 'table' parameter.",
+        version,
+      });
+    case payload.type === 'Search' && !payload.query:
+      ctx.status(400);
+      return ctx.json<BookmarkResponse>({
+        error: "Missing 'query' parameter.",
+        version,
+      });
+    case payload.type === 'Search' && !payload.column:
+      ctx.status(400);
+      return ctx.json<BookmarkResponse>({
+        error: "Missing 'column' parameter.",
+        version,
+      });
+    case payload.type === 'Count' && !payload.countColumn:
+      ctx.status(400);
+      return ctx.json<BookmarkResponse>({
+        error: "Missing 'countColumn' parameter.",
+        version,
+      });
+    case payload.type === 'Count' && !payload.table:
+      ctx.status(400);
+      return ctx.json<BookmarkResponse>({
+        error: "Missing 'table' parameter.",
+        version,
+      });
+    case payload.type === 'Insert' &&
+      payload.table === 'articles' &&
+      !payload.data?.title:
+      ctx.status(400);
+      return ctx.json<BookmarkResponse>({
+        error: "Missing 'data.title' parameter.",
+        version,
+      });
+    case payload.type === 'Insert' &&
+      payload.table === 'comics' &&
+      !payload.data?.creator:
+      ctx.status(400);
+      return ctx.json<BookmarkResponse>({
+        error: "Missing 'data.creator' parameter.",
+        version,
+      });
+    case payload.type === 'Insert' && !payload.data?.url:
+      ctx.status(400);
+      return ctx.json<BookmarkResponse>({
+        error: "Missing 'url' parameter.",
+        version,
+      });
+    case payload.type === 'Insert' &&
+      (payload.data?.tags.length === 0 || !Array.isArray(payload.data?.tags)):
+      ctx.status(400);
+      return ctx.json<BookmarkResponse>({
+        error: "Missing 'tags' parameter.",
+        version,
+      });
+    default: {
+      return handleAction(ctx, payload);
+    }
   }
 };
