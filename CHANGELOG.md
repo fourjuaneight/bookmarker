@@ -2,6 +2,35 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.6.0] - 2024-02-06
+
+### Bug Fixes
+
+- [Use author when saving articles.](https://github.com/fourjuaneight/bookmarker/commit/92e66a202e774690be5bdda5573f233e47292455)
+- [Use author on article data lookup.](https://github.com/fourjuaneight/bookmarker/commit/289709600de3cf493f774d7ef7c61a513ddf78be)
+- [Add entrypoint to config.](https://github.com/fourjuaneight/bookmarker/commit/024484df57373f098afe507c4fddc5571a977c03)
+
+### Features
+
+- [Add action to verify no secrets are leaked.](https://github.com/fourjuaneight/bookmarker/commit/5766988a0e6ecbfedf2e5d4afedf94647199df1e)
+- [**breaking**] [Migrate to Hono.](https://github.com/fourjuaneight/bookmarker/commit/18321d0e536073294d909a4fd56dd6768b56ca54)
+
+### Miscellaneous Tasks
+
+- [Update Changelog.](https://github.com/fourjuaneight/bookmarker/commit/c1efa86c829c0745badb7deca187de8df28ee7a5)
+- [Add debug logs.](https://github.com/fourjuaneight/bookmarker/commit/09284b8f43ffdae58bedf7c8ebb6e35631428650)
+- [Add more debug logs.](https://github.com/fourjuaneight/bookmarker/commit/073828c438ea4513ce07ff607ecccc6c60c50570)
+- [Remove debug logs.](https://github.com/fourjuaneight/bookmarker/commit/12befd8f482b9e2c1f0e041b28f9dfa28b4fee9b)
+- [Bump word-wrap from 1.2.3 to 1.2.4](https://github.com/fourjuaneight/bookmarker/commit/7292b8ea761a2bfe82e007f6859852d5befc1aa9)
+- [Update dependencies.](https://github.com/fourjuaneight/bookmarker/commit/2810c4e8bda813c1c4bd03cae6a7845d2988e63d)
+- [Bump json5 from 1.0.1 to 1.0.2](https://github.com/fourjuaneight/bookmarker/commit/9e6a6143bf1e6549618ea0b0cbb1dadeca7bb937)
+- [Update dependencies.](https://github.com/fourjuaneight/bookmarker/commit/0af53535c7b3812b18e0530abf9d7987972839bd)
+- [Update workflow pnpm to v8.](https://github.com/fourjuaneight/bookmarker/commit/c8d8e8143e3fa65932c427a0dc939fbfae29d754)
+- [Use pnpm setup action to install dependnecies.](https://github.com/fourjuaneight/bookmarker/commit/f8ebf7c76a64b477d4d8c9c3db83db82e47efdcf)
+- [Bump follow-redirects from 1.15.1 to 1.15.4](https://github.com/fourjuaneight/bookmarker/commit/08370ad21fefdfd263078f45db32029b5fca25bb)
+- [Update dependencies.](https://github.com/fourjuaneight/bookmarker/commit/a7935e0868c8eb0baf7bcfecbd326884a813e587)
+- [Update to v1.6.0.](https://github.com/fourjuaneight/bookmarker/commit/172c02a0d766f755d5e20292e32c0a64eb0c5b12)
+
 ## [1.5.1] - 2023-04-25
 
 ### Bug Fixes
