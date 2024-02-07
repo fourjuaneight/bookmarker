@@ -182,7 +182,7 @@ const handleAction = async (
 
     ctx.status(200);
     return ctx.json<BookmarkResponse>({
-      error: response.message,
+      bookmarked: response.message,
       location,
       version,
     });
