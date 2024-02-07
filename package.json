@@ -1,6 +1,6 @@
 {
   "name": "bookmarker",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "Serverless functions to bookmark media to Airtable.",
   "main": "dist/worker.js",
   "scripts": {
