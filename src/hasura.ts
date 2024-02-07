@@ -426,7 +426,13 @@ export const addHasuraRecord = async (
   `;
 
   try {
-    const existing = await searchBookmarkItems(table, bkTitle ?? '', bkColumn);
+    const existing = await searchBookmarkItems(
+      table,
+      bkTitle ?? '',
+      bkColumn,
+      endpoint,
+      secret
+    );
 
     if (Object.keys(existing).length !== 0) {
       throw `(addHasuraRecord): Bookmark already exists.\n${JSON.stringify(
