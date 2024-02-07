@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.6.1] - 2024-02-07
+
+### Bug Fixes
+
+- [Update bookmark helpers to pass endpoint and secret to hasura methods.](https://github.com/fourjuaneight/bookmarker/commit/8e07eb26682e45d990f643a509351dcb4fa30d80)
+- [Add missing hasura fetch params to method.](https://github.com/fourjuaneight/bookmarker/commit/553eecb7aa03252e0a1d1a18d3c011672effda43)
+- [Remove quotes when searching existing item.](https://github.com/fourjuaneight/bookmarker/commit/86304667cdeed28efcbc12951d8a7802307e4882)
+- [Remove error object on successfull bookmark save.](https://github.com/fourjuaneight/bookmarker/commit/265cf40f3dbdc65f3d26db69bcfd160cd2db1563)
+
+### Miscellaneous Tasks
+
+- [Update Changelog.](https://github.com/fourjuaneight/bookmarker/commit/ff7f6d310c01e06363085fcb252964a32a4dd07b)
+- [Minor logging updates.](https://github.com/fourjuaneight/bookmarker/commit/37de7374f10725749a3fa31bad335f8913ad4756)
+- [Better error handling.](https://github.com/fourjuaneight/bookmarker/commit/0500fa452dd0279c0fb1cbc900cda7830838b8f1)
+- [Update to v1.6.1.](https://github.com/fourjuaneight/bookmarker/commit/84cb8d0bde807465ed6b11cf11aed0d30adcaae5)
+
 ## [1.6.0] - 2024-02-06
 
 ### Bug Fixes
