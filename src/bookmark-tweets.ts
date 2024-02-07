@@ -173,19 +173,28 @@ const getTweetDetails = async (url: string): Promise<TwitterData> => {
  *
  * @param {string} url tweet url
  * @param {string[]} tags record tags
+ * @param {string} endpoint Hasura endpoint
+ * @param {string} secret Hasura secret
  * @returns {Promise<BookmarkingResponse>} result of record upload
  */
 export const bookmarkTweets = async (
   url: string,
-  tags: string[]
+  tags: string[],
+  endpoint: string,
+  secret: string
 ): Promise<BookmarkingResponse> => {
   try {
     const tweetData = await getTweetDetails(url);
-    const hasuraResp = await addHasuraRecord('tweets', {
-      ...tweetData,
-      tags,
-      dead: false,
-    });
+    const hasuraResp = await addHasuraRecord(
+      'tweets',
+      {
+        ...tweetData,
+        tags,
+        dead: false,
+      },
+      endpoint,
+      secret
+    );
 
     return { success: true, message: hasuraResp, source: 'bookmarkTweets' };
   } catch (error) {

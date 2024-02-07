@@ -50,19 +50,28 @@ const getRedditDetails = async (url: string): Promise<RedditData> => {
  *
  * @param {string} url reddit post url
  * @param {string[]} tags record tags
+ * @param {string} endpoint Hasura endpoint
+ * @param {string} secret Hasura secret
  * @returns {Promise<BookmarkingResponse>} result of record upload
  */
 export const bookmarkReddits = async (
   url: string,
-  tags: string[]
+  tags: string[],
+  endpoint: string,
+  secret: string
 ): Promise<BookmarkingResponse> => {
   try {
     const redditData = await getRedditDetails(url);
-    const hasuraResp = await addHasuraRecord('reddits', {
-      ...redditData,
-      tags,
-      dead: false,
-    });
+    const hasuraResp = await addHasuraRecord(
+      'reddits',
+      {
+        ...redditData,
+        tags,
+        dead: false,
+      },
+      endpoint,
+      secret
+    );
 
     return { success: true, message: hasuraResp, source: 'bookmarkReddits' };
   } catch (error) {

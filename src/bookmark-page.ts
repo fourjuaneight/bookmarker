@@ -10,11 +10,15 @@ import { BookmarkingResponse, PageData, RecordData, Tables } from './typings.d';
  *
  * @param {Tables} table airtable table name
  * @param {PageData} data page data
+ * @param {string} endpoint Hasura endpoint
+ * @param {string} secret Hasura secret
  * @returns {Promise<BookmarkingResponse>} result of record upload
  */
 export const bookmarkPage = async (
   table: Tables,
-  data: PageData
+  data: PageData,
+  endpoint: string,
+  secret: string
 ): Promise<BookmarkingResponse> => {
   const isArticle = table === 'articles';
   const source = isArticle ? 'bookmarkPage:articles' : 'bookmarkPage:comics';
@@ -36,7 +40,7 @@ export const bookmarkPage = async (
     : ({ ...baseData, author: fmtValue(data.author) } as RecordData);
 
   try {
-    const hasuraResp = await addHasuraRecord(table, record);
+    const hasuraResp = await addHasuraRecord(table, record, endpoint, secret);
 
     return { success: true, message: hasuraResp, source };
   } catch (error) {

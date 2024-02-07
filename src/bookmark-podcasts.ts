@@ -150,19 +150,28 @@ const getPodcastDetails = async (url: string): Promise<BookmarkData> => {
  *
  * @param {string} url podcast url
  * @param {string[]} tags record tags
+ * @param {string} endpoint Hasura endpoint
+ * @param {string} secret Hasura secret
  * @returns {Promise<BookmarkingResponse>} result of record upload
  */
 export const bookmarkPodcasts = async (
   url: string,
-  tags: string[]
+  tags: string[],
+  endpoint: string,
+  secret: string
 ): Promise<BookmarkingResponse> => {
   try {
     const podcastData = await getPodcastDetails(url);
-    const hasuraResp = await addHasuraRecord('podcasts', {
-      ...podcastData,
-      tags,
-      dead: false,
-    });
+    const hasuraResp = await addHasuraRecord(
+      'podcasts',
+      {
+        ...podcastData,
+        tags,
+        dead: false,
+      },
+      endpoint,
+      secret
+    );
 
     return { success: true, message: hasuraResp, source: 'bookmarkPodcasts' };
   } catch (error) {

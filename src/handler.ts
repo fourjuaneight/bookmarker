@@ -115,28 +115,58 @@ const handleAction = async (
       }
       case payload.table === 'podcasts':
         location = fmtTable;
-        response = await bookmarkPodcasts(data.url, data.tags);
+        response = await bookmarkPodcasts(
+          data.url,
+          data.tags,
+          HASURA_ENDPOINT,
+          HASURA_ADMIN_SECRET
+        );
         break;
       case payload.table === 'reddits':
         location = fmtTable;
-        response = await bookmarkReddits(data.url, data.tags);
+        response = await bookmarkReddits(
+          data.url,
+          data.tags,
+          HASURA_ENDPOINT,
+          HASURA_ADMIN_SECRET
+        );
         break;
       case payload.table === 'tweets':
         location = fmtTable;
-        response = await bookmarkTweets(data.url, data.tags);
+        response = await bookmarkTweets(
+          data.url,
+          data.tags,
+          HASURA_ENDPOINT,
+          HASURA_ADMIN_SECRET
+        );
         break;
       case payload.table === 'videos':
         location = fmtTable;
 
         if (data.url.includes('vimeo')) {
-          response = await bookmarkVimeo(data.url, data.tags);
+          response = await bookmarkVimeo(
+            data.url,
+            data.tags,
+            HASURA_ENDPOINT,
+            HASURA_ADMIN_SECRET
+          );
         } else {
-          response = await bookmarkYouTube(data.url, data.tags);
+          response = await bookmarkYouTube(
+            data.url,
+            data.tags,
+            HASURA_ENDPOINT,
+            HASURA_ADMIN_SECRET
+          );
         }
         break;
       default: {
         location = 'Page';
-        response = await bookmarkPage(payload.table, data as RecordData);
+        response = await bookmarkPage(
+          payload.table,
+          data as RecordData,
+          HASURA_ENDPOINT,
+          HASURA_ADMIN_SECRET
+        );
         break;
       }
     }
