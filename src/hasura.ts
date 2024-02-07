@@ -342,7 +342,7 @@ export const searchBookmarkItems = async (
   endpoint: string,
   secret: string
 ): Promise<KeyedRecordData> => {
-  const cleanPattern = pattern.replace(/([:;!?-_()[\]]+)/g, '');
+  const cleanPattern = pattern.replace(/([":;!?-_()[\]]+)/g, '');
   const query = `
     {
       bookmarks_${table}(
