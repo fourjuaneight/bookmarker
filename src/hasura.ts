@@ -102,7 +102,7 @@ export const queryTags = async (
     });
 
     if (request.status !== 200) {
-      throw `(queryTags): ${request.status} - ${request.statusText}`;
+      throw `(request): ${request.status} - ${request.statusText}`;
     }
 
     const response: HasuraQueryTagsResp | HasuraErrors = await request.json();
@@ -110,7 +110,7 @@ export const queryTags = async (
     if (response.errors) {
       const { errors } = response as HasuraErrors;
 
-      throw `(queryTags) - ${table}: \n ${errors
+      throw `(response) - ${table}: \n ${errors
         .map(err => `${err.extensions.path}: ${err.message}`)
         .join('\n')} \n ${query}`;
     }
@@ -121,8 +121,7 @@ export const queryTags = async (
 
     return tags;
   } catch (error) {
-    console.log(error);
-    throw error;
+    throw `(queryTags): ${error}`;
   }
 };
 
@@ -164,7 +163,7 @@ export const queryBookmarkItems = async (
     });
 
     if (request.status !== 200) {
-      throw `(queryBookmarkItems): ${request.status} - ${request.statusText}`;
+      throw `(request): ${request.status} - ${request.statusText}`;
     }
 
     const response: HasuraQueryResp | HasuraErrors = await request.json();
@@ -172,7 +171,7 @@ export const queryBookmarkItems = async (
     if (response.errors) {
       const { errors } = response as HasuraErrors;
 
-      throw `(queryBookmarkItems) - ${table}: \n ${errors
+      throw `(response) - ${table}: \n ${errors
         .map(err => `${err.extensions.path}: ${err.message}`)
         .join('\n')} \n ${query}`;
     }
@@ -190,8 +189,7 @@ export const queryBookmarkItems = async (
 
     return keyedRecords;
   } catch (error) {
-    console.log(error);
-    throw error;
+    throw `(queryBookmarkItems): ${error}`;
   }
 };
 
@@ -237,7 +235,7 @@ export const queryBookmarkItemsByTable = async (
     });
 
     if (request.status !== 200) {
-      throw `(queryBookmarkItems): ${request.status} - ${request.statusText}`;
+      throw `(request): ${request.status} - ${request.statusText}`;
     }
 
     const response: HasuraQueryResp | HasuraErrors = await request.json();
@@ -245,7 +243,7 @@ export const queryBookmarkItemsByTable = async (
     if (response.errors) {
       const { errors } = response as HasuraErrors;
 
-      throw `(queryBookmarkItems) - ${table}: \n ${errors
+      throw `(response) - ${table}: \n ${errors
         .map(err => `${err.extensions.path}: ${err.message}`)
         .join('\n')} \n ${query}`;
     }
@@ -254,8 +252,7 @@ export const queryBookmarkItemsByTable = async (
 
     return records;
   } catch (error) {
-    console.log(error);
-    throw error;
+    throw `(queryBookmarkItemsByTable): ${error}`;
   }
 };
 
@@ -296,7 +293,7 @@ export const queryBookmarkAggregateCount = async (
     });
 
     if (request.status !== 200) {
-      throw `(queryBookmarkAggregateCount): ${request.status} - ${request.statusText}`;
+      throw `(request): ${request.status} - ${request.statusText}`;
     }
 
     const response: any = await request.json();
@@ -304,7 +301,7 @@ export const queryBookmarkAggregateCount = async (
     if (response.errors) {
       const { errors } = response as HasuraErrors;
 
-      throw `(queryBookmarkAggregateCount) - ${table}: \n ${errors
+      throw `(response) - ${table}: \n ${errors
         .map(err => `${err.extensions.path}: ${err.message}`)
         .join('\n')} \n ${query}`;
     }
@@ -322,8 +319,7 @@ export const queryBookmarkAggregateCount = async (
 
     return countUniqueSorted(collection);
   } catch (error) {
-    console.log(error);
-    throw error;
+    throw `(queryBookmarkAggregateCount): ${error}`;
   }
 };
 
@@ -370,7 +366,7 @@ export const searchBookmarkItems = async (
     });
 
     if (request.status !== 200) {
-      throw `(searchBookmarkItems): ${request.status} - ${request.statusText}`;
+      throw `(request): ${request.status} - ${request.statusText}`;
     }
 
     const response: HasuraQueryResp | HasuraErrors = await request.json();
@@ -378,7 +374,7 @@ export const searchBookmarkItems = async (
     if (response.errors) {
       const { errors } = response as HasuraErrors;
 
-      throw `(searchBookmarkItems) - ${table}: \n ${errors
+      throw `(response) - ${table}: \n ${errors
         .map(err => `${err.extensions.path}: ${err.message}`)
         .join('\n')} \n ${query}`;
     }
@@ -396,8 +392,7 @@ export const searchBookmarkItems = async (
 
     return keyedRecords;
   } catch (error) {
-    console.log(error);
-    throw error;
+    throw `(searchBookmarkItems): ${error}`;
   }
 };
 
@@ -455,7 +450,7 @@ export const addHasuraRecord = async (
     });
 
     if (request.status !== 200) {
-      throw `(addHasuraRecord): ${request.status} - ${request.statusText}`;
+      throw `(request): ${request.status} - ${request.statusText}`;
     }
 
     const response: HasuraInsertResp | HasuraErrors = await request.json();
@@ -463,7 +458,7 @@ export const addHasuraRecord = async (
     if (response.errors) {
       const { errors } = response as HasuraErrors;
 
-      throw `(addHasuraRecord) - ${table}: \n ${errors
+      throw `(response) - ${table}: \n ${errors
         .map(err => `${err.extensions.path}: ${err.message}`)
         .join('\n')} \n ${query}`;
     }
@@ -471,7 +466,6 @@ export const addHasuraRecord = async (
     return (response as HasuraInsertResp).data[`insert_bookmarks_${table}_one`]
       .id;
   } catch (error) {
-    console.log(error);
-    throw error;
+    throw `(addHasuraRecord): ${error}`;
   }
 };

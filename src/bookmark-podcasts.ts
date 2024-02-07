@@ -62,10 +62,7 @@ const paramCleaner = (data: string, pattern: RegExp): string => {
     return match[0].replace(pattern, '$1');
   }
 
-  const error = '(paramCleaner): Unable to find match.';
-
-  console.error('Unable to find match.');
-  throw error;
+  throw '(paramCleaner): Unable to find match.';
 };
 
 /**
@@ -139,7 +136,7 @@ const getPodcastDetails = async (url: string): Promise<BookmarkData> => {
       url: link,
     };
   } catch (error) {
-    throw `(getPodcastDetails):\n ${error}`;
+    throw `(getPodcastDetails): ${error}`;
   }
 };
 

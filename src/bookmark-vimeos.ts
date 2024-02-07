@@ -49,7 +49,7 @@ const getVimeoDetails = async (url: string): Promise<BookmarkData> => {
       url,
     };
   } catch (error) {
-    throw `(getVimeoDetails):\n${error}`;
+    throw `(getVimeoDetails): ${error}`;
   }
 };
 
