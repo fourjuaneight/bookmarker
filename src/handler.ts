@@ -206,9 +206,8 @@ const handleAction = async (
  * @returns {Promise<Response>} response object
  */
 export const handleGet = async (ctx: Context): Promise<Response> => {
-  const { AUTH_KEY, HASURA_ENDPOINT, HASURA_ADMIN_SECRET } = ctx.env;
+  const { HASURA_ENDPOINT, HASURA_ADMIN_SECRET } = ctx.env;
   const contentType = ctx.req.headers.get('content-type');
-  const key = ctx.req.headers.get('key');
   const isJson = contentType?.includes('application/json');
   const table = ctx.req.headers.get('table');
 
@@ -224,18 +223,6 @@ export const handleGet = async (ctx: Context): Promise<Response> => {
       ctx.status(415);
       return ctx.json<BookmarkResponse>({
         error: 'Unsupported Media Type.',
-        version,
-      });
-    case !key:
-      ctx.status(401);
-      return ctx.json<BookmarkResponse>({
-        error: "Missing 'key' header.",
-        version,
-      });
-    case key !== AUTH_KEY:
-      ctx.status(401);
-      return ctx.json<BookmarkResponse>({
-        error: "You're not authorized to access this API.",
         version,
       });
     case !table:
